@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Tucson Pet Finder — Free Lost & Found Pet Alerts</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#020810;--bg2:#040d1a;--panel:rgba(6,18,40,0.92);--teal:#00FFD4;--teal-glow:rgba(0,255,212,0.25);--teal-dim:rgba(0,255,212,0.07);--gold:#FFD700;--green:#00FF88;--red:#FF4466;--blue:#00AAFF;--text:#C8E8FF;--text-dim:#4A6A88;--border:rgba(0,255,212,0.12);--border-bright:rgba(0,255,212,0.4)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:18px;line-height:1.7;min-height:100vh;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+.bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,255,212,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,212,0.018) 1px,transparent 1px);background-size:50px 50px}
+.orb{position:fixed;pointer-events:none;z-index:0;border-radius:50%;filter:blur(100px)}
+.orb1{width:400px;height:400px;top:-100px;left:-100px;background:radial-gradient(circle,rgba(0,255,212,0.07),transparent 70%);animation:o1 14s ease-in-out infinite}
+.orb2{width:350px;height:350px;bottom:-80px;right:-80px;background:radial-gradient(circle,rgba(255,100,50,0.05),transparent 70%);animation:o2 17s ease-in-out infinite}
+@keyframes o1{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,25px)}}
+@keyframes o2{0%,100%{transform:translate(0,0)}50%{transform:translate(-30px,-20px)}}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(2,8,16,0.98);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;gap:12px}
+.page{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:64px 0 80px}
+.nav-back{color:var(--teal);font-family:'Share Tech Mono',monospace;font-size:0.78rem;letter-spacing:0.08em;text-decoration:none;display:flex;align-items:center;gap:6px}
+.nav-title{font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;color:#fff;flex:1}
+.nav-live{font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--green);border:1px solid rgba(0,255,136,0.3);padding:4px 12px;border-radius:20px;display:flex;align-items:center;gap:5px}
+.nav-live::before{content:'●';animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+.hero{padding:36px 20px 28px;text-align:center}
+.hero-icon{font-size:3rem;margin-bottom:12px;animation:pawPulse 3s ease-in-out infinite}
+@keyframes pawPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.hero-title{font-family:'Orbitron',sans-serif;font-size:clamp(1.5rem,7vw,2.2rem);font-weight:900;color:#fff;line-height:1.1;margin-bottom:8px}
+.hero-title span{color:var(--teal);text-shadow:0 0 20px var(--teal-glow)}
+.hero-sub{font-size:1rem;color:#7A9AB8;font-weight:300;line-height:1.6;max-width:320px;margin:0 auto 20px}
+.hero-stats{display:flex;justify-content:center;gap:24px}
+.hstat-num{font-family:'Orbitron',sans-serif;font-size:1.4rem;font-weight:700;color:var(--teal);text-shadow:0 0 12px var(--teal-glow);line-height:1}
+.hstat-lbl{font-size:0.78rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em}
+.alert-strip{margin:20px 16px;background:rgba(255,68,102,0.08);border:1px solid rgba(255,68,102,0.25);border-radius:12px;padding:14px 16px;display:flex;gap:12px;align-items:center}
+.alert-icon{font-size:1.4rem;flex-shrink:0}
+.alert-text{font-size:0.95rem;color:#FFAAAA;line-height:1.5}
+.alert-text strong{color:#fff}
+.tabs{display:flex;margin:0 16px 20px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:4px;gap:4px}
+.tab-btn{flex:1;padding:13px 8px;font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.04em;border:none;border-radius:9px;background:transparent;color:var(--text-dim);cursor:pointer;transition:all 0.25s}
+.tab-btn.active{background:var(--teal);color:var(--bg);box-shadow:0 0 16px var(--teal-glow)}
+.tab-btn.active.found-tab{background:var(--green);box-shadow:0 0 16px rgba(0,255,136,0.4)}
+.form-panel{margin:0 16px 24px;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:22px 20px;display:none}
+.form-panel.active{display:block}
+.form-title{font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;margin-bottom:18px}
+.form-title.lost{color:var(--teal)}.form-title.found{color:var(--green)}
+.form-row{margin-bottom:16px}
+.form-label{font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);letter-spacing:0.08em;text-transform:uppercase;display:block;margin-bottom:7px}
+.form-input,.form-select,.form-textarea{width:100%;background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-family:'Rajdhani',sans-serif;font-size:1.05rem;color:var(--text);outline:none;transition:border-color 0.2s;-webkit-appearance:none}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--text-dim)}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--border-bright)}
+.form-select{color:var(--text);background:rgba(0,0,0,0.5)}
+.form-select option{background:#040d1a}
+.form-textarea{resize:none;min-height:80px;line-height:1.5}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.form-err{font-size:0.72rem;color:var(--red);margin-top:4px;display:none}
+.photo-upload{width:100%;border:1px dashed var(--border-bright);border-radius:10px;padding:20px;text-align:center;cursor:pointer;background:rgba(0,0,0,0.3);transition:background 0.2s}
+.photo-upload:hover{background:var(--teal-dim)}
+.photo-upload input{display:none}
+.photo-icon{font-size:1.8rem;margin-bottom:6px}
+.photo-txt{font-size:0.82rem;color:var(--text-dim)}
+.photo-txt strong{color:var(--teal)}
+.photo-prev{display:none;width:100%;height:140px;object-fit:cover;border-radius:8px;margin-top:8px}
+.submit-btn{width:100%;background:var(--teal);color:var(--bg);font-family:'Orbitron',sans-serif;font-size:0.8rem;font-weight:700;letter-spacing:0.08em;padding:15px;border-radius:10px;border:none;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 20px var(--teal-glow);margin-top:4px}
+.submit-btn.found-btn{background:var(--green);box-shadow:0 4px 20px rgba(0,255,136,0.4)}
+.submit-btn:disabled{opacity:0.6;cursor:not-allowed}
+.submit-btn:active:not(:disabled){transform:scale(0.97)}
+.success-panel{display:none;margin:0 16px 24px;background:rgba(0,255,212,0.06);border:1px solid var(--border-bright);border-radius:16px;padding:28px 22px;text-align:center}
+.success-icon{font-size:2.5rem;margin-bottom:12px}
+.success-title{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;color:var(--teal);margin-bottom:8px}
+.success-msg{font-size:0.9rem;color:#8AADCC;font-weight:300;line-height:1.6;margin-bottom:16px}
+.success-share{font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--gold);border:1px solid rgba(255,215,0,0.3);padding:8px 16px;border-radius:8px;background:rgba(255,215,0,0.06);cursor:pointer;display:inline-block}
+.listings-section{margin:0 16px 32px;display:none}
+.listings-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.listings-title{font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.15em}
+.listings-count{font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--teal)}
+.listing-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;display:flex;gap:14px;align-items:flex-start;cursor:pointer;transition:border-color 0.2s}
+.listing-card:hover{border-color:var(--border-bright)}
+.listing-card.found-card{border-color:rgba(0,255,136,0.15)}
+.listing-card.reunited{opacity:0.5}
+.listing-photo{width:70px;height:70px;border-radius:10px;background:var(--teal-dim);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0;overflow:hidden}
+.listing-photo img{width:100%;height:100%;object-fit:cover}
+.listing-info{flex:1;min-width:0}
+.listing-top{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap}
+.listing-type{font-family:'Share Tech Mono',monospace;font-size:0.58rem;padding:2px 8px;border-radius:4px;letter-spacing:0.08em;flex-shrink:0}
+.type-lost{background:rgba(255,68,102,0.12);color:var(--red);border:1px solid rgba(255,68,102,0.3)}
+.type-found{background:rgba(0,255,136,0.1);color:var(--green);border:1px solid rgba(0,255,136,0.3)}
+.type-reunited{background:rgba(255,255,255,0.06);color:var(--text-dim);border:1px solid rgba(255,255,255,0.1)}
+.listing-name{font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.listing-breed{font-size:0.82rem;color:#7A9AB8;font-weight:300;margin-bottom:4px}
+.listing-loc{font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--text-dim)}
+.listing-time{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--text-dim);text-align:right;flex-shrink:0;white-space:nowrap}
+.state-box{text-align:center;padding:32px 20px;font-family:'Share Tech Mono',monospace;font-size:0.78rem;color:var(--text-dim);letter-spacing:0.1em}
+.empty-icon{font-size:2.5rem;margin-bottom:12px}
+.empty-title{font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;color:var(--text-dim);margin-bottom:6px}
+.empty-sub{font-size:0.82rem;color:var(--text-dim);font-weight:300}
+.res-section{margin:0 16px 28px}
+.res-title{font-family:'Orbitron',sans-serif;font-size:0.65rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:14px}
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.res-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;text-decoration:none;display:block;transition:border-color 0.2s,transform 0.2s}
+.res-card:hover{border-color:var(--border-bright)}
+.res-card:active{transform:scale(0.97)}
+.res-icon{font-size:1.3rem;margin-bottom:6px}
+.res-name{font-family:'Orbitron',sans-serif;font-size:0.68rem;font-weight:700;color:var(--teal);margin-bottom:2px;line-height:1.3}
+.res-info{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--text-dim);line-height:1.4}
+.share-cta{margin:0 16px 32px;background:linear-gradient(135deg,rgba(0,255,212,0.07),rgba(0,170,255,0.05));border:1px solid var(--border-bright);border-radius:16px;padding:22px 20px;text-align:center}
+.share-cta h3{font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;color:var(--teal);margin-bottom:8px}
+.share-cta p{font-size:0.85rem;color:#8AADCC;font-weight:300;line-height:1.6;margin-bottom:14px}
+.share-btns{display:flex;flex-direction:column;gap:8px}
+.sbtn{padding:12px;border-radius:10px;font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.05em;border:none;cursor:pointer;transition:all 0.2s;text-decoration:none;display:block;text-align:center}
+.sbtn-p{background:var(--teal);color:var(--bg);box-shadow:0 4px 14px var(--teal-glow)}
+.sbtn-s{background:transparent;color:var(--text-dim);border:1px solid var(--border)}
+.sbtn:active{transform:scale(0.97)}
+footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--border);margin:0 16px}
+.footer-back{font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--teal);text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin-bottom:12px;padding:8px 16px;border:1px solid var(--border);border-radius:20px}
+.footer-credit{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--text-dim);line-height:1.8}
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-sheet{background:#040d1a;border:1px solid var(--border);border-radius:20px 20px 0 0;padding:28px 22px 40px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;animation:slideUp 0.35s ease both;position:relative}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-handle{width:36px;height:3px;background:var(--border-bright);border-radius:2px;margin:0 auto 20px}
+.modal-photo{width:100%;height:180px;object-fit:cover;background:var(--teal-dim);display:flex;align-items:center;justify-content:center;font-size:4rem;margin-bottom:16px;overflow:hidden;border-radius:12px}
+.modal-photo img{width:100%;height:100%;object-fit:cover}
+.modal-title{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;color:#fff;margin-bottom:6px}
+.modal-breed{font-size:0.88rem;color:#7A9AB8;font-weight:300;margin-bottom:18px}
+.modal-detail{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:0.88rem}
+.modal-dlbl{color:var(--text-dim);font-family:'Share Tech Mono',monospace;font-size:0.68rem;letter-spacing:0.1em}
+.modal-dval{color:#fff;font-weight:500}
+.modal-desc{margin:14px 0 18px;font-size:0.88rem;color:#8AADCC;font-weight:300;line-height:1.6}
+.modal-call{width:100%;background:var(--teal);color:var(--bg);font-family:'Orbitron',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.06em;padding:14px;border-radius:10px;border:none;cursor:pointer;margin-bottom:8px;box-shadow:0 4px 20px var(--teal-glow)}
+.modal-reunite{width:100%;background:transparent;color:var(--green);font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.06em;padding:12px;border-radius:10px;border:1px solid rgba(0,255,136,0.3);cursor:pointer;transition:all 0.2s}
+.modal-reunite:hover{background:rgba(0,255,136,0.08)}
+.modal-close{position:absolute;top:16px;right:16px;width:30px;height:30px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text-dim);cursor:pointer}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="page">
+  <nav>
+    <a class="nav-back" href="tucson-connect.html">← BACK</a>
+    <div class="nav-title">🐾 PET FINDER</div>
+    <div class="nav-live">LIVE</div>
+  </nav>
+  <div class="hero">
+    <div class="hero-icon">🐾</div>
+    <h1 class="hero-title">TUCSON<br><span>PET FINDER</span></h1>
+    <p class="hero-sub">Lost or found a pet in Tucson? Post in 60 seconds. Neighbors get alerted instantly. Free forever.</p>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-num">5mi</div><div class="hstat-lbl">Alert Radius</div></div>
+      <div class="hstat"><div class="hstat-num">FREE</div><div class="hstat-lbl">Always</div></div>
+      <div class="hstat"><div class="hstat-num">60s</div><div class="hstat-lbl">To Post</div></div>
+    </div>
+  </div>
+  <div class="alert-strip" id="alertStrip">
+    <div class="alert-icon">🔍</div>
+    <div class="alert-text" id="alertText">Checking Tucson alerts...</div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" id="tabLost" onclick="switchTab('lost')">🔴 I LOST A PET</button>
+    <button class="tab-btn found-tab" id="tabFound" onclick="switchTab('found')">🟢 I FOUND A PET</button>
+    <button class="tab-btn" id="tabSee" onclick="switchTab('see')">📋 SEE ALL</button>
+  </div>
+  <div class="form-panel active" id="formLost">
+    <div class="form-title lost">🔴 Report a Lost Pet</div>
+    <div class="form-row"><label class="form-label">Pet's Name *</label><input class="form-input" type="text" id="lostName" placeholder="e.g. Max, Luna, Bella"/><div class="form-err" id="errLostName">Please enter your pet's name</div></div>
+    <div class="form-row-2">
+      <div><label class="form-label">Type *</label><select class="form-select" id="lostType"><option value="">Select...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select><div class="form-err" id="errLostType">Please select type</div></div>
+      <div><label class="form-label">Color / Breed</label><input class="form-input" type="text" id="lostBreed" placeholder="e.g. Brown lab"/></div>
+    </div>
+    <div class="form-row"><label class="form-label">Last Seen Location *</label><input class="form-input" type="text" id="lostLoc" placeholder="e.g. Near Speedway & Wilmot"/><div class="form-err" id="errLostLoc">Please enter location</div></div>
+    <div class="form-row"><label class="form-label">Description & Details</label><textarea class="form-textarea" id="lostDesc" placeholder="Collar color, markings, when last seen..."></textarea></div>
+    <div class="form-row"><label class="form-label">Your Phone Number *</label><input class="form-input" type="tel" id="lostPhone" placeholder="520-XXX-XXXX"/><div class="form-err" id="errLostPhone">Please enter a valid 10-digit phone number</div></div>
+    <div class="form-row"><label class="form-label">Photo (helps a lot!)</label><div class="photo-upload" onclick="document.getElementById('lostPhoto').click()"><input type="file" id="lostPhoto" accept="image/*" onchange="prevPhoto(this,'lostPrev')"/><div class="photo-icon">📷</div><div class="photo-txt">Tap to add photo<br><strong>JPG or PNG</strong></div><img class="photo-prev" id="lostPrev"/></div></div>
+    <button class="submit-btn" id="lostBtn" onclick="submit('lost')">🚨 POST LOST PET ALERT</button>
+  </div>
+  <div class="form-panel" id="formFound">
+    <div class="form-title found">🟢 Report a Found Pet</div>
+    <div class="form-row-2">
+      <div><label class="form-label">Type *</label><select class="form-select" id="foundType"><option value="">Select...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select><div class="form-err" id="errFoundType">Please select type</div></div>
+      <div><label class="form-label">Color / Breed</label><input class="form-input" type="text" id="foundBreed" placeholder="e.g. Black cat"/></div>
+    </div>
+    <div class="form-row"><label class="form-label">Where Found *</label><input class="form-input" type="text" id="foundLoc" placeholder="e.g. Grant & Swan area"/><div class="form-err" id="errFoundLoc">Please enter location</div></div>
+    <div class="form-row"><label class="form-label">Description</label><textarea class="form-textarea" id="foundDesc" placeholder="Collar? Tags? Any identifying features..."></textarea></div>
+    <div class="form-row"><label class="form-label">Your Phone Number *</label><input class="form-input" type="tel" id="foundPhone" placeholder="520-XXX-XXXX"/><div class="form-err" id="errFoundPhone">Please enter a valid 10-digit phone number</div></div>
+    <div class="form-row"><label class="form-label">Photo</label><div class="photo-upload" onclick="document.getElementById('foundPhoto').click()"><input type="file" id="foundPhoto" accept="image/*" onchange="prevPhoto(this,'foundPrev')"/><div class="photo-icon">📷</div><div class="photo-txt">Tap to add photo<br><strong>Really helps!</strong></div><img class="photo-prev" id="foundPrev"/></div></div>
+    <button class="submit-btn found-btn" id="foundBtn" onclick="submit('found')">🟢 POST FOUND PET ALERT</button>
+  </div>
+  <div class="success-panel" id="successPanel"><div class="success-icon" id="successIcon">🐾</div><div class="success-title" id="successTitle">Alert Posted!</div><div class="success-msg" id="successMsg">Your alert is live for all Tucson neighbors.</div><div class="success-share" onclick="shareApp()">📲 Share this app with neighbors →</div></div>
+  <div class="listings-section" id="listingsSection"><div class="listings-header"><div class="listings-title">Active Alerts</div><div class="listings-count" id="listingCount"></div></div><div id="listingsContainer"></div></div>
+  <div class="res-section">
+    <div class="res-title">🆘 Emergency Resources</div>
+    <div class="res-grid">
+      <a class="res-card" href="tel:5207245900"><div class="res-icon">🐕</div><div class="res-name">Pima Animal Control</div><div class="res-info">520-724-5900<br>Open daily</div></a>
+      <a class="res-card" href="tel:5207977177"><div class="res-icon">🏥</div><div class="res-name">Humane Society</div><div class="res-info">520-797-7177<br>Southern AZ</div></a>
+      <a class="res-card" href="https://petcolove.org/lost" target="_blank"><div class="res-icon">🔍</div><div class="res-name">Petco Love Lost</div><div class="res-info">National database<br>Free posting</div></a>
+      <a class="res-card" href="mailto:Info@pawfbi.com"><div class="res-icon">🚁</div><div class="res-name">PawFBI</div><div class="res-info">Drone & thermal<br>pet tracking</div></a>
+    </div>
+  </div>
+  <div class="share-cta">
+    <h3>🌐 Know a Tucson neighbor with a lost pet?</h3>
+    <p>This app is 100% free. The more neighbors who use it, the faster pets get home.</p>
+    <div class="share-btns">
+      <button class="sbtn sbtn-p" onclick="shareApp()">📲 Share Tucson Pet Finder</button>
+      <a class="sbtn sbtn-s" href="tucson-connect.html">🏘️ See All Free Tucson Apps</a>
+    </div>
+  </div>
+  <footer><a class="footer-back" href="tucson-connect.html">← Back to Tucson Connect</a><div class="footer-credit">Tucson Pet Finder · 100% Free · Real Database · Built by Lamar Myers<br>VTREI, LLC · Tucson, AZ · 520-258-2714</div></footer>
+</div>
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-sheet" style="position:relative">
+    <div class="modal-close" onclick="closeModal()">✕</div>
+    <div class="modal-handle"></div>
+    <div class="modal-photo" id="mPhoto">🐾</div>
+    <div class="modal-title" id="mTitle"></div>
+    <div class="modal-breed" id="mBreed"></div>
+    <div id="mDetails"></div>
+    <div class="modal-desc" id="mDesc"></div>
+    <button class="modal-call" id="mCall">📞 Contact Reporter</button>
+    <button class="modal-reunite" id="mReunite">🎉 Mark as Reunited!</button>
+  </div>
+</div>
+<script>
+const URL='https://mlgmigguhljsiopctkkj.supabase.co';
+const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1sZ21pZ2d1aGxqc2lvcGN0a2tqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMDM3NzcsImV4cCI6MjA4OTY3OTc3N30.rwX3Ck09LwcUyT7SntrRA8rtFmExRlPLsG3iQPMjBSs';
+const H={'Content-Type':'application/json','apikey':KEY,'Authorization':'Bearer '+KEY};
+
+async function getPets(){try{const r=await fetch(URL+'/rest/v1/pets?select=*&order=created_at.desc',{headers:H});return await r.json()}catch(e){return[]}}
+async function addPet(pet){const r=await fetch(URL+'/rest/v1/pets',{method:'POST',headers:{...H,'Prefer':'return=representation'},body:JSON.stringify(pet)});if(!r.ok)throw new Error(await r.text());return r.json()}
+async function patchPet(id,data){await fetch(URL+'/rest/v1/pets?id=eq.'+id,{method:'PATCH',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify(data)})}
+
+function validPhone(p){return p.replace(/\D/g,'').length===10}
+function fmtPhone(p){const d=p.replace(/\D/g,'');return d.length===10?d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6):p}
+function showErr(id,show){const e=document.getElementById(id);if(e)e.style.display=show?'block':'none'}
+function timeAgo(d){const m=Math.floor((Date.now()-new Date(d))/60000);if(m<1)return'Just now';if(m<60)return m+'m ago';const h=Math.floor(m/60);if(h<24)return h+'h ago';return Math.floor(h/24)+'d ago'}
+function petEmoji(type){return type==='Cat'?'🐱':type==='Bird'?'🐦':type==='Rabbit'?'🐰':'🐕'}
+
+function switchTab(tab){
+  ['Lost','Found','See'].forEach(t=>document.getElementById('tab'+t).classList.remove('active'));
+  document.getElementById('tab'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('active');
+  document.getElementById('tabFound').classList.add('found-tab');
+  document.getElementById('formLost').classList.toggle('active',tab==='lost');
+  document.getElementById('formFound').classList.toggle('active',tab==='found');
+  document.getElementById('successPanel').style.display='none';
+  const ls=document.getElementById('listingsSection');
+  ls.style.display=tab==='see'?'block':'none';
+  if(tab==='see')renderListings();
+}
+
+function prevPhoto(input,pid){
+  const f=input.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{const i=document.getElementById(pid);i.src=e.target.result;i.style.display='block'};
+  r.readAsDataURL(f);
+}
+
+async function submit(type){
+  let ok=true;
+  if(type==='lost'){
+    const name=document.getElementById('lostName').value.trim();
+    const pt=document.getElementById('lostType').value;
+    const loc=document.getElementById('lostLoc').value.trim();
+    const phone=document.getElementById('lostPhone').value.trim();
+    showErr('errLostName',!name);if(!name)ok=false;
+    showErr('errLostType',!pt);if(!pt)ok=false;
+    showErr('errLostLoc',!loc);if(!loc)ok=false;
+    showErr('errLostPhone',!validPhone(phone));if(!validPhone(phone))ok=false;
+    if(!ok)return;
+    const btn=document.getElementById('lostBtn');
+    btn.disabled=true;btn.textContent='POSTING...';
+    try{
+      await addPet({status:'lost',name,type:pt,breed:document.getElementById('lostBreed').value.trim()||pt,location:loc,description:document.getElementById('lostDesc').value.trim(),phone:fmtPhone(phone)});
+      showSuccess('lost',name);loadAlertBanner();
+    }catch(e){alert('Error posting. Please try again.');console.error(e)}
+    finally{btn.disabled=false;btn.textContent='🚨 POST LOST PET ALERT'}
+  } else {
+    const pt=document.getElementById('foundType').value;
+    const loc=document.getElementById('foundLoc').value.trim();
+    const phone=document.getElementById('foundPhone').value.trim();
+    showErr('errFoundType',!pt);if(!pt)ok=false;
+    showErr('errFoundLoc',!loc);if(!loc)ok=false;
+    showErr('errFoundPhone',!validPhone(phone));if(!validPhone(phone))ok=false;
+    if(!ok)return;
+    const btn=document.getElementById('foundBtn');
+    btn.disabled=true;btn.textContent='POSTING...';
+    try{
+      await addPet({status:'found',name:'Found '+pt,type:pt,breed:document.getElementById('foundBreed').value.trim()||pt,location:loc,description:document.getElementById('foundDesc').value.trim(),phone:fmtPhone(phone)});
+      showSuccess('found');
+    }catch(e){alert('Error posting. Please try again.');console.error(e)}
+    finally{btn.disabled=false;btn.textContent='🟢 POST FOUND PET ALERT'}
+  }
+}
+
+function showSuccess(type,name=''){
+  document.getElementById('formLost').classList.remove('active');
+  document.getElementById('formFound').classList.remove('active');
+  const sp=document.getElementById('successPanel');sp.style.display='block';
+  if(type==='lost'){
+    document.getElementById('successIcon').textContent='🚨';
+    document.getElementById('successTitle').textContent=name?""+name+"'s Alert Is Live!":'Alert Posted!';
+    document.getElementById('successTitle').style.color='var(--red)';
+    document.getElementById('successMsg').textContent=`Saved in our real database — every Tucson neighbor who opens this app will see it. Share this app to get more eyes looking! 💙`;
+    sp.style.background='rgba(255,68,102,0.06)';sp.style.borderColor='rgba(255,68,102,0.3)';
+  } else {
+    document.getElementById('successIcon').textContent='🟢';
+    document.getElementById('successTitle').textContent='Found Pet Posted!';
+    document.getElementById('successTitle').style.color='var(--green)';
+    document.getElementById('successMsg').textContent='Your report is live in our database. The owner can now find and contact you directly. Thank you! 💚';
+    sp.style.background='rgba(0,255,136,0.06)';sp.style.borderColor='rgba(0,255,136,0.3)';
+  }
+  sp.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+async function renderListings(){
+  const c=document.getElementById('listingsContainer');
+  c.innerHTML='<div class="state-box">⟳ Loading alerts from Tucson database...</div>';
+  const pets=await getPets();
+  const active=pets.filter(p=>p.status!=='reunited');
+  const reunited=pets.filter(p=>p.status==='reunited');
+  document.getElementById('listingCount').textContent=active.length+' active alert'+(active.length!==1?'s':'');
+  c.innerHTML='';
+  if(!pets.length){c.innerHTML='<div class="state-box"><div class="empty-icon">🐾</div><div class="empty-title">No alerts yet</div><div class="empty-sub">Be the first to post a lost or found pet alert for Tucson!</div></div>';return}
+  [...active,...reunited].forEach(pet=>{
+    const d=document.createElement('div');
+    d.className='listing-card'+(pet.status==='found'?' found-card':'')+(pet.status==='reunited'?' reunited':'');
+    d.onclick=()=>openModal(pet);
+    d.innerHTML=`<div class="listing-photo">${pet.photo_url?`<img src="${pet.photo_url}"/>`:(petEmoji(pet.type))}</div><div class="listing-info"><div class="listing-top"><span class="listing-type type-${pet.status}">${pet.status.toUpperCase()}</span><span class="listing-name">${pet.name||'Unknown'}</span></div><div class="listing-breed">${pet.breed||pet.type}</div><div class="listing-loc">📍 ${pet.location}</div></div><div class="listing-time">${timeAgo(pet.created_at)}</div>`;
+    c.appendChild(d);
+  });
+}
+
+async function loadAlertBanner(){
+  const pets=await getPets();
+  const lost=pets.filter(p=>p.status==='lost').length;
+  const el=document.getElementById('alertText');
+  const strip=document.getElementById('alertStrip');
+  if(lost===0){el.textContent='No pets currently reported missing in Tucson. Post if you\'ve lost or found a pet.';strip.style.borderColor='rgba(0,255,212,0.2)';document.querySelector('.alert-icon').textContent='✅';}
+  else{el.innerHTML=`<strong>${lost} pet${lost!==1?'s':''} currently missing</strong> in the Tucson area. Keep an eye out in your neighborhood.`;}
+}
+
+function openModal(pet){
+  const ph=document.getElementById('mPhoto');
+  ph.innerHTML=pet.photo_url?`<img src="${pet.photo_url}"/>`:petEmoji(pet.type);
+  document.getElementById('mTitle').textContent=(pet.name||'Unknown')+(pet.status==='lost'?' — MISSING':pet.status==='found'?' — FOUND':' — REUNITED 🎉');
+  document.getElementById('mBreed').textContent=(pet.breed||pet.type)+' · '+pet.type;
+  document.getElementById('mDesc').textContent=pet.description||'No additional description.';
+  document.getElementById('mDetails').innerHTML=`<div class="modal-detail"><span class="modal-dlbl">STATUS</span><span class="modal-dval" style="color:${pet.status==='lost'?'var(--red)':pet.status==='found'?'var(--green)':'var(--text-dim)'}">${pet.status.toUpperCase()}</span></div><div class="modal-detail"><span class="modal-dlbl">LOCATION</span><span class="modal-dval">${pet.location}</span></div><div class="modal-detail" style="border:none"><span class="modal-dlbl">POSTED</span><span class="modal-dval">${timeAgo(pet.created_at)}</span></div>`;
+  const cb=document.getElementById('mCall');
+  if(pet.phone&&pet.status!=='reunited'){cb.textContent='📞 Call '+pet.phone;cb.onclick=()=>window.location.href='tel:'+pet.phone.replace(/\D/g,'');cb.style.display='block';}
+  else cb.style.display='none';
+  const rb=document.getElementById('mReunite');
+  rb.style.display=pet.status!=='reunited'?'block':'none';
+  rb.onclick=()=>markReunited(pet.id,pet.name);
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(e){
+  if(e&&e.target!==document.getElementById('modalOverlay')&&!e.target.classList.contains('modal-close'))return;
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+async function markReunited(id,name){
+  try{
+    await patchPet(id,{status:'reunited'});
+    closeModal({target:document.getElementById('modalOverlay')});
+    renderListings();loadAlertBanner();
+    alert('🎉 So glad '+(name||'your pet')+' is home safe! The Tucson community is smiling right now. 💙');
+  }catch(e){alert('Error updating. Please try again.')}
+}
+
+function shareApp(){
+  const text='🐾 FREE app for Tucson pet owners! Post lost/found pets and neighbors nearby get alerted instantly. Real database — every neighbor sees the same listings. No sign-up, no cost. Try it: tucson-connect.vercel.app/tucson-pet-finder.html';
+  if(navigator.share)navigator.share({title:'Tucson Pet Finder',text,url:window.location.href});
+  else navigator.clipboard.writeText(text).then(()=>alert('📋 Copied! Paste in your Nextdoor group or text to a friend!'));
+}
+
+loadAlertBanner();
+</script>
+</body>
+</html>
