@@ -222,7 +222,8 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
   </div>
   <div class="form-panel" id="formFound">
     <div class="form-title found">🟢 Report a Found Pet</div>
-    <div class="form-row-2">
+    <div class="form-row"><label class="form-label">Pet's Name on Collar/Tags <button type="button" onclick="startVoice('foundName')" style="background:rgba(0,255,212,0.1);border:1px solid var(--border-bright);border-radius:6px;color:var(--teal);font-size:0.75rem;padding:2px 8px;cursor:pointer;margin-left:6px;font-family:'Share Tech Mono',monospace">🎤 Speak</button></label><input class="form-input" type="text" id="foundName" placeholder="e.g. Bella (if seen on tag or collar — optional)"/></div>
+      <div class="form-row-2">
       <div><label class="form-label">Type *</label><select class="form-select" id="foundType"><option value="">Select...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select><div class="form-err" id="errFoundType">Please select type</div></div>
       <div><label class="form-label">Color / Breed <button type="button" onclick="startVoice('foundBreed')" style="background:rgba(0,255,212,0.1);border:1px solid var(--border-bright);border-radius:6px;color:var(--teal);font-size:0.75rem;padding:2px 8px;cursor:pointer;margin-left:6px;font-family:'Share Tech Mono',monospace">🎤 Speak</button></label><input class="form-input" type="text" id="foundBreed" placeholder="e.g. Black cat"/></div>
     </div>
@@ -311,6 +312,27 @@ const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6
 const H={'Content-Type':'application/json','apikey':KEY,'Authorization':'Bearer '+KEY};
 
 async function getPets(){try{const r=await fetch(URL+'/rest/v1/pets?select=*&order=created_at.desc',{headers:H});return await r.json()}catch(e){return[]}}
+async function uploadPhoto(base64Data, fileName){
+  try{
+    // Convert base64 to blob
+    const base64=base64Data.split(',')[1];
+    const mime=base64Data.split(',')[0].split(':')[1].split(';')[0];
+    const binary=atob(base64);
+    const arr=new Uint8Array(binary.length);
+    for(let i=0;i<binary.length;i++)arr[i]=binary.charCodeAt(i);
+    const blob=new Blob([arr],{type:mime});
+    
+    const path='pets/'+Date.now()+'-'+fileName;
+    const r=await fetch(URL+'/storage/v1/object/pet-photos/'+path,{
+      method:'POST',
+      headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':mime,'x-upsert':'true'},
+      body:blob
+    });
+    if(!r.ok)return null;
+    return URL+'/storage/v1/object/public/pet-photos/'+path;
+  }catch(e){console.error('Photo upload failed:',e);return null;}
+}
+
 async function addPet(pet){const r=await fetch(URL+'/rest/v1/pets',{method:'POST',headers:{...H,'Prefer':'return=representation'},body:JSON.stringify(pet)});if(!r.ok)throw new Error(await r.text());return r.json()}
 async function patchPet(id,data){await fetch(URL+'/rest/v1/pets?id=eq.'+id,{method:'PATCH',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify(data)})}
 
@@ -386,7 +408,15 @@ function startVoice(fieldId){
       if(e.results[i].isFinal)finalTranscript+=e.results[i][0].transcript+' ';
       else interim+=e.results[i][0].transcript;
     }
-    el.value=(finalTranscript+interim).trim();
+    let val=(finalTranscript+interim).trim();
+    // If phone field — extract digits only and format
+    if(el.type==='tel'||fieldId.toLowerCase().includes('phone')){
+      const digits=val.replace(/\D/g,'').slice(0,10);
+      if(digits.length>=7)val=digits.slice(0,3)+'-'+digits.slice(3,6)+'-'+digits.slice(6);
+      else if(digits.length>=4)val=digits.slice(0,3)+'-'+digits.slice(3);
+      else val=digits;
+    }
+    el.value=val;
     resetTimer();
   };
   
@@ -423,7 +453,10 @@ async function submit(type){
     const btn=document.getElementById('lostBtn');
     btn.disabled=true;btn.textContent='POSTING...';
     try{
-      await addPet({status:'lost',name,type:pt,breed:document.getElementById('lostBreed').value.trim()||pt,location:loc,description:document.getElementById('lostDesc').value.trim(),phone:fmtPhone(phone)});
+      const lostPhotoFile=document.getElementById('lostPhoto').files[0];
+      let lostPhotoUrl=null;
+      if(lostPhotoFile){const lostB64=document.getElementById('lostPrev').src;lostPhotoUrl=await uploadPhoto(lostB64,lostPhotoFile.name);}
+      await addPet({status:'lost',name,type:pt,breed:document.getElementById('lostBreed').value.trim()||pt,location:loc,description:document.getElementById('lostDesc').value.trim(),phone:fmtPhone(phone),photo_url:lostPhotoUrl||''});
       showSuccess('lost',name);loadAlertBanner();
 
 function reportListing(id, name){
@@ -456,7 +489,10 @@ function closeExpandPhoto(){
     const btn=document.getElementById('foundBtn');
     btn.disabled=true;btn.textContent='POSTING...';
     try{
-      await addPet({status:'found',name:'Found '+pt,type:pt,breed:document.getElementById('foundBreed').value.trim()||pt,location:loc,description:document.getElementById('foundDesc').value.trim(),phone:fmtPhone(phone)});
+      const foundPhotoFile=document.getElementById('foundPhoto').files[0];
+      let foundPhotoUrl=null;
+      if(foundPhotoFile){const foundB64=document.getElementById('foundPrev').src;foundPhotoUrl=await uploadPhoto(foundB64,foundPhotoFile.name);}
+      const foundPetName=document.getElementById('foundName')?.value.trim();await addPet({status:'found',name:foundPetName?foundPetName:'Found '+pt,type:pt,breed:document.getElementById('foundBreed').value.trim()||pt,location:loc,description:document.getElementById('foundDesc').value.trim(),phone:fmtPhone(phone),photo_url:foundPhotoUrl||''});
       showSuccess('found');
     }catch(e){alert('Error posting. Please try again.');console.error(e)}
     finally{btn.disabled=false;btn.textContent='🟢 POST FOUND PET ALERT'}
