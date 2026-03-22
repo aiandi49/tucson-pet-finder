@@ -224,6 +224,24 @@ footer{background:var(--navy);padding:28px 22px 20px;text-align:center;margin-to
 .reg-fab{position:fixed;bottom:96px;right:20px;z-index:500;background:linear-gradient(135deg,#1A2E4A,#2C4A6E);border:none;border-radius:50%;width:52px;height:52px;font-size:1.3rem;cursor:pointer;box-shadow:0 4px 16px rgba(26,46,74,0.4);display:flex;align-items:center;justify-content:center;transition:transform 0.2s}
 .reg-fab:active{transform:scale(0.92)}
 .reg-fab-label{position:fixed;bottom:152px;right:14px;z-index:500;background:var(--navy);color:#fff;font-size:0.65rem;font-weight:700;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap}
+.sos-fab{position:fixed;bottom:168px;right:20px;z-index:500;background:linear-gradient(135deg,#cc0000,#ff3322);border:none;border-radius:50%;width:56px;height:56px;font-size:1.4rem;cursor:pointer;box-shadow:0 4px 20px rgba(200,0,0,0.5);display:flex;align-items:center;justify-content:center;animation:sosPulse 2.5s ease-in-out infinite}
+.sos-fab.no-profile{display:none}.sos-fab.has-profile{display:flex}
+@keyframes sosPulse{0%,100%{box-shadow:0 4px 20px rgba(200,0,0,0.5)}50%{box-shadow:0 4px 32px rgba(255,50,0,0.8)}}
+.sos-fab-label{position:fixed;bottom:228px;right:14px;z-index:500;background:var(--navy);border:1px solid rgba(200,0,0,0.4);color:#cc0000;font-size:0.65rem;font-weight:700;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap;display:none}
+.sos-fab.has-profile ~ .sos-fab-label{display:block}
+.pet-slot{background:var(--bg2);border:2px dashed var(--border-dark);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:all 0.2s}
+.pet-slot:hover{border-color:var(--teal2);background:var(--teal-light)}
+.pet-slot.filled{border-style:solid;border-color:rgba(30,132,73,0.4);background:var(--green-light)}
+.pet-slot-top{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.pet-slot-emoji{font-size:1.4rem}
+.pet-slot-name{font-family:'Lora',serif;font-size:0.92rem;font-weight:700;color:var(--navy)}
+.pet-slot-detail{font-size:0.8rem;color:var(--text-mid)}
+.pet-slot-add{font-size:0.88rem;font-weight:600;color:var(--teal);text-align:center;padding:6px 0}
+.sos-pick-btn{width:100%;background:var(--red-light);border:2px solid rgba(192,57,43,0.3);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:all 0.2s;text-align:left}
+.sos-pick-btn:hover{background:var(--red-light);border-color:var(--red)}
+.sos-pick-emoji{font-size:1.8rem;flex-shrink:0}
+.sos-pick-name{font-family:'Lora',serif;font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:2px}
+.sos-pick-detail{font-size:0.8rem;color:var(--text-mid)}
 </style>
 </head>
 <body>
@@ -312,8 +330,11 @@ footer{background:var(--navy);padding:28px 22px 20px;text-align:center;margin-to
   <div class="toast-close" onclick="dismissToast(false)">✕</div>
 </div>
 
-<div class="reg-fab-label">🐾 Register Pet</div>
-<button class="reg-fab" onclick="openRegModal()" aria-label="Register your pet">🐾</button>
+<div class="sos-fab-label">🚨 EMERGENCY SOS</div>
+<button class="sos-fab no-profile" id="sosFab" onclick="openSOS()">🆘</button>
+
+<div class="reg-fab-label" id="regFabLabel">🐾 My Profile</div>
+<button class="reg-fab" id="regFab" onclick="openProfileModal()" aria-label="My profile">🐾</button>
 
 <div class="fab-stray-label">📸 Spot a Stray</div>
 <button class="fab-stray" onclick="openStrayModal()" aria-label="Spot a stray pet">📷</button>
@@ -406,14 +427,18 @@ function petEmoji(type){return type==='Cat'?'🐱':type==='Bird'?'🐦':type==='
 
 function switchTab(tab){
   ['Lost','Found','See'].forEach(t=>document.getElementById('tab'+t).classList.remove('active'));
-  document.getElementById('tab'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('active');
+  const tabEl=document.getElementById('tab'+tab.charAt(0).toUpperCase()+tab.slice(1));
+  if(tabEl)tabEl.classList.add('active');
   document.getElementById('tabFound').classList.add('found-tab');
   document.getElementById('formLost').classList.toggle('active',tab==='lost');
   document.getElementById('formFound').classList.toggle('active',tab==='found');
   document.getElementById('successPanel').style.display='none';
   const ls=document.getElementById('listingsSection');
-  ls.style.display=tab==='see'?'block':'none';
-  if(tab==='see')renderListings();
+  if(tab==='see'){
+    ls.style.display='block';
+    const c=document.getElementById('listingsContainer');
+    if(!c.children.length||c.innerHTML.includes('Loading'))renderListings();
+  } else { ls.style.display='none'; }
 }
 
 function prevPhoto(input,pid,hintId){
@@ -716,7 +741,7 @@ async function renderListings(){
     toggle.onclick=()=>{wrap.innerHTML='';c.appendChild(tierDivider('archived'));archived.forEach(p=>c.appendChild(buildCard(p)));if(reunited.length)reunited.forEach(p=>c.appendChild(buildCard(p)));};
     wrap.appendChild(toggle);c.appendChild(wrap);
   }
-  if(reunited.length&&!archived.length)reunited.forEach(p=>c.appendChild(buildCard(p)));
+  // Reunited hidden from main list — shown only inside archive toggle
 }
 
 async function loadAlertBanner(){
@@ -724,17 +749,25 @@ async function loadAlertBanner(){
   const lost=pets.filter(p=>p.status==='lost').length;
   const el=document.getElementById('alertText');
   const strip=document.getElementById('alertStrip');
-  if(lost===0){
-    el.textContent='No pets currently reported missing in Tucson. Post below if you\'ve lost or found a pet.';
+  const found=pets.filter(p=>p.status==='found').length;
+  if(lost===0&&found===0){
+    el.textContent='No active alerts in Tucson right now. Post if you've lost or found a pet.';
     strip.style.background='var(--teal-light)';strip.style.borderColor='rgba(26,122,110,0.3)';
     document.querySelector('.alert-icon').textContent='✅';
     el.style.color='var(--teal)';
   } else {
-    el.innerHTML=`<strong>${lost} pet${lost!==1?'s':''} currently missing</strong> in the Tucson area. <span style='text-decoration:underline;opacity:0.7'>Tap to view →</span>`;
+    const parts=[];
+    if(lost>0)parts.push(`<strong>${lost} pet${lost!==1?'s':''} missing</strong>`);
+    if(found>0)parts.push(`<strong>${found} found</strong> waiting for owner`);
+    el.innerHTML=parts.join(' · ')+` in Tucson. <span style='text-decoration:underline;opacity:0.7'>Tap to view →</span>`;
+    el.style.color='';
   }
 }
 
+let _currentPet = null;
+
 function openModal(pet){
+  _currentPet = pet;
   const ph=document.getElementById('mPhoto');
   ph.innerHTML=pet.photo_url&&!pet.photo_url.startsWith('data:')?`<img src="${pet.photo_url}" onerror="this.parentNode.innerHTML='${petEmoji(pet.type)}'"/>`:petEmoji(pet.type);
   const badge=document.getElementById('mBadge');
@@ -760,48 +793,60 @@ function openModal(pet){
     cb.onclick=()=>window.location.href='tel:'+pet.phone.replace(/\D/g,'');
     cb.style.display='block';
     extraDiv.innerHTML=`
-      <button class="modal-claim-lost" onclick="openClaimFlow('${pet.id}','${(pet.name||'').replace(/'/g,"\'")}','lost','${pet.phone||''}')">🐕 This Is My Pet — I'm the Owner</button>
-      <div class="photo-match-note" style="margin-top:8px"><span>🔒</span><span>Clicking above starts a <strong>verification checklist</strong> before contact info is shared.</span></div>
-      <div class="safety-banner"><strong>🤝 Safe Meetup Spots</strong> Always meet in public.<div class="safety-places"><span class="safety-place">🏪 Walgreens</span><span class="safety-place">🚔 Police Station</span><span class="safety-place">☕ Starbucks</span><span class="safety-place">🏥 Fire Station</span></div></div>
+      <button class="modal-claim-lost" onclick="openClaimFlow('lost')">🐕 This Is My Pet — I'm the Owner</button>
+      <div class="photo-match-note" style="margin-top:8px"><span>🔒</span><span>Starts a <strong>verification checklist</strong> before contact info is shared.</span></div>
+      <div class="safety-banner"><strong>🤝 Safe Meetup Spots</strong> Always meet in public.
+        <div class="safety-places"><span class="safety-place">🏪 Walgreens</span><span class="safety-place">🚔 Police Station</span><span class="safety-place">☕ Starbucks</span><span class="safety-place">🏥 Fire Station</span></div>
+      </div>
       <button class="report-btn" onclick="reportListing('${pet.id}','${(pet.name||'').replace(/'/g,'')}')">🚨 Report Suspicious Activity</button>`;
   } else if(pet.status==='found'){
     cb.textContent='📞 Contact Finder: '+pet.phone;
     cb.onclick=()=>window.location.href='tel:'+pet.phone.replace(/\D/g,'');
     cb.style.display='block';
     extraDiv.innerHTML=`
-      <button class="modal-claim-found" onclick="openClaimFlow('${pet.id}','${(pet.name||'').replace(/'/g,"\'")}','found','${pet.phone||''}')">🏠 This Is My Pet — Reunite Now</button>
-      <div class="photo-match-note" style="margin-top:8px"><span>🔒</span><span>Clicking above opens a <strong>quick verification</strong> to confirm ownership.</span></div>
-      <div class="safety-banner"><strong>🤝 Safe Meetup Spots</strong> Always meet in public.<div class="safety-places"><span class="safety-place">🏪 Walgreens</span><span class="safety-place">🚔 Police Station</span><span class="safety-place">☕ Starbucks</span><span class="safety-place">🏥 Fire Station</span></div></div>
+      <button class="modal-claim-found" onclick="openClaimFlow('found')">🏠 This Is My Pet — Reunite Now</button>
+      <div class="photo-match-note" style="margin-top:8px"><span>🔒</span><span>Opens a <strong>quick verification</strong> before the finder's info is shared.</span></div>
+      <div class="safety-banner"><strong>🤝 Safe Meetup Spots</strong> Always meet in public.
+        <div class="safety-places"><span class="safety-place">🏪 Walgreens</span><span class="safety-place">🚔 Police Station</span><span class="safety-place">☕ Starbucks</span><span class="safety-place">🏥 Fire Station</span></div>
+      </div>
       <button class="report-btn" onclick="reportListing('${pet.id}','${(pet.name||'').replace(/'/g,'')}')">🚨 Report Suspicious Activity</button>`;
   } else if(pet.status==='reunited'){
     extraDiv.innerHTML=`<div style="text-align:center;padding:16px 0;font-size:0.9rem;color:var(--text-light)">🎉 This pet has been reunited with their family!</div>`;
   }
 
-  rb.style.display=pet.status!=='reunited'?'block':'none';
-  rb.onclick=()=>markReunited(pet.id,pet.name);
-  rb.textContent='✅ Mark as Reunited';
+  if(pet.status!=='reunited'){
+    rb.style.display='block';
+    rb.textContent='✅ Mark as Reunited';
+    rb.onclick=()=>openClaimFlow('reunite');
+  }
   document.getElementById('mReunite').after(extraDiv);
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow='hidden';
 }
 
-function openClaimFlow(petId,petName,petStatus,finderPhone){
-  const overlay=document.getElementById('verifyOverlay');
-  const content=document.getElementById('verifyContent');
-  content.innerHTML=`
-    <div class="verify-title">${petStatus==='lost'?'🐕 Claim Your Pet':'🏠 Claim Your Pet'}</div>
-    <div class="verify-sub">Before we connect you, confirm you are the owner of <strong style="color:var(--navy)">${petName}</strong>.</div>
+function openClaimFlow(petStatus){
+  if(!_currentPet) return;
+  const pet = _currentPet;
+  const overlay = document.getElementById('verifyOverlay');
+  const vc = document.getElementById('verifyContent');
+  const isReunite = petStatus === 'reunite';
+  vc.innerHTML=`
+    <div class="verify-title">${isReunite?'✅ Confirm Reunification':petStatus==='lost'?'🐕 Claim Your Pet':'🏠 Claim Your Pet'}</div>
+    <div class="verify-sub">${isReunite?`Confirm that <strong style="color:var(--navy)">${pet.name||'this pet'}</strong> has been safely returned to their owner.`:`Before we connect you, confirm you are the owner of <strong style="color:var(--navy)">${pet.name||'this pet'}</strong>.`}</div>
     <div class="verify-checklist">
-      <div class="verify-checklist-title">✅ Ownership Verification</div>
-      <div class="verify-check"><input type="checkbox" id="chk1" onchange="updateClaimBtn()"><label for="chk1">I can describe a <strong>unique marking</strong> on this pet</label></div>
-      <div class="verify-check"><input type="checkbox" id="chk2" onchange="updateClaimBtn()"><label for="chk2">I have <strong>photos of me with this pet</strong> available</label></div>
-      <div class="verify-check"><input type="checkbox" id="chk3" onchange="updateClaimBtn()"><label for="chk3">I know my pet's <strong>vet name or clinic</strong></label></div>
-      <div class="verify-check"><input type="checkbox" id="chk4" onchange="updateClaimBtn()"><label for="chk4">I will meet the finder in a <strong>public place</strong></label></div>
+      <div class="verify-checklist-title">✅ Verification Checklist</div>
+      <div class="verify-check"><input type="checkbox" id="chk1" onchange="updateClaimBtn()"><label for="chk1">${isReunite?'The owner has been <strong>positively identified</strong>':'I can describe a <strong>unique marking</strong> on this pet'}</label></div>
+      <div class="verify-check"><input type="checkbox" id="chk2" onchange="updateClaimBtn()"><label for="chk2">${isReunite?'The pet and owner have <strong>already reunited in person</strong>':'I have <strong>photos of me with this pet</strong> available'}</label></div>
+      <div class="verify-check"><input type="checkbox" id="chk3" onchange="updateClaimBtn()"><label for="chk3">${isReunite?'I <strong>personally witnessed</strong> the reunion or I am the owner/finder':'I know my pet's <strong>vet name or clinic</strong>'}</label></div>
+      <div class="verify-check"><input type="checkbox" id="chk4" onchange="updateClaimBtn()"><label for="chk4">${isReunite?'I understand this will <strong>permanently remove the alert</strong>':'I will meet the finder in a <strong>public place</strong>'}</label></div>
     </div>
-    <div style="margin-bottom:12px"><label style="font-size:0.88rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Describe a unique feature your pet has *</label><input class="verify-input" id="claimMark" placeholder="e.g. white patch on left ear, missing tooth..." oninput="updateClaimBtn()"/></div>
-    <div style="margin-bottom:12px"><label style="font-size:0.88rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Your phone number *</label><input class="verify-input" type="tel" id="claimPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this);updateClaimBtn()"/></div>
-    <button class="verify-confirm-btn" id="claimConfirmBtn" onclick="confirmClaim('${petId}','${petName.replace(/'/g,"\'")}','${finderPhone}')">🔓 Verified — Connect Me Now</button>
-    <p style="font-size:0.75rem;color:var(--text-light);text-align:center;margin-top:10px;line-height:1.5">By proceeding you confirm this is your pet.</p>`;
+    ${!isReunite?`
+    <div style="margin-bottom:12px"><label style="font-size:0.88rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Describe a unique feature your pet has *</label><input class="verify-input" id="claimMark" placeholder="e.g. white patch on left ear..." oninput="updateClaimBtn()"/></div>
+    <div style="margin-bottom:12px"><label style="font-size:0.88rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Your phone number *</label><input class="verify-input" type="tel" id="claimPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this);updateClaimBtn()"/></div>`:''}
+    <button class="verify-confirm-btn" id="claimConfirmBtn" onclick="confirmClaim('${isReunite}')">
+      ${isReunite?'🎉 Yes — Mark as Reunited':'🔓 Verified — Connect Me Now'}
+    </button>
+    <p style="font-size:0.75rem;color:var(--text-light);text-align:center;margin-top:10px;line-height:1.5">${isReunite?'This removes the alert permanently from the active list.':'By proceeding you confirm this is your pet.'}</p>`;
   overlay.classList.add('open');
   document.body.style.overflow='hidden';
 }
@@ -814,18 +859,23 @@ function updateClaimBtn(){
   if(btn)btn.classList.toggle('ready',chks&&mark&&phone);
 }
 
-async function confirmClaim(petId,petName,finderPhone){
-  const phone=document.getElementById('claimPhone').value.trim();
-  const mark=document.getElementById('claimMark').value.trim();
+async function confirmClaim(isReunite){
+  if(!_currentPet) return;
+  const pet = _currentPet;
+  const vc = document.getElementById('verifyContent');
+  if(isReunite==='true'){
+    try{
+      await patchPet(pet.id,{status:'reunited'});
+      vc.innerHTML=`<div style="text-align:center;padding:30px 0"><div style="font-size:3rem;margin-bottom:14px">🎉</div><div style="font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--teal);margin-bottom:10px">Reunited!</div><div style="font-size:0.9rem;color:var(--text-mid);line-height:1.6"><strong>${pet.name||'This pet'}</strong> is home safe and has been removed from the active list.<br><br>The Tucson community is smiling! 💙</div></div>`;
+      setTimeout(()=>{closeVerify();document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';renderListings();loadAlertBanner();},2500);
+    }catch(e){alert('Error updating. Please try again.');}
+    return;
+  }
+  const phone=document.getElementById('claimPhone')?.value.trim()||'';
+  const mark=document.getElementById('claimMark')?.value.trim()||'';
   if(!phone||!mark)return;
-  document.getElementById('verifyContent').innerHTML=`
-    <div style="text-align:center;padding:30px 0">
-      <div style="font-size:3rem;margin-bottom:14px">🎉</div>
-      <div style="font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--teal);margin-bottom:10px">You're Verified!</div>
-      <div style="font-size:0.9rem;color:var(--text-mid);line-height:1.6;margin-bottom:24px">Ownership confirmed for <strong>${petName}</strong>. Contact the finder directly:</div>
-      ${finderPhone?`<a href="tel:${finderPhone.replace(/\D/g,'')}" style="display:block;background:var(--navy);color:#fff;font-size:1rem;font-weight:700;padding:16px;border-radius:12px;text-decoration:none;text-align:center;margin-bottom:12px">📞 Call Finder: ${finderPhone}</a>`:''}
-      <div class="safety-banner"><strong>🤝 Safe Meetup Reminder</strong> Meet in public — Walgreens, Starbucks, or Police Station.</div>
-    </div>`;
+  const contactPhone=pet.phone||'';
+  vc.innerHTML=`<div style="text-align:center;padding:30px 0"><div style="font-size:3rem;margin-bottom:14px">🎉</div><div style="font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--teal);margin-bottom:10px">You're Verified!</div><div style="font-size:0.9rem;color:var(--text-mid);line-height:1.6;margin-bottom:20px">Ownership confirmed for <strong>${pet.name||'your pet'}</strong>. Contact the ${pet.status==='found'?'finder':'reporter'} now:</div>${contactPhone?`<a href="tel:${contactPhone.replace(/\D/g,'')}" style="display:block;background:var(--navy);color:#fff;font-size:1rem;font-weight:700;padding:16px;border-radius:12px;text-decoration:none;text-align:center;margin-bottom:12px">📞 Call ${pet.status==='found'?'Finder':'Reporter'}: ${contactPhone}</a>`:''}<div class="safety-banner"><strong>🤝 Safe Meetup Reminder</strong> Meet in public — Walgreens, Starbucks, or Police Station.</div></div>`;
 }
 
 function closeVerify(){
@@ -833,28 +883,197 @@ function closeVerify(){
   document.body.style.overflow='';
 }
 
-function openRegModal(){
-  document.getElementById('regSuccess').style.display='none';
-  document.getElementById('regContent').querySelectorAll('.verify-input').forEach(i=>i.value='');
-  document.getElementById('regOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
+// ════════════════════════════════════════════════════════════════════════════
+// PROFILE SYSTEM
+// ════════════════════════════════════════════════════════════════════════════
+const PROFILE_KEY = 'tpf_profile_id';
+function getProfileId(){ return localStorage.getItem(PROFILE_KEY); }
+function setProfileId(id){ localStorage.setItem(PROFILE_KEY, id); }
+
+async function saveProfile(ownerName, ownerPhone){
+  const r=await fetch(URL+'/rest/v1/profiles',{method:'POST',headers:{...H,'Prefer':'return=representation'},body:JSON.stringify({owner_name:ownerName,owner_phone:fmtPhone(ownerPhone),pets:[]})});
+  if(!r.ok)throw new Error(await r.text());
+  const data=await r.json(); return data[0].id;
+}
+async function getProfile(profileId){
+  const r=await fetch(URL+'/rest/v1/profiles?id=eq.'+profileId+'&select=*',{headers:H});
+  if(!r.ok)return null;
+  const data=await r.json(); return data[0]||null;
+}
+async function updateProfilePets(profileId,pets){
+  await fetch(URL+'/rest/v1/profiles?id=eq.'+profileId,{method:'PATCH',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify({pets})});
 }
 
-async function submitRegistration(){
-  const name=document.getElementById('regPetName').value.trim();
-  const type=document.getElementById('regPetType').value;
-  const breed=document.getElementById('regPetBreed').value.trim();
-  const mark=document.getElementById('regPetMark').value.trim();
-  const vet=document.getElementById('regVet').value.trim();
-  const phone=document.getElementById('regPhone').value.trim();
-  if(!name||!type||!phone||phone.replace(/\D/g,'').length!==10){alert('Please fill in Pet Name, Type, and a valid Phone Number.');return;}
-  try{
-    await addPet({status:'registered',name,type,breed:breed||type,location:'Registered Pet — Tucson AZ',description:`UNIQUE MARKING: ${mark||'Not provided'}. VET: ${vet||'Not provided'}`,phone:fmtPhone(phone),photo_url:''});
-    document.getElementById('regSuccess').style.display='block';
-    document.getElementById('regContent').querySelectorAll('input,select').forEach(e=>e.style.display='none');
-    document.querySelector('#regContent .verify-confirm-btn').style.display='none';
-  }catch(e){alert('Error registering. Please try again.');console.error(e);}
+async function openProfileModal(){
+  document.getElementById('regOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  const pc=document.getElementById('profileContent');
+  pc.innerHTML=`<div style="text-align:center;padding:30px;color:var(--text-mid);font-size:0.9rem">Loading profile...</div>`;
+  const pid=getProfileId();
+  if(pid){
+    const local=localStorage.getItem('tpf_profile_local');
+    if(local){renderProfileDashboard(JSON.parse(local));return;}
+    const profile=await getProfile(pid);
+    if(profile){renderProfileDashboard(profile);return;}
+  }
+  renderProfileCreate();
 }
+function closeProfileModal(){document.getElementById('regOverlay').classList.remove('open');document.body.style.overflow='';}
+
+function renderProfileCreate(){
+  const pc=document.getElementById('profileContent');
+  pc.innerHTML=`
+    <div style="font-family:'Lora',serif;font-size:1.15rem;font-weight:700;color:var(--navy);margin-bottom:6px">🐾 Create Your Profile</div>
+    <div style="font-size:0.9rem;color:var(--text-mid);margin-bottom:18px;line-height:1.5">No account needed — just your name and phone. Register up to 4 pets and get a one-tap 🆘 SOS emergency button.</div>
+    <div style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:12px;padding:14px 16px;margin-bottom:18px">
+      <div style="font-size:0.85rem;font-weight:700;color:var(--teal);margin-bottom:8px">✅ What you get with a profile</div>
+      <div style="font-size:0.85rem;color:var(--text-mid);line-height:1.8">🆘 One-tap SOS emergency post<br>✅ Verified Owner badge when claiming<br>🐾 Up to 4 pets registered<br>📞 Your info pre-filled automatically</div>
+    </div>
+    <div style="margin-bottom:12px"><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Your Name *</label><input class="verify-input" id="profName" placeholder="e.g. Lamar Myers"/></div>
+    <div style="margin-bottom:18px"><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Your Phone *</label><input class="verify-input" type="tel" id="profPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/></div>
+    <button class="verify-confirm-btn ready" onclick="createProfile()" style="background:var(--navy)">🐾 Create My Profile →</button>
+    <p style="font-size:0.75rem;color:var(--text-light);text-align:center;margin-top:10px">No password. No email. Just you and your pets. 🌵</p>`;
+}
+
+async function createProfile(){
+  const name=document.getElementById('profName').value.trim();
+  const phone=document.getElementById('profPhone').value.trim();
+  if(!name||phone.replace(/\D/g,'').length!==10){alert('Please enter your name and a valid 10-digit phone.');return;}
+  const btn=document.querySelector('#profileContent .verify-confirm-btn');
+  btn.disabled=true;btn.textContent='Creating...';
+  try{
+    const id=await saveProfile(name,phone);
+    setProfileId(id);updateSOSButton(true);
+    const profile=await getProfile(id);renderProfileDashboard(profile);
+  }catch(e){
+    const p={id:'local_'+Date.now(),owner_name:name,owner_phone:fmtPhone(phone),pets:[]};
+    localStorage.setItem('tpf_profile_local',JSON.stringify(p));
+    setProfileId(p.id);updateSOSButton(true);renderProfileDashboard(p);
+  }
+}
+
+function petEmoji2(type){return type==='Cat'?'🐱':type==='Bird'?'🐦':type==='Rabbit'?'🐰':'🐕';}
+
+function renderProfileDashboard(profile){
+  const pc=document.getElementById('profileContent');
+  const pets=profile.pets||[];
+  const slots=[0,1,2,3].map(i=>{
+    const p=pets[i];
+    if(p)return`<div class="pet-slot filled" onclick="editPetSlot(${i})"><div class="pet-slot-top"><span class="pet-slot-emoji">${petEmoji2(p.type)}</span><div><div class="pet-slot-name">${p.name}</div><div class="pet-slot-detail">${p.breed||p.type}${p.marking?' · '+p.marking:''}</div></div><span style="margin-left:auto;font-size:0.78rem;color:var(--green);font-weight:700">✅ Registered</span></div></div>`;
+    return`<div class="pet-slot" onclick="addPetToProfile(${i})"><div class="pet-slot-add">+ Add Pet ${i+1}</div></div>`;
+  }).join('');
+  pc.innerHTML=`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+      <div style="font-size:2rem">🐾</div>
+      <div><div style="font-family:'Lora',serif;font-size:1.05rem;font-weight:700;color:var(--navy)">${profile.owner_name}</div><div style="font-size:0.8rem;color:var(--teal);font-weight:600">${profile.owner_phone} · ✅ Verified Owner</div></div>
+    </div>
+    <div style="font-size:0.85rem;font-weight:700;color:var(--navy);margin-bottom:10px">My Pets (${pets.filter(Boolean).length}/4 registered)</div>
+    ${slots}
+    ${pets.filter(Boolean).length>0?`<div style="background:var(--red-light);border:2px solid rgba(192,57,43,0.25);border-radius:12px;padding:14px 16px;margin-top:16px"><div style="font-size:0.85rem;font-weight:700;color:var(--red);margin-bottom:6px">🆘 SOS Emergency Button Active</div><div style="font-size:0.85rem;color:var(--text-mid);line-height:1.5">Your red SOS button is live. One tap posts an emergency alert instantly with all your pet's info.</div></div>`:`<div style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:12px;padding:14px 16px;margin-top:16px;text-align:center;font-size:0.88rem;color:var(--text-mid)">Add at least one pet to activate your SOS button.</div>`}
+    <button class="verify-confirm-btn ready" onclick="closeProfileModal()" style="margin-top:16px;background:var(--navy)">✓ Done</button>`;
+}
+
+let _editingSlot=-1;
+function addPetToProfile(slot){_editingSlot=slot;renderAddPetForm();}
+function editPetSlot(slot){_editingSlot=slot;renderAddPetForm();}
+
+function renderAddPetForm(){
+  const pc=document.getElementById('profileContent');
+  pc.innerHTML=`
+    <button onclick="reopenDashboard()" style="background:none;border:none;color:var(--teal);font-size:0.88rem;font-weight:600;cursor:pointer;margin-bottom:14px">← Back to Profile</button>
+    <div style="font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:6px">Add Pet ${_editingSlot+1}</div>
+    <div style="font-size:0.88rem;color:var(--text-mid);margin-bottom:18px">This info is used for instant SOS posts and verified ownership.</div>
+    <div style="margin-bottom:12px"><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Pet Name *</label><input class="verify-input" id="addPetName" placeholder="e.g. Mojo"/></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+      <div><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Type *</label><select class="verify-input" id="addPetType"><option value="">Select...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select></div>
+      <div><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Breed / Color</label><input class="verify-input" id="addPetBreed" placeholder="e.g. Black lab"/></div>
+    </div>
+    <div style="margin-bottom:12px"><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Unique Marking</label><input class="verify-input" id="addPetMark" placeholder="e.g. white spot on left ear"/></div>
+    <div style="margin-bottom:12px"><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Neighborhood / Area</label><input class="verify-input" id="addPetArea" placeholder="e.g. Midtown Tucson near Speedway"/></div>
+    <div style="margin-bottom:18px"><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Vet Name & Phone (optional)</label><input class="verify-input" id="addPetVet" placeholder="e.g. Dr. Smith — 520-555-1234"/></div>
+    <button class="verify-confirm-btn ready" onclick="savePetToProfile()" style="background:var(--green)">✅ Save This Pet</button>`;
+}
+
+async function reopenDashboard(){
+  const pid=getProfileId();
+  const local=localStorage.getItem('tpf_profile_local');
+  if(local){renderProfileDashboard(JSON.parse(local));return;}
+  if(pid){const p=await getProfile(pid);if(p)renderProfileDashboard(p);}
+}
+
+async function savePetToProfile(){
+  const name=document.getElementById('addPetName').value.trim();
+  const type=document.getElementById('addPetType').value;
+  if(!name||!type){alert('Pet name and type are required.');return;}
+  const pet={name,type,breed:document.getElementById('addPetBreed').value.trim()||type,marking:document.getElementById('addPetMark').value.trim(),area:document.getElementById('addPetArea').value.trim(),vet:document.getElementById('addPetVet').value.trim()};
+  const pid=getProfileId();
+  let profile=null;
+  const local=localStorage.getItem('tpf_profile_local');
+  if(local)profile=JSON.parse(local);
+  else if(pid)profile=await getProfile(pid);
+  if(!profile)return;
+  const pets=profile.pets||[];
+  pets[_editingSlot]=pet;profile.pets=pets;
+  if(local)localStorage.setItem('tpf_profile_local',JSON.stringify(profile));
+  else await updateProfilePets(pid,pets);
+  updateSOSButton(pets.filter(Boolean).length>0);
+  renderProfileDashboard(profile);
+}
+
+function updateSOSButton(hasPets){
+  const fab=document.getElementById('sosFab');
+  if(!fab)return;
+  fab.classList.toggle('has-profile',hasPets);
+  fab.classList.toggle('no-profile',!hasPets);
+}
+
+function openSOS(){
+  const pid=getProfileId();
+  if(!pid){openProfileModal();return;}
+  document.getElementById('sosOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  const local=localStorage.getItem('tpf_profile_local');
+  if(local){renderSOSPick(JSON.parse(local));return;}
+  document.getElementById('sosContent').innerHTML=`<div style="text-align:center;padding:24px;color:var(--text-mid)">Loading your pets...</div>`;
+  getProfile(pid).then(p=>{if(p)renderSOSPick(p);});
+}
+
+function renderSOSPick(profile){
+  window._sosProfile=profile;
+  const sc=document.getElementById('sosContent');
+  const pets=(profile.pets||[]).filter(Boolean);
+  if(!pets.length){
+    sc.innerHTML=`<div style="font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--red);margin-bottom:10px">🆘 SOS Emergency</div><div style="font-size:0.9rem;color:var(--text-mid);margin-bottom:18px">Add pets to your profile first.</div><button class="verify-confirm-btn ready" onclick="closeSOS();openProfileModal()" style="background:var(--navy)">Go to My Profile</button>`;
+    return;
+  }
+  sc.innerHTML=`<div style="font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--red);margin-bottom:6px">🆘 Emergency SOS</div><div style="font-size:0.9rem;color:var(--text-mid);margin-bottom:18px">Which pet is missing? An alert posts <strong>instantly</strong>.</div>`+
+    pets.map((p,i)=>`<button class="sos-pick-btn" onclick="triggerSOS(${i})"><span class="sos-pick-emoji">${petEmoji2(p.type)}</span><div><div class="sos-pick-name">${p.name}</div><div class="sos-pick-detail">${p.breed||p.type}${p.marking?' · '+p.marking:''}</div></div><span style="margin-left:auto;color:var(--red);font-size:1.2rem">🆘</span></button>`).join('')+
+    `<button onclick="closeSOS()" style="width:100%;background:none;border:2px solid var(--border);border-radius:10px;padding:12px;color:var(--text-light);font-size:0.9rem;cursor:pointer;margin-top:4px">Cancel</button>`;
+}
+
+async function triggerSOS(i){
+  const profile=window._sosProfile;
+  const pet=profile.pets[i];
+  const sc=document.getElementById('sosContent');
+  sc.innerHTML=`<div style="text-align:center;padding:30px"><div style="font-size:2.5rem;margin-bottom:14px">🆘</div><div style="font-family:'Lora',serif;font-size:1rem;font-weight:700;color:var(--red);margin-bottom:8px">Posting Emergency Alert...</div><div style="font-size:0.85rem;color:var(--text-mid)">Alerting all Tucson neighbors</div></div>`;
+  try{
+    await addPet({status:'lost',name:pet.name,type:pet.type,breed:pet.breed||pet.type,location:pet.area||'Tucson, AZ',description:`🆘 SOS EMERGENCY — Owner: ${profile.owner_name}. Marking: ${pet.marking||'Not provided'}. Vet: ${pet.vet||'Not provided'}.`,phone:profile.owner_phone,photo_url:''});
+    sc.innerHTML=`<div style="text-align:center;padding:30px"><div style="font-size:3rem;margin-bottom:14px">🆘</div><div style="font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--red);margin-bottom:10px">Alert Posted!</div><div style="font-size:0.9rem;color:var(--text-mid);line-height:1.6;margin-bottom:20px">Emergency alert for <strong>${pet.name}</strong> is now live for all Tucson neighbors.</div><button class="verify-confirm-btn ready" onclick="closeSOS();switchTab('see')" style="background:var(--red)">👁 View Live Alert</button></div>`;
+    loadAlertBanner();
+  }catch(e){sc.innerHTML=`<div style="text-align:center;padding:20px;color:var(--red)">Error. <button onclick="triggerSOS(${i})" style="color:var(--navy);font-weight:700;cursor:pointer">Try again</button></div>`;}
+}
+
+function closeSOS(){document.getElementById('sosOverlay').classList.remove('open');document.body.style.overflow='';}
+
+(function initProfile(){
+  const pid=getProfileId();
+  const local=localStorage.getItem('tpf_profile_local');
+  if(pid||local){
+    const p=local?JSON.parse(local):null;
+    const hasPets=p?(p.pets||[]).filter(Boolean).length>0:true;
+    updateSOSButton(hasPets);
+  }
+})();
 
 function closeModal(e){
   if(e&&e.target!==document.getElementById('modalOverlay')&&!e.target.classList.contains('modal-close'))return;
@@ -862,32 +1081,7 @@ function closeModal(e){
   document.body.style.overflow='';
 }
 
-async function markReunited(id,name){
-  try{
-    await patchPet(id,{status:'reunited'});
-    closeModal({target:document.getElementById('modalOverlay')});
-    renderListings();loadAlertBanner();
-
-function reportListing(id, name){
-  const reason = prompt('Briefly describe the suspicious activity for "' + (name||'this listing') + '":\n\n(Your report helps keep Tucson safe)');
-  if(!reason || !reason.trim()) return;
-  // Log to console + alert (full backend reporting can be added later)
-  console.log('REPORT:', {id, name, reason, time: new Date().toISOString()});
-  alert('🚨 Thank you for reporting. Our team will review this listing within 24 hours. If you feel you are in immediate danger, please call 911.');
-}
-
-function expandPhoto(img){
-  document.getElementById('photoExpandImg').src = img.src;
-  document.getElementById('photoExpandOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeExpandPhoto(){
-  document.getElementById('photoExpandOverlay').classList.remove('open');
-  document.body.style.overflow='';
-}
-    alert('🎉 Wonderful news! So glad '+(name||'your pet')+' is safe at home! The whole Tucson community is smiling right now. 💙');
-  }catch(e){alert('Error updating. Please try again.')}
-}
+async function markReunited(id,name){ openClaimFlow('reunite'); }
 
 function shareApp(){
   const text='🐾 FREE app for Tucson pet owners — Tucson Pet Finder! Post lost or found pets and neighbors nearby get alerted right away. Real database — every neighbor sees the same listings. No sign-up. No cost. Check it out: tucson-connect.vercel.app/tucson-pet-finder-v2.html';
@@ -1025,28 +1219,19 @@ function closeExpandPhoto(){
   </div>
 </div>
 
-<!-- PET REGISTRATION MODAL -->
+<!-- PROFILE MODAL -->
 <div class="verify-overlay" id="regOverlay">
   <div class="verify-sheet">
-    <div class="verify-close" onclick="document.getElementById('regOverlay').classList.remove('open');document.body.style.overflow=''">✕</div>
-    <div id="regContent">
-      <div class="verify-title">🐾 Register Your Pet</div>
-      <div class="verify-sub">Register your pet now — if they ever go missing, you get a verified badge when claiming them. No account needed.</div>
-      <div style="margin-bottom:12px"><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Pet Name *</label><input class="verify-input" id="regPetName" placeholder="e.g. Mojo, Luna, Max"/></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
-        <div><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Type *</label><select class="verify-input" id="regPetType"><option value="">Select...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select></div>
-        <div><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Breed / Color</label><input class="verify-input" id="regPetBreed" placeholder="e.g. Black lab mix"/></div>
-      </div>
-      <div style="margin-bottom:12px"><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Unique Marking (for verification)</label><input class="verify-input" id="regPetMark" placeholder="e.g. white spot on left ear, scar on nose"/></div>
-      <div style="margin-bottom:12px"><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Vet Name & Phone (optional)</label><input class="verify-input" id="regVet" placeholder="e.g. Dr. Smith — 520-555-1234"/></div>
-      <div style="margin-bottom:12px"><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Your Phone *</label><input class="verify-input" type="tel" id="regPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/></div>
-      <button class="verify-confirm-btn ready" onclick="submitRegistration()" style="background:var(--navy)">🐾 Register My Pet</button>
-      <div id="regSuccess" style="display:none;text-align:center;padding:20px 0">
-        <div style="font-size:2.5rem;margin-bottom:10px">🎉</div>
-        <div style="font-family:'Lora',serif;font-size:1.1rem;color:var(--teal);margin-bottom:8px;font-weight:700">Pet Registered!</div>
-        <div style="font-size:0.9rem;color:var(--text-mid);line-height:1.6">Your pet is now in our registry. If they go missing and someone posts them, you can claim them instantly with a ✅ Verified Owner badge.</div>
-      </div>
-    </div>
+    <div class="verify-close" onclick="closeProfileModal()">✕</div>
+    <div id="profileContent"></div>
+  </div>
+</div>
+
+<!-- SOS MODAL -->
+<div class="verify-overlay" id="sosOverlay">
+  <div class="verify-sheet">
+    <div class="verify-close" onclick="closeSOS()">✕</div>
+    <div id="sosContent"></div>
   </div>
 </div>
 
