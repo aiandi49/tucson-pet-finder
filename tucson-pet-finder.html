@@ -501,6 +501,23 @@ function autoPhone(input){
   else input.value=v;
 }
 
+function reportListing(id, name){
+  const reason = prompt('Briefly describe the issue with "' + (name||'this listing') + '":\n\n(Your report helps keep Tucson safe)');
+  if(!reason || !reason.trim()) return;
+  console.log('REPORT:', {id, name, reason, time: new Date().toISOString()});
+  alert('🚨 Thank you for reporting. Our team will review this listing within 24 hours.');
+}
+
+function expandPhoto(img){
+  document.getElementById('photoExpandImg').src = img.src;
+  document.getElementById('photoExpandOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeExpandPhoto(){
+  document.getElementById('photoExpandOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
 // ── VOICE ENGINE ──────────────────────────────────────────────────────────────
 // Single persistent SpeechRecognition instance — avoids iOS permission popup
 // on every tap by reusing the same object across all fields.
@@ -714,24 +731,6 @@ function dismissToast(goToAlert){
     switchTab('see');
     setTimeout(()=>openModal(_toastPet), 400);
   }
-}
-
-function reportListing(id, name){
-  const reason = prompt('Briefly describe the suspicious activity for "' + (name||'this listing') + '":\n\n(Your report helps keep Tucson safe)');
-  if(!reason || !reason.trim()) return;
-  // Log to console + alert (full backend reporting can be added later)
-  console.log('REPORT:', {id, name, reason, time: new Date().toISOString()});
-  alert('🚨 Thank you for reporting. Our team will review this listing within 24 hours. If you feel you are in immediate danger, please call 911.');
-}
-
-function expandPhoto(img){
-  document.getElementById('photoExpandImg').src = img.src;
-  document.getElementById('photoExpandOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeExpandPhoto(){
-  document.getElementById('photoExpandOverlay').classList.remove('open');
-  document.body.style.overflow='';
 }
     }catch(e){alert('Error posting. Please try again.');console.error(e)}
     finally{btn.disabled=false;btn.textContent='🚨 POST LOST PET ALERT'}
@@ -1398,24 +1397,6 @@ async function markReunited(id,name){
     await patchPet(id,{status:'reunited'});
     closeModal({target:document.getElementById('modalOverlay')});
     renderListings();loadAlertBanner();
-
-function reportListing(id, name){
-  const reason = prompt('Briefly describe the suspicious activity for "' + (name||'this listing') + '":\n\n(Your report helps keep Tucson safe)');
-  if(!reason || !reason.trim()) return;
-  // Log to console + alert (full backend reporting can be added later)
-  console.log('REPORT:', {id, name, reason, time: new Date().toISOString()});
-  alert('🚨 Thank you for reporting. Our team will review this listing within 24 hours. If you feel you are in immediate danger, please call 911.');
-}
-
-function expandPhoto(img){
-  document.getElementById('photoExpandImg').src = img.src;
-  document.getElementById('photoExpandOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeExpandPhoto(){
-  document.getElementById('photoExpandOverlay').classList.remove('open');
-  document.body.style.overflow='';
-}
     alert('🎉 So glad '+(name||'your pet')+' is home safe! The Tucson community is smiling right now. 💙');
   }catch(e){alert('Error updating. Please try again.')}
 }
@@ -1427,24 +1408,6 @@ function shareApp(){
 }
 
 loadAlertBanner();
-
-function reportListing(id, name){
-  const reason = prompt('Briefly describe the suspicious activity for "' + (name||'this listing') + '":\n\n(Your report helps keep Tucson safe)');
-  if(!reason || !reason.trim()) return;
-  // Log to console + alert (full backend reporting can be added later)
-  console.log('REPORT:', {id, name, reason, time: new Date().toISOString()});
-  alert('🚨 Thank you for reporting. Our team will review this listing within 24 hours. If you feel you are in immediate danger, please call 911.');
-}
-
-function expandPhoto(img){
-  document.getElementById('photoExpandImg').src = img.src;
-  document.getElementById('photoExpandOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeExpandPhoto(){
-  document.getElementById('photoExpandOverlay').classList.remove('open');
-  document.body.style.overflow='';
-}
 
 let strayLatLng = null;
 let strayPhotoData = null;
@@ -1520,24 +1483,6 @@ async function submitStray(){
     document.getElementById('strayFormView').style.display='none';
     document.getElementById('straySuccessView').style.display='block';
     loadAlertBanner();
-
-function reportListing(id, name){
-  const reason = prompt('Briefly describe the suspicious activity for "' + (name||'this listing') + '":\n\n(Your report helps keep Tucson safe)');
-  if(!reason || !reason.trim()) return;
-  // Log to console + alert (full backend reporting can be added later)
-  console.log('REPORT:', {id, name, reason, time: new Date().toISOString()});
-  alert('🚨 Thank you for reporting. Our team will review this listing within 24 hours. If you feel you are in immediate danger, please call 911.');
-}
-
-function expandPhoto(img){
-  document.getElementById('photoExpandImg').src = img.src;
-  document.getElementById('photoExpandOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeExpandPhoto(){
-  document.getElementById('photoExpandOverlay').classList.remove('open');
-  document.body.style.overflow='';
-}
   }catch(e){alert('Error posting. Please try again.');console.error(e);}
   finally{btn.disabled=false;btn.textContent='📸 POST STRAY SIGHTING';}
 }
