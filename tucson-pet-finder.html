@@ -190,7 +190,7 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
       <div class="hstat"><div class="hstat-num">60s</div><div class="hstat-lbl">To Post</div></div>
     </div>
   </div>
-  <div class="alert-strip" id="alertStrip">
+  <div class="alert-strip" id="alertStrip" onclick="switchTab('see')" style="cursor:pointer" title="Click to see all alerts">
     <div class="alert-icon">🔍</div>
     <div class="alert-text" id="alertText">Checking Tucson alerts...</div>
   </div>
@@ -347,17 +347,21 @@ function startVoice(fieldId){
   const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SpeechRecognition){alert('Voice input not supported on this browser. Try Chrome.');return;}
   const el=document.getElementById(fieldId);
-  const btn=el.previousElementSibling||el.parentElement.querySelector('button');
   const recog=new SpeechRecognition();
   recog.lang='en-US';recog.interimResults=false;recog.maxAlternatives=1;
+  const savedVal=el.value;
+  el.value='';
   recog.onstart=()=>{el.placeholder='🎤 Listening... speak now';el.style.borderColor='var(--teal)'};
   recog.onresult=e=>{
-    const transcript=e.results[0][0].transcript;
-    el.value=(el.value?el.value+' ':'')+transcript;
+    el.value=e.results[0][0].transcript;
     el.style.borderColor='var(--border-bright)';
     el.placeholder='';
   };
-  recog.onerror=()=>{el.placeholder='Could not hear — tap to try again';el.style.borderColor='var(--red)'};
+  recog.onerror=()=>{
+    el.value=savedVal;
+    el.placeholder='Could not hear — tap to try again';
+    el.style.borderColor='var(--red)';
+  };
   recog.onend=()=>{el.style.borderColor='var(--border)'};
   recog.start();
 }
@@ -453,7 +457,7 @@ async function loadAlertBanner(){
   const el=document.getElementById('alertText');
   const strip=document.getElementById('alertStrip');
   if(lost===0){el.textContent='No pets currently reported missing in Tucson. Post if you\'ve lost or found a pet.';strip.style.borderColor='rgba(0,255,212,0.2)';document.querySelector('.alert-icon').textContent='✅';}
-  else{el.innerHTML=`<strong>${lost} pet${lost!==1?'s':''} currently missing</strong> in the Tucson area. Keep an eye out in your neighborhood.`;}
+  else{el.innerHTML=`<strong>${lost} pet${lost!==1?'s':''} currently missing</strong> in the Tucson area. Keep an eye out in your neighborhood. <span style='text-decoration:underline;opacity:0.7'>Tap to view →</span>`;}
 }
 
 function openModal(pet){

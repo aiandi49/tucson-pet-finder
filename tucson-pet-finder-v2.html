@@ -183,7 +183,7 @@ footer{background:var(--navy);padding:28px 22px 20px;text-align:center;margin-to
       <span class="hero-pill">✓ Real Database</span>
     </div>
   </div>
-  <div class="alert-strip" id="alertStrip">
+  <div class="alert-strip" id="alertStrip" onclick="switchTab('see')" style="cursor:pointer" title="Click to see all alerts">
     <div class="alert-icon">🔍</div>
     <div class="alert-text" id="alertText">Checking Tucson pet alerts...</div>
   </div>
@@ -343,14 +343,19 @@ function startVoice(fieldId){
   const el=document.getElementById(fieldId);
   const recog=new SpeechRecognition();
   recog.lang='en-US';recog.interimResults=false;recog.maxAlternatives=1;
+  const savedVal=el.value;
+  el.value='';
   recog.onstart=()=>{el.placeholder='🎤 Listening... speak now';el.style.borderColor='var(--teal2)'};
   recog.onresult=e=>{
-    const transcript=e.results[0][0].transcript;
-    el.value=(el.value?el.value+' ':'')+transcript;
+    el.value=e.results[0][0].transcript;
     el.style.borderColor='var(--teal2)';
     el.placeholder='';
   };
-  recog.onerror=()=>{el.placeholder='Could not hear — tap to try again';el.style.borderColor='var(--red)'};
+  recog.onerror=()=>{
+    el.value=savedVal;
+    el.placeholder='Could not hear — tap to try again';
+    el.style.borderColor='var(--red)';
+  };
   recog.onend=()=>{el.style.borderColor='var(--border)'};
   recog.start();
 }
@@ -449,7 +454,7 @@ async function loadAlertBanner(){
     document.querySelector('.alert-icon').textContent='✅';
     el.style.color='var(--teal)';
   } else {
-    el.innerHTML=`<strong>${lost} pet${lost!==1?'s':''} currently missing</strong> in the Tucson area. Scroll down to see the listings.`;
+    el.innerHTML=`<strong>${lost} pet${lost!==1?'s':''} currently missing</strong> in the Tucson area. <span style='text-decoration:underline;opacity:0.7'>Tap to view →</span>`;
   }
 }
 
