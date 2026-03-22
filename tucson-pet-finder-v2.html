@@ -502,10 +502,11 @@ footer{background:var(--navy);padding:28px 22px 20px;text-align:center;margin-to
       <button class="stray-submit" id="straySubmitBtn" onclick="submitStray()">📸 Post This Sighting</button>
     </div>
     <div id="straySuccessView" style="display:none">
-      <div style="text-align:center;padding:20px 0">
-        <div style="font-size:2.5rem;margin-bottom:10px">🙌</div>
-        <div style="font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--gold);margin-bottom:8px">Sighting Posted!</div>
-        <div style="font-size:0.92rem;color:var(--text-mid);line-height:1.6">Your photo and location are now live. Every neighbor who opens this app will see it. Thank you for helping! 🐾</div>
+      <div style="text-align:center;padding:30px 10px 20px">
+        <div style="font-size:3rem;margin-bottom:14px">🙌</div>
+        <div style="font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--gold);margin-bottom:12px">Sighting Posted!</div>
+        <div style="font-size:0.92rem;color:var(--text-mid);line-height:1.7;margin-bottom:24px">Your photo and location are now live. Every neighbor who opens this app will see it. Thank you for helping! 🐾</div>
+        <button class="stray-submit" onclick="closeStrayModal()" style="background:var(--teal);color:#fff;box-shadow:0 4px 16px rgba(0,180,160,0.35)">✓ Done</button>
       </div>
     </div>
   </div>
@@ -685,11 +686,29 @@ function doVoiceStart(fieldId){
   try{_recog.start();}catch(e){_isListening=false;el.style.borderColor="";el.placeholder="";_setBtn(_activeBtn,false);console.warn("Voice start error:",e);}
 }
 
+// ── SMART NAME PARSER ──────────────────────────────────────────────────────
+function smartParseName(raw){
+  if(!raw) return raw;
+  var patterns=[
+    /(?:name\s+on\s+(?:the\s+)?(?:collar|tag|tags)\s+(?:says?|reads?|is))\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
+    /(?:(?:her|his|the|its)\s+name\s+(?:is|was|'s))\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
+    /(?:name\s+(?:is|was|'s))\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
+    /(?:they?\s+call\s+(?:him|her|it|them))\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
+    /(?:goes\s+by)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
+    /(?:called)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
+    /(?:named)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
+    /(?:says?)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\s*$/i,
+  ];
+  for(var i=0;i<patterns.length;i++){var m=raw.match(patterns[i]);if(m&&m[1]){return m[1].trim().replace(/\b\w/g,function(c){return c.toUpperCase();});}}
+  if(raw.split(/\s+/).length<=2&&raw.length<=25) return raw;
+  return raw;
+}
+
 // ── SUBMIT ─────────────────────────────────────────────────────────────────
 async function doSubmit(type){
   var ok=true;
   if(type==="lost"){
-    var name=document.getElementById("lostName").value.trim();
+    var name=smartParseName(document.getElementById("lostName").value.trim());
     var pt=document.getElementById("lostType").value;
     var loc=document.getElementById("lostLoc").value.trim();
     var phone=document.getElementById("lostPhone").value.trim();
@@ -718,7 +737,7 @@ async function doSubmit(type){
     try{
       var pf2=document.getElementById("foundPhoto").files[0]; var pu2=null;
       if(pf2) pu2=await uploadPhoto(document.getElementById("foundPrev").src,pf2.name);
-      var fn2=document.getElementById("foundName").value.trim();
+      var fn2=smartParseName(document.getElementById("foundName").value.trim());
       await addPet({status:"found",name:fn2||"Found "+pt2,type:pt2,breed:document.getElementById("foundBreed").value.trim()||pt2,location:loc2,description:document.getElementById("foundDesc").value.trim(),phone:fmtPhone(phone2),photo_url:pu2||""});
       showSuccess("found"); loadAlertBanner();
     }catch(e){alert("Error posting. Please try again.");console.error(e);}
@@ -1131,13 +1150,13 @@ async function triggerSOS(i){
 function closeSOS(){document.getElementById("sosOverlay").classList.remove("open");document.body.style.overflow="";}
 
 // ── STRAY ──────────────────────────────────────────────────────────────────
-var _strayLatLng=null,_strayPhotoData=null;
+var _strayLatLng=null,_strayLocReadable=null,_strayPhotoData=null;
 
 function openStrayModal(){document.getElementById("strayModal").classList.add("open");document.getElementById("strayFormView").style.display="block";document.getElementById("straySuccessView").style.display="none";document.body.style.overflow="hidden";}
 function closeStrayModal(e){
   if(e&&e.target!==document.getElementById("strayModal")&&!e.target.classList.contains("stray-close")) return;
   document.getElementById("strayModal").classList.remove("open"); document.body.style.overflow="";
-  _strayLatLng=null;_strayPhotoData=null;
+  _strayLatLng=null;_strayLocReadable=null;_strayPhotoData=null;
   document.getElementById("strayPhotoPreview").style.display="none";
   document.getElementById("strayPhotoHint").style.display="flex";
   document.getElementById("strayLocText").textContent="Tap here to capture your current location";
@@ -1145,12 +1164,12 @@ function closeStrayModal(e){
   document.getElementById("strayNote").value=""; document.getElementById("strayPhone").value=""; document.getElementById("strayPhotoInput").value="";
 }
 function loadStrayPhoto(input){var f=input.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){_strayPhotoData=e.target.result;var img=document.getElementById("strayPhotoPreview");img.src=_strayPhotoData;img.style.display="block";document.getElementById("strayPhotoHint").style.display="none";};r.readAsDataURL(f);}
-function getStrayLocation(){var el=document.getElementById("strayLocText");el.textContent="Getting your location...";if(!navigator.geolocation){el.textContent="GPS not available";return;}navigator.geolocation.getCurrentPosition(function(pos){_strayLatLng={lat:pos.coords.latitude,lng:pos.coords.longitude};el.textContent="✅ Location saved ("+_strayLatLng.lat.toFixed(4)+", "+_strayLatLng.lng.toFixed(4)+")";el.className="stray-loc-text got";},function(){el.textContent="Could not get location — tap to try again";el.className="stray-loc-text";});}
+function getStrayLocation(){var el=document.getElementById("strayLocText");el.textContent="Getting your location...";if(!navigator.geolocation){el.textContent="GPS not available";return;}navigator.geolocation.getCurrentPosition(function(pos){_strayLatLng={lat:pos.coords.latitude,lng:pos.coords.longitude};el.textContent="✅ Location saved — looking up address...";el.className="stray-loc-text got";fetch("https://nominatim.openstreetmap.org/reverse?format=json&lat="+_strayLatLng.lat+"&lon="+_strayLatLng.lng+"&zoom=16&addressdetails=1").then(function(r){return r.json();}).then(function(data){var a=data.address||{};var parts=[];if(a.road)parts.push(a.road);if(a.neighbourhood||a.suburb)parts.push(a.neighbourhood||a.suburb);if(a.city||a.town||a.village)parts.push(a.city||a.town||a.village);var readable=parts.length?parts.join(", "):(data.display_name?data.display_name.split(",").slice(0,3).join(","):null);if(readable){_strayLocReadable=readable;el.textContent="✅ "+readable;}else{_strayLocReadable=null;el.textContent="✅ Location captured near Tucson";}}).catch(function(){_strayLocReadable=null;el.textContent="✅ Location captured";});},function(){el.textContent="Could not get location — tap to try again";el.className="stray-loc-text";});}
 async function submitStray(){
   if(!_strayPhotoData){alert("Please take or upload a photo first!");return;}
   var btn=document.getElementById("straySubmitBtn"); btn.disabled=true; btn.textContent="Posting...";
   var note=document.getElementById("strayNote").value.trim(); var phone=document.getElementById("strayPhone").value.trim();
-  var loc=_strayLatLng?"GPS: "+_strayLatLng.lat.toFixed(5)+", "+_strayLatLng.lng.toFixed(5):"Location not captured";
+  var loc=_strayLocReadable?_strayLocReadable:(_strayLatLng?_strayLatLng.lat.toFixed(4)+", "+_strayLatLng.lng.toFixed(4):"Location not captured");
   try{await addPet({status:"stray",name:"Stray Sighting",type:"Unknown",breed:"Unknown",location:loc,description:note||"No additional notes.",phone:phone?fmtPhone(phone):"",photo_url:_strayPhotoData});document.getElementById("strayFormView").style.display="none";document.getElementById("straySuccessView").style.display="block";loadAlertBanner();}
   catch(e){alert("Error posting. Please try again.");console.error(e);}
   finally{btn.disabled=false;btn.textContent="📸 Post This Sighting";}

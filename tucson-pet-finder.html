@@ -507,10 +507,11 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
       <button class="stray-submit" id="straySubmitBtn" onclick="submitStray()">📸 POST STRAY SIGHTING</button>
     </div>
     <div id="straySuccessView" style="display:none">
-      <div class="stray-success">
-        <div style="font-size:2.5rem;margin-bottom:10px">🙌</div>
-        <div style="font-family:'Orbitron',sans-serif;font-size:0.95rem;color:var(--gold);margin-bottom:8px">SIGHTING POSTED!</div>
-        <div style="font-size:0.85rem;color:var(--text-dim);line-height:1.6">Your photo is now live. Every Tucson neighbor who opens this app will see it. Thank you! 🐾</div>
+      <div class="stray-success" style="padding:30px 10px 20px">
+        <div style="font-size:3rem;margin-bottom:14px">🙌</div>
+        <div style="font-family:'Orbitron',sans-serif;font-size:0.95rem;color:var(--gold);margin-bottom:12px;letter-spacing:0.06em">SIGHTING POSTED!</div>
+        <div style="font-size:0.88rem;color:var(--text-dim);line-height:1.7;margin-bottom:24px">Your photo is now live. Every Tucson neighbor who opens this app will see it. Thank you! 🐾</div>
+        <button class="stray-submit" onclick="closeStrayModal()" style="background:var(--teal);color:var(--bg);box-shadow:0 4px 16px var(--teal-glow)">✓ DONE</button>
       </div>
     </div>
   </div>
@@ -826,11 +827,39 @@ function doVoiceStart(fieldId) {
   }
 }
 
+// ── SMART NAME PARSER ──────────────────────────────────────────────────────
+function smartParseName(raw) {
+  if(!raw) return raw;
+  // Patterns like "name on collar says George", "her name is Bella", "his name's Max", "they call him Buddy"
+  var patterns = [
+    /(?:name\s+on\s+(?:the\s+)?(?:collar|tag|tags)\s+(?:says?|reads?|is))\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
+    /(?:(?:her|his|the|its)\s+name\s+(?:is|was|'s))\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
+    /(?:name\s+(?:is|was|'s))\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
+    /(?:they?\s+call\s+(?:him|her|it|them))\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
+    /(?:goes\s+by)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
+    /(?:called)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
+    /(?:named)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
+    /(?:says?)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\s*$/i,
+  ];
+  for(var i=0; i<patterns.length; i++) {
+    var m = raw.match(patterns[i]);
+    if(m && m[1]) {
+      var name = m[1].trim();
+      // Capitalize first letter of each word
+      return name.replace(/\b\w/g, function(c){ return c.toUpperCase(); });
+    }
+  }
+  // If it's a short input (1-2 words, under 25 chars) just use it as-is
+  if(raw.split(/\s+/).length <= 2 && raw.length <= 25) return raw;
+  // Long freeform speech — return as-is, let the full text show in description
+  return raw;
+}
+
 // ── SUBMIT FORMS ───────────────────────────────────────────────────────────
 async function doSubmit(type) {
   var ok = true;
   if(type==="lost") {
-    var name  = document.getElementById("lostName").value.trim();
+    var name  = smartParseName(document.getElementById("lostName").value.trim());
     var pt    = document.getElementById("lostType").value;
     var loc   = document.getElementById("lostLoc").value.trim();
     var phone = document.getElementById("lostPhone").value.trim();
@@ -865,7 +894,7 @@ async function doSubmit(type) {
       var photoFile2 = document.getElementById("foundPhoto").files[0];
       var photoUrl2 = null;
       if(photoFile2) photoUrl2 = await uploadPhoto(document.getElementById("foundPrev").src, photoFile2.name);
-      var foundName2 = document.getElementById("foundName").value.trim();
+      var foundName2 = smartParseName(document.getElementById("foundName").value.trim());
       await addPet({status:"found",name:foundName2||"Found "+pt2,type:pt2,breed:document.getElementById("foundBreed").value.trim()||pt2,location:loc2,description:document.getElementById("foundDesc").value.trim(),phone:fmtPhone(phone2),photo_url:photoUrl2||""});
       showSuccess("found");
       loadAlertBanner();
@@ -1633,6 +1662,7 @@ function closeSOS() {
 
 // ── SPOT A STRAY ───────────────────────────────────────────────────────────
 var _strayLatLng = null;
+var _strayLocReadable = null;
 var _strayPhotoData = null;
 
 function openStrayModal() {
@@ -1646,7 +1676,7 @@ function closeStrayModal(e) {
   if(e && e.target !== document.getElementById("strayModal") && !e.target.classList.contains("stray-close")) return;
   document.getElementById("strayModal").classList.remove("open");
   document.body.style.overflow = "";
-  _strayLatLng = null; _strayPhotoData = null;
+  _strayLatLng = null; _strayLocReadable = null; _strayPhotoData = null;
   document.getElementById("strayPhotoPreview").style.display = "none";
   document.getElementById("strayPhotoHint").style.display = "flex";
   document.getElementById("strayLocText").textContent = "Tap to capture your GPS location";
@@ -1676,8 +1706,30 @@ function getStrayLocation() {
   navigator.geolocation.getCurrentPosition(
     function(pos) {
       _strayLatLng = {lat:pos.coords.latitude, lng:pos.coords.longitude};
-      el.textContent = "✅ Location captured ("+_strayLatLng.lat.toFixed(4)+", "+_strayLatLng.lng.toFixed(4)+")";
+      el.textContent = "✅ Location captured — looking up address...";
       el.className = "stray-loc-text got";
+      // Reverse geocode to human-readable address (OpenStreetMap, free, no API key)
+      fetch("https://nominatim.openstreetmap.org/reverse?format=json&lat="+_strayLatLng.lat+"&lon="+_strayLatLng.lng+"&zoom=16&addressdetails=1")
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          var a = data.address || {};
+          var parts = [];
+          if(a.road) parts.push(a.road);
+          if(a.neighbourhood || a.suburb) parts.push(a.neighbourhood || a.suburb);
+          if(a.city || a.town || a.village) parts.push(a.city || a.town || a.village);
+          var readable = parts.length ? parts.join(", ") : (data.display_name ? data.display_name.split(",").slice(0,3).join(",") : null);
+          if(readable) {
+            _strayLocReadable = readable;
+            el.textContent = "✅ " + readable;
+          } else {
+            _strayLocReadable = null;
+            el.textContent = "✅ Location captured near Tucson";
+          }
+        })
+        .catch(function(){
+          _strayLocReadable = null;
+          el.textContent = "✅ Location captured";
+        });
     },
     function() { el.textContent = "Could not get location — tap to try again"; el.className = "stray-loc-text"; }
   );
@@ -1689,7 +1741,7 @@ async function submitStray() {
   btn.disabled = true; btn.textContent = "POSTING...";
   var note = document.getElementById("strayNote").value.trim();
   var phone = document.getElementById("strayPhone").value.trim();
-  var locStr = _strayLatLng ? "GPS: "+_strayLatLng.lat.toFixed(5)+", "+_strayLatLng.lng.toFixed(5) : "Location not captured";
+  var locStr = _strayLocReadable ? _strayLocReadable : (_strayLatLng ? _strayLatLng.lat.toFixed(4)+", "+_strayLatLng.lng.toFixed(4) : "Location not captured");
   try {
     await addPet({status:"stray",name:"Stray Sighting",type:"Unknown",breed:"Unknown",location:locStr,description:note||"No additional notes.",phone:phone?fmtPhone(phone):"",photo_url:_strayPhotoData});
     document.getElementById("strayFormView").style.display = "none";
