@@ -6,24 +6,33 @@
 <title>Tucson Pet Finder — Free Lost & Found Pet Alerts</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F7F4EF;--bg2:#EDEAE3;--white:#FFFFFF;--navy:#1A2E4A;--navy2:#2C4A6E;--teal:#1A7A6E;--teal2:#22A090;--teal-light:#E8F5F3;--gold:#B8860B;--gold-light:#FEF9E7;--red:#C0392B;--red-light:#FDEDEC;--green:#1E8449;--green-light:#EAFAF1;--text:#2C3E50;--text-mid:#566573;--text-light:#85929E;--border:#D5D8DC;--border-dark:#AAB7B8;--shadow:0 2px 12px rgba(0,0,0,0.08);--shadow-hover:0 6px 24px rgba(0,0,0,0.13)}
+:root{
+  --bg:#F7F4EF;--bg2:#EDEAE3;--white:#FFFFFF;--navy:#1A2E4A;--navy2:#2C4A6E;
+  --teal:#1A7A6E;--teal2:#22A090;--teal-light:#E8F5F3;
+  --gold:#B8860B;--gold-light:#FEF9E7;
+  --red:#C0392B;--red-light:#FDEDEC;
+  --green:#1E8449;--green-light:#EAFAF1;
+  --text:#2C3E50;--text-mid:#566573;--text-light:#85929E;
+  --border:#D5D8DC;--border-dark:#AAB7B8;
+  --shadow:0 2px 12px rgba(0,0,0,0.08);--shadow-hover:0 6px 24px rgba(0,0,0,0.13);
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'Source Sans 3',sans-serif;font-size:20px;line-height:1.7;min-height:100vh;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
-.page{max-width:480px;margin:0 auto;padding:62px 0 80px}
+.page{max-width:480px;margin:0 auto;padding:62px 0 160px}
 nav{background:var(--navy);padding:15px 18px;display:flex;align-items:center;gap:12px;position:fixed;top:0;left:0;right:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
-.nav-back{color:rgba(255,255,255,0.8);font-size:0.95rem;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.nav-back{color:rgba(255,255,255,0.8);font-size:0.95rem;font-weight:600;text-decoration:none;white-space:nowrap}
 .nav-title{font-family:'Lora',serif;font-size:1rem;font-weight:700;color:#fff;flex:1}
 .nav-live{font-size:0.8rem;font-weight:700;color:var(--green);background:var(--green-light);padding:5px 14px;border-radius:20px;border:1px solid rgba(30,132,73,0.35);white-space:nowrap}
 .hero{background:var(--navy);padding:32px 22px 44px;text-align:center;position:relative;overflow:hidden}
-.hero::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:40px;background:var(--bg);clip-path:ellipse(55% 100% at 50% 100%)}
+.hero::after{content:"";position:absolute;bottom:-1px;left:0;right:0;height:40px;background:var(--bg);clip-path:ellipse(55% 100% at 50% 100%)}
 .hero-icon{font-size:3rem;margin-bottom:10px}
 .hero-title{font-family:'Lora',serif;font-size:clamp(1.5rem,6vw,2rem);font-weight:700;color:#fff;line-height:1.2;margin-bottom:8px}
 .hero-title span{color:#7EC8C0}
 .hero-sub{font-size:0.95rem;color:rgba(255,255,255,0.7);font-weight:300;max-width:320px;margin:0 auto 20px;line-height:1.6}
 .hero-pills{display:flex;justify-content:center;flex-wrap:wrap;gap:8px}
 .hero-pill{font-size:0.8rem;font-weight:600;background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.85);padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.2)}
-.alert-strip{margin:24px 18px 20px;background:var(--red-light);border:2px solid rgba(192,57,43,0.3);border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:center}
+.alert-strip{margin:24px 18px 20px;background:var(--red-light);border:2px solid rgba(192,57,43,0.3);border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:center;cursor:pointer}
 .alert-icon{font-size:1.5rem;flex-shrink:0}
 .alert-text{font-size:0.92rem;color:var(--red);font-weight:500;line-height:1.5}
 .alert-text strong{color:#922B21}
@@ -38,12 +47,13 @@ nav{background:var(--navy);padding:15px 18px;display:flex;align-items:center;gap
 .form-banner.found{background:var(--green-light);color:var(--green)}
 .form-label{display:block;font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:8px}
 .form-row{margin-bottom:16px}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
 .form-input,.form-select,.form-textarea{width:100%;background:var(--bg);border:2px solid var(--border);border-radius:10px;padding:16px 18px;font-family:'Source Sans 3',sans-serif;font-size:1.1rem;color:var(--text);outline:none;transition:border-color 0.2s;-webkit-appearance:none}
 .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--teal2);background:var(--white)}
 .form-input::placeholder,.form-textarea::placeholder{color:var(--text-light)}
 .form-textarea{resize:none;min-height:90px;line-height:1.5}
-.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
 .form-err{font-size:0.78rem;color:var(--red);margin-top:5px;display:none}
+.spk-btn{background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600}
 .photo-upload{width:100%;border:2px dashed var(--border-dark);border-radius:12px;padding:22px 16px;text-align:center;cursor:pointer;background:var(--bg2);transition:background 0.2s,border-color 0.2s}
 .photo-upload:hover{background:var(--teal-light);border-color:var(--teal2)}
 .photo-upload input{display:none}
@@ -60,40 +70,20 @@ nav{background:var(--navy);padding:15px 18px;display:flex;align-items:center;gap
 .success-icon{font-size:2.5rem;margin-bottom:10px}
 .success-title{font-family:'Lora',serif;font-size:1.2rem;font-weight:700;color:var(--teal);margin-bottom:8px}
 .success-msg{font-size:0.92rem;color:var(--text-mid);line-height:1.6;margin-bottom:18px}
-.success-share{display:inline-block;background:var(--navy);color:#fff;font-family:'Source Sans 3',sans-serif;font-size:0.92rem;font-weight:700;padding:12px 24px;border-radius:10px;border:none;cursor:pointer;transition:background 0.2s}
-.success-share:hover{background:var(--navy2)}
+.success-share{display:inline-block;background:var(--navy);color:#fff;font-family:'Source Sans 3',sans-serif;font-size:0.92rem;font-weight:700;padding:12px 24px;border-radius:10px;border:none;cursor:pointer}
 .listings-section{margin:0 18px 28px;display:none}
 .listings-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .listings-title{font-family:'Lora',serif;font-size:1rem;font-weight:700;color:var(--navy)}
 .listings-count{font-size:0.82rem;color:var(--text-light);font-weight:600}
-
-.tier-divider{display:flex;align-items:center;gap:10px;margin:18px 0 10px}
-.tier-divider-line{flex:1;height:1px;background:var(--border)}
-.tier-label{font-size:0.72rem;font-weight:700;white-space:nowrap;padding:3px 10px;border-radius:20px;letter-spacing:0.04em}
-.tier-hot .tier-label{color:var(--red);border:1px solid rgba(192,57,43,0.25);background:var(--red-light)}
-.tier-watching .tier-label{color:var(--gold);border:1px solid rgba(184,134,11,0.3);background:var(--gold-light)}
-.tier-archived .tier-label{color:var(--text-light);border:1px solid var(--border);background:var(--bg2)}
-.listing-card.watching{opacity:0.85;border-left-color:var(--gold)}
-.listing-card.archived{opacity:0.5;filter:grayscale(0.2)}
-.age-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
-.age-dot-hot{background:var(--red);animation:dotPulse 1.5s infinite}
-.age-dot-watching{background:var(--gold)}
-.age-dot-archived{background:var(--text-light)}
-@keyframes dotPulse{0%,100%{opacity:1}50%{opacity:0.3}}
-
-.pet-toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);z-index:800;background:var(--white);border:2px solid var(--border-dark);border-radius:16px;padding:14px 16px;max-width:340px;width:calc(100% - 40px);display:flex;gap:12px;align-items:center;opacity:0;transition:all 0.4s ease;pointer-events:none;box-shadow:0 8px 32px rgba(0,0,0,0.15)}
-.pet-toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
-.toast-photo{width:52px;height:52px;border-radius:10px;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;overflow:hidden}
-.toast-photo img{width:100%;height:100%;object-fit:cover;border-radius:10px}
-.toast-body{flex:1;min-width:0}
-.toast-title{font-size:0.72rem;font-weight:700;color:var(--red);margin-bottom:3px}
-.toast-name{font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:2px}
-.toast-sub{font-size:0.75rem;color:var(--text-light);line-height:1.3}
-.toast-close{font-size:0.9rem;color:var(--text-light);cursor:pointer;flex-shrink:0;padding:4px}
-.toast-view{font-size:0.72rem;color:var(--teal);text-decoration:underline;cursor:pointer;margin-top:4px;display:inline-block}
+.tier-div{display:flex;align-items:center;gap:10px;margin:18px 0 10px}
+.tier-div-line{flex:1;height:1px;background:var(--border)}
+.tier-lbl{font-size:0.72rem;font-weight:700;white-space:nowrap;padding:3px 10px;border-radius:20px;letter-spacing:0.04em}
+.tier-hot .tier-lbl{color:var(--red);border:1px solid rgba(192,57,43,0.25);background:var(--red-light)}
+.tier-watching .tier-lbl{color:var(--gold);border:1px solid rgba(184,134,11,0.3);background:var(--gold-light)}
+.tier-archived .tier-lbl{color:var(--text-light);border:1px solid var(--border);background:var(--bg2)}
 .listing-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;display:flex;gap:14px;align-items:flex-start;cursor:pointer;box-shadow:var(--shadow);transition:box-shadow 0.2s;border-left:5px solid var(--red)}
 .listing-card.found-card{border-left-color:var(--green)}
-.listing-card.reunited{border-left-color:var(--border-dark);opacity:0.6}.listing-card.stray-card{border-left-color:var(--gold)}
+.listing-card.watching{border-left-color:var(--gold);opacity:0.85}
 .listing-card:hover{box-shadow:var(--shadow-hover)}
 .listing-photo{width:66px;height:66px;border-radius:12px;overflow:hidden;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0}
 .listing-photo img{width:100%;height:100%;object-fit:cover}
@@ -102,34 +92,32 @@ nav{background:var(--navy);padding:15px 18px;display:flex;align-items:center;gap
 .listing-type{font-size:0.7rem;font-weight:700;padding:2px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:0.04em}
 .type-lost{background:var(--red-light);color:var(--red)}
 .type-found{background:var(--green-light);color:var(--green)}
-.type-reunited{background:var(--bg2);color:var(--text-light)}.type-stray{background:var(--gold-light);color:var(--gold)}
+.type-stray{background:var(--gold-light);color:var(--gold)}
+.type-reunited{background:var(--bg2);color:var(--text-light)}
+.age-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.dot-hot{background:var(--red);animation:dotPulse 1.5s infinite}
+.dot-watching{background:var(--gold)}
+.dot-archived{background:var(--text-light)}
+@keyframes dotPulse{0%,100%{opacity:1}50%{opacity:0.3}}
 .listing-name{font-family:'Lora',serif;font-size:0.95rem;font-weight:700;color:var(--navy)}
 .listing-breed{font-size:0.85rem;color:var(--text-mid);margin-bottom:3px}
 .listing-loc{font-size:0.8rem;color:var(--text-light)}
 .listing-time{font-size:0.75rem;color:var(--text-light);flex-shrink:0;white-space:nowrap}
 .state-box{text-align:center;padding:32px 20px;font-size:0.9rem;color:var(--text-light)}
-.empty-icon{font-size:2.5rem;margin-bottom:12px}
-.empty-title{font-family:'Lora',serif;font-size:1rem;font-weight:700;color:var(--text-light);margin-bottom:6px}
-.empty-sub{font-size:0.85rem;color:var(--text-light)}
 .res-section{margin:0 18px 28px}
 .res-title{font-family:'Lora',serif;font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:14px}
 .res-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.res-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:16px 14px;text-decoration:none;display:block;box-shadow:var(--shadow);transition:box-shadow 0.2s,transform 0.15s}
+.res-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:16px 14px;text-decoration:none;display:block;box-shadow:var(--shadow);transition:box-shadow 0.2s}
 .res-card:hover{box-shadow:var(--shadow-hover)}
-.res-card:active{transform:scale(0.97)}
 .res-icon{font-size:1.5rem;margin-bottom:6px}
 .res-name{font-family:'Lora',serif;font-size:0.88rem;font-weight:700;color:var(--navy);margin-bottom:4px;line-height:1.3}
 .res-info{font-size:0.78rem;color:var(--text-light);line-height:1.4}
 .share-cta{margin:0 18px 28px;background:var(--teal-light);border:2px solid var(--teal2);border-radius:16px;padding:22px 20px;text-align:center}
 .share-cta h3{font-family:'Lora',serif;font-size:1rem;font-weight:700;color:var(--teal);margin-bottom:8px}
 .share-cta p{font-size:0.9rem;color:var(--text-mid);line-height:1.6;margin-bottom:16px}
-.share-btns{display:flex;flex-direction:column;gap:8px}
-.sbtn{display:block;width:100%;padding:15px;border-radius:12px;font-family:'Source Sans 3',sans-serif;font-size:1rem;font-weight:700;border:none;cursor:pointer;text-decoration:none;text-align:center;transition:background 0.2s;box-sizing:border-box}
+.sbtn{display:block;width:100%;padding:15px;border-radius:12px;font-family:'Source Sans 3',sans-serif;font-size:1rem;font-weight:700;border:none;cursor:pointer;text-decoration:none;text-align:center;transition:background 0.2s;box-sizing:border-box;margin-bottom:8px}
 .sbtn-p{background:var(--navy);color:#fff}
-.sbtn-p:hover{background:var(--navy2)}
 .sbtn-s{background:transparent;color:var(--text-mid);border:2px solid var(--border)}
-.sbtn-s:hover{border-color:var(--teal2);color:var(--teal)}
-.sbtn:active{transform:scale(0.98)}
 footer{background:var(--navy);padding:28px 22px 20px;text-align:center;margin-top:8px}
 .footer-back{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.7);font-size:0.88rem;font-weight:600;text-decoration:none;margin-bottom:14px;padding:8px 18px;border:1px solid rgba(255,255,255,0.2);border-radius:20px}
 .footer-credit{font-size:0.8rem;color:rgba(255,255,255,0.45);line-height:1.8}
@@ -146,16 +134,79 @@ footer{background:var(--navy);padding:28px 22px 20px;text-align:center;margin-to
 .modal-breed{font-size:0.92rem;color:var(--text-mid);margin-bottom:16px}
 .modal-detail{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);font-size:0.9rem}
 .modal-dlbl{color:var(--text-light);font-weight:600;font-size:0.82rem}
-.modal-dval{color:var(--text);font-weight:500;text-align:right;max-width:60%}
+.modal-dval{color:var(--text-mid);font-weight:400;text-align:right;max-width:60%}
 .modal-desc{margin:14px 0 20px;font-size:0.92rem;color:var(--text-mid);line-height:1.7;background:var(--bg2);padding:14px 16px;border-radius:10px}
-.modal-call{display:block;width:100%;background:var(--navy);color:#fff;font-family:'Source Sans 3',sans-serif;font-size:1.05rem;font-weight:700;padding:16px;border-radius:12px;border:none;cursor:pointer;margin-bottom:10px;text-align:center;text-decoration:none;box-shadow:var(--shadow)}
-.modal-reunite{display:block;width:100%;background:var(--green-light);color:var(--green);font-family:'Source Sans 3',sans-serif;font-size:0.95rem;font-weight:700;padding:14px;border-radius:12px;border:2px solid rgba(30,132,73,0.3);cursor:pointer;transition:background 0.2s;text-align:center}
+.modal-call{display:block;width:100%;background:var(--navy);color:#fff;font-family:'Source Sans 3',sans-serif;font-size:1.05rem;font-weight:700;padding:16px;border-radius:12px;border:none;cursor:pointer;margin-bottom:10px;text-align:center}
+.modal-reunite{display:block;width:100%;background:var(--green-light);color:var(--green);font-family:'Source Sans 3',sans-serif;font-size:0.95rem;font-weight:700;padding:14px;border-radius:12px;border:2px solid rgba(30,132,73,0.3);cursor:pointer;transition:background 0.2s;text-align:center;margin-bottom:10px}
 .modal-reunite:hover{background:var(--green);color:#fff}
-.modal-close{position:absolute;top:12px;right:14px;width:32px;height:32px;background:var(--bg2);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--text-light);cursor:pointer}
-
-.fab-stray{position:fixed;bottom:24px;right:20px;z-index:500;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#B8860B,#E6A817);border:none;box-shadow:0 4px 20px rgba(184,134,11,0.4);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.6rem;transition:transform 0.2s;-webkit-tap-highlight-color:transparent}
+.modal-close{position:absolute;top:12px;right:14px;width:32px;height:32px;background:var(--bg2);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--text-light);cursor:pointer;z-index:10}
+.claim-lost-btn{width:100%;background:linear-gradient(135deg,var(--red),#e05555);color:#fff;font-family:'Source Sans 3',sans-serif;font-size:1rem;font-weight:700;padding:15px;border-radius:12px;border:none;cursor:pointer;margin-bottom:10px;box-shadow:0 4px 16px rgba(192,57,43,0.35);animation:claimP 2s ease-in-out infinite}
+.claim-found-btn{width:100%;background:linear-gradient(135deg,var(--green),#27ae60);color:#fff;font-family:'Source Sans 3',sans-serif;font-size:1rem;font-weight:700;padding:15px;border-radius:12px;border:none;cursor:pointer;margin-bottom:10px;box-shadow:0 4px 16px rgba(30,132,73,0.35);animation:claimP2 2s ease-in-out infinite}
+@keyframes claimP{0%,100%{box-shadow:0 4px 16px rgba(192,57,43,0.35)}50%{box-shadow:0 4px 24px rgba(192,57,43,0.6)}}
+@keyframes claimP2{0%,100%{box-shadow:0 4px 16px rgba(30,132,73,0.35)}50%{box-shadow:0 4px 24px rgba(30,132,73,0.6)}}
+.safety-note{background:var(--teal-light);border:1px solid var(--teal2);border-radius:10px;padding:10px 14px;margin:10px 0;font-size:0.85rem;color:var(--teal);line-height:1.5;display:flex;gap:8px;align-items:flex-start}
+.safety-banner{background:var(--gold-light);border:2px solid rgba(184,134,11,0.3);border-radius:12px;padding:14px 16px;margin:10px 0;font-size:0.88rem;color:var(--gold);line-height:1.6}
+.safety-banner strong{color:var(--navy);display:block;margin-bottom:4px;font-weight:700;font-size:0.85rem}
+.safety-places{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.safety-place{background:#fff;border:1px solid rgba(184,134,11,0.3);border-radius:6px;padding:3px 10px;font-size:0.78rem;color:var(--gold);font-weight:600}
+.report-btn{width:100%;background:transparent;color:var(--red);font-size:0.82rem;font-weight:600;padding:10px;border-radius:8px;border:1px solid rgba(192,57,43,0.25);cursor:pointer;margin-top:8px;transition:all 0.2s}
+.report-btn:hover{background:var(--red-light)}
+.verify-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.55);display:none;align-items:center;justify-content:center;padding:20px}
+.verify-overlay.open{display:flex}
+.verify-sheet{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:28px 22px;width:100%;max-width:460px;max-height:88vh;overflow-y:auto;position:relative;box-shadow:0 8px 40px rgba(0,0,0,0.15)}
+.verify-close{position:absolute;top:14px;right:16px;width:30px;height:30px;background:var(--bg2);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;color:var(--text-light);cursor:pointer;z-index:10}
+.verify-title{font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:6px}
+.verify-sub{font-size:0.9rem;color:var(--text-mid);margin-bottom:20px;line-height:1.5}
+.verify-checklist{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:14px 0}
+.verify-checklist-title{font-size:0.82rem;font-weight:700;color:var(--teal);margin-bottom:10px}
+.verify-check{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.verify-check:last-of-type{border-bottom:none}
+.verify-check input[type=checkbox]{width:20px;height:20px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
+.verify-check label{font-size:0.88rem;color:var(--text);cursor:pointer;line-height:1.4}
+.verify-input{width:100%;background:var(--bg);border:2px solid var(--border);border-radius:10px;padding:12px 14px;font-family:'Source Sans 3',sans-serif;font-size:1rem;color:var(--text);outline:none;margin-top:6px;transition:border-color 0.2s}
+.verify-input:focus{border-color:var(--teal2)}
+.verify-input::placeholder{color:var(--text-light)}
+.verify-confirm-btn{width:100%;background:var(--navy);color:#fff;font-family:'Source Sans 3',sans-serif;font-size:1rem;font-weight:700;padding:15px;border-radius:12px;border:none;cursor:pointer;margin-top:14px;opacity:0.4;pointer-events:none;transition:all 0.2s}
+.verify-confirm-btn.ready{opacity:1;pointer-events:auto;background:var(--teal)}
+.pet-toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);z-index:800;background:var(--white);border:2px solid var(--border-dark);border-radius:16px;padding:14px 16px;max-width:340px;width:calc(100% - 40px);display:flex;gap:12px;align-items:center;opacity:0;transition:all 0.4s ease;pointer-events:none;box-shadow:0 8px 32px rgba(0,0,0,0.15)}
+.pet-toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+.toast-photo{width:52px;height:52px;border-radius:10px;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;overflow:hidden}
+.toast-photo img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+.toast-body{flex:1;min-width:0}
+.toast-title{font-size:0.72rem;font-weight:700;color:var(--red);margin-bottom:3px}
+.toast-name{font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:2px}
+.toast-sub{font-size:0.75rem;color:var(--text-light);line-height:1.3}
+.toast-view{font-size:0.72rem;color:var(--teal);text-decoration:underline;cursor:pointer;margin-top:4px;display:inline-block}
+.toast-close{font-size:0.9rem;color:var(--text-light);cursor:pointer;flex-shrink:0;padding:4px}
+.fab-stray{position:fixed;bottom:24px;right:20px;z-index:500;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#B8860B,#E6A817);border:none;box-shadow:0 4px 20px rgba(184,134,11,0.4);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.5rem;transition:transform 0.2s;-webkit-tap-highlight-color:transparent}
 .fab-stray:active{transform:scale(0.92)}
 .fab-stray-label{position:fixed;bottom:38px;right:88px;z-index:500;background:var(--navy);color:#E6A817;font-size:0.65rem;font-weight:700;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap;border:1px solid rgba(184,134,11,0.4)}
+.reg-fab{position:fixed;bottom:100px;right:20px;z-index:500;background:linear-gradient(135deg,#1A2E4A,#2C4A6E);border:none;border-radius:50%;width:54px;height:54px;font-size:1.3rem;cursor:pointer;box-shadow:0 4px 16px rgba(26,46,74,0.4);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;-webkit-tap-highlight-color:transparent}
+.reg-fab:active{transform:scale(0.92)}
+.reg-fab-label{position:fixed;bottom:116px;right:84px;z-index:500;background:var(--navy);color:#fff;font-size:0.65rem;font-weight:700;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap}
+.sos-fab{position:fixed;bottom:176px;right:20px;z-index:500;background:linear-gradient(135deg,#cc0000,#ff3322);border:none;border-radius:50%;width:54px;height:54px;font-size:1.4rem;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(200,0,0,0.5);animation:sosPulse 2.5s ease-in-out infinite;-webkit-tap-highlight-color:transparent}
+.sos-fab.visible{display:flex}
+.sos-fab:active{transform:scale(0.92)}
+@keyframes sosPulse{0%,100%{box-shadow:0 4px 20px rgba(200,0,0,0.5)}50%{box-shadow:0 4px 32px rgba(255,50,0,0.8)}}
+.sos-fab-label{position:fixed;bottom:192px;right:84px;z-index:500;background:var(--navy);border:1px solid rgba(200,0,0,0.4);color:#cc0000;font-size:0.65rem;font-weight:700;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap;display:none}
+.sos-fab.visible ~ .sos-fab-label{display:block}
+.pet-slot{background:var(--bg2);border:2px dashed var(--border-dark);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:all 0.2s}
+.pet-slot:hover{border-color:var(--teal2);background:var(--teal-light)}
+.pet-slot.filled{border-style:solid;border-color:rgba(30,132,73,0.4);background:var(--green-light)}
+.pet-slot-top{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.pet-slot-emoji{font-size:1.4rem}
+.pet-slot-name{font-family:'Lora',serif;font-size:0.92rem;font-weight:700;color:var(--navy)}
+.pet-slot-detail{font-size:0.8rem;color:var(--text-mid)}
+.pet-slot-add{font-size:0.88rem;font-weight:600;color:var(--teal);text-align:center;padding:6px 0}
+.sos-pick-btn{width:100%;background:var(--red-light);border:2px solid rgba(192,57,43,0.3);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:all 0.2s;text-align:left}
+.sos-pick-btn:hover{border-color:var(--red)}
+.sos-pick-emoji{font-size:1.8rem;flex-shrink:0}
+.sos-pick-name{font-family:'Lora',serif;font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:2px}
+.sos-pick-detail{font-size:0.8rem;color:var(--text-mid)}
+.photo-expand-overlay{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,0.88);display:none;align-items:center;justify-content:center;cursor:zoom-out}
+.photo-expand-overlay.open{display:flex}
+.photo-expand-overlay img{max-width:95vw;max-height:90vh;object-fit:contain;border-radius:12px}
+.photo-expand-close{position:absolute;top:16px;right:16px;width:36px;height:36px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;color:#fff;cursor:pointer}
 .stray-modal{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,0.6);display:none;align-items:flex-end;justify-content:center}
 .stray-modal.open{display:flex}
 .stray-sheet{background:var(--white);border-radius:20px 20px 0 0;padding:24px 20px 40px;width:100%;max-width:480px;animation:slideUp 0.3s ease both;position:relative;box-shadow:0 -4px 30px rgba(0,0,0,0.15)}
@@ -179,75 +230,12 @@ footer{background:var(--navy);padding:28px 22px 20px;text-align:center;margin-to
 .stray-submit{width:100%;background:linear-gradient(135deg,#B8860B,#E6A817);color:#fff;font-family:'Source Sans 3',sans-serif;font-size:1.05rem;font-weight:700;padding:16px;border-radius:12px;border:none;cursor:pointer;margin-top:4px;box-shadow:0 4px 16px rgba(184,134,11,0.3)}
 .stray-submit:disabled{opacity:0.6;cursor:not-allowed}
 .stray-close{position:absolute;top:14px;right:16px;width:32px;height:32px;background:var(--bg2);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--text-light);cursor:pointer}
-.stray-success{text-align:center;padding:20px 0 8px}
-.stray-success-icon{font-size:2.5rem;margin-bottom:10px}
-.stray-success-title{font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--gold);margin-bottom:8px}
-.stray-success-msg{font-size:0.92rem;color:var(--text-mid);line-height:1.6}
-
-.photo-expand-overlay{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,0.88);display:none;align-items:center;justify-content:center;cursor:zoom-out}
-.photo-expand-overlay.open{display:flex}
-.photo-expand-overlay img{max-width:95vw;max-height:90vh;object-fit:contain;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.4)}
-.photo-expand-close{position:absolute;top:16px;right:16px;width:36px;height:36px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;color:#fff;cursor:pointer}
-
-.safety-banner{background:var(--gold-light);border:2px solid rgba(184,134,11,0.3);border-radius:12px;padding:14px 16px;margin:14px 0;font-size:0.88rem;color:var(--gold);line-height:1.6}
-.safety-banner strong{color:var(--navy);display:block;margin-bottom:4px;font-weight:700;font-size:0.85rem}
-.safety-places{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.safety-place{background:#fff;border:1px solid rgba(184,134,11,0.3);border-radius:6px;padding:3px 10px;font-size:0.78rem;color:var(--gold);font-weight:600}
-.photo-match-note{background:var(--teal-light);border:1px solid var(--teal2);border-radius:10px;padding:10px 14px;margin:10px 0;font-size:0.85rem;color:var(--teal);line-height:1.5;display:flex;gap:8px;align-items:flex-start}
-.report-btn{width:100%;background:transparent;color:var(--red);font-size:0.82rem;font-weight:600;padding:10px;border-radius:8px;border:1px solid rgba(192,57,43,0.25);cursor:pointer;margin-top:8px;transition:all 0.2s}
-.report-btn:hover{background:var(--red-light)}
-
-/* ── CLAIM / REUNITE FLOW ── */
-.modal-claim-lost{width:100%;background:linear-gradient(135deg,var(--red),#e05555);color:#fff;font-family:'Source Sans 3',sans-serif;font-size:1rem;font-weight:700;padding:15px;border-radius:12px;border:none;cursor:pointer;margin-bottom:10px;box-shadow:0 4px 16px rgba(192,57,43,0.35);animation:claimPulse 2s ease-in-out infinite}
-@keyframes claimPulse{0%,100%{box-shadow:0 4px 16px rgba(192,57,43,0.35)}50%{box-shadow:0 4px 24px rgba(192,57,43,0.6)}}
-.modal-claim-found{width:100%;background:linear-gradient(135deg,var(--green),#27ae60);color:#fff;font-family:'Source Sans 3',sans-serif;font-size:1rem;font-weight:700;padding:15px;border-radius:12px;border:none;cursor:pointer;margin-bottom:10px;box-shadow:0 4px 16px rgba(30,132,73,0.35);animation:claimPulse2 2s ease-in-out infinite}
-@keyframes claimPulse2{0%,100%{box-shadow:0 4px 16px rgba(30,132,73,0.35)}50%{box-shadow:0 4px 24px rgba(30,132,73,0.6)}}
-
-/* ── VERIFY MODAL ── */
-.verify-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.55);display:none;align-items:center;justify-content:center;padding:20px}
-.verify-overlay.open{display:flex}
-.verify-sheet{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:28px 22px;width:100%;max-width:460px;max-height:88vh;overflow-y:auto;position:relative;box-shadow:0 8px 40px rgba(0,0,0,0.15)}
-.verify-close{position:absolute;top:14px;right:16px;width:30px;height:30px;background:var(--bg2);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;color:var(--text-light);cursor:pointer}
-.verify-title{font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:6px}
-.verify-sub{font-size:0.9rem;color:var(--text-mid);margin-bottom:20px;line-height:1.5}
-.verify-checklist{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:14px 0}
-.verify-checklist-title{font-size:0.82rem;font-weight:700;color:var(--teal);margin-bottom:10px}
-.verify-check{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
-.verify-check:last-of-type{border-bottom:none}
-.verify-check input[type=checkbox]{width:20px;height:20px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
-.verify-check label{font-size:0.88rem;color:var(--text);cursor:pointer;line-height:1.4}
-.verify-confirm-btn{width:100%;background:var(--navy);color:#fff;font-family:'Source Sans 3',sans-serif;font-size:1rem;font-weight:700;padding:15px;border-radius:12px;border:none;cursor:pointer;margin-top:14px;opacity:0.4;pointer-events:none;transition:all 0.2s}
-.verify-confirm-btn.ready{opacity:1;pointer-events:auto;background:var(--teal)}
-.verify-input{width:100%;background:var(--bg);border:2px solid var(--border);border-radius:10px;padding:12px 14px;font-family:'Source Sans 3',sans-serif;font-size:1rem;color:var(--text);outline:none;margin-top:6px;transition:border-color 0.2s}
-.verify-input:focus{border-color:var(--teal2)}
-.verify-input::placeholder{color:var(--text-light)}
-.reg-fab{position:fixed;bottom:100px;right:20px;z-index:500;background:linear-gradient(135deg,#1A2E4A,#2C4A6E);border:none;border-radius:50%;width:54px;height:54px;font-size:1.3rem;cursor:pointer;box-shadow:0 4px 16px rgba(26,46,74,0.4);display:flex;align-items:center;justify-content:center;transition:transform 0.2s}
-.reg-fab:active{transform:scale(0.92)}
-.reg-fab-label{position:fixed;bottom:116px;right:84px;z-index:500;background:var(--navy);color:#fff;font-size:0.65rem;font-weight:700;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap}
-.sos-fab{position:fixed;bottom:176px;right:20px;z-index:500;background:linear-gradient(135deg,#cc0000,#ff3322);border:none;border-radius:50%;width:54px;height:54px;font-size:1.4rem;cursor:pointer;box-shadow:0 4px 20px rgba(200,0,0,0.5);display:flex;align-items:center;justify-content:center;animation:sosPulse 2.5s ease-in-out infinite}
-.sos-fab.no-profile{display:none}.sos-fab.has-profile{display:flex}
-@keyframes sosPulse{0%,100%{box-shadow:0 4px 20px rgba(200,0,0,0.5)}50%{box-shadow:0 4px 32px rgba(255,50,0,0.8)}}
-.sos-fab-label{position:fixed;bottom:192px;right:84px;z-index:500;background:var(--navy);border:1px solid rgba(200,0,0,0.4);color:#cc0000;font-size:0.65rem;font-weight:700;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap;display:none}
-.sos-fab.has-profile ~ .sos-fab-label{display:block}
-.pet-slot{background:var(--bg2);border:2px dashed var(--border-dark);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:all 0.2s}
-.pet-slot:hover{border-color:var(--teal2);background:var(--teal-light)}
-.pet-slot.filled{border-style:solid;border-color:rgba(30,132,73,0.4);background:var(--green-light)}
-.pet-slot-top{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.pet-slot-emoji{font-size:1.4rem}
-.pet-slot-name{font-family:'Lora',serif;font-size:0.92rem;font-weight:700;color:var(--navy)}
-.pet-slot-detail{font-size:0.8rem;color:var(--text-mid)}
-.pet-slot-add{font-size:0.88rem;font-weight:600;color:var(--teal);text-align:center;padding:6px 0}
-.sos-pick-btn{width:100%;background:var(--red-light);border:2px solid rgba(192,57,43,0.3);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:all 0.2s;text-align:left}
-.sos-pick-btn:hover{background:var(--red-light);border-color:var(--red)}
-.sos-pick-emoji{font-size:1.8rem;flex-shrink:0}
-.sos-pick-name{font-family:'Lora',serif;font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:2px}
-.sos-pick-detail{font-size:0.8rem;color:var(--text-mid)}
 </style>
 </head>
 <body>
 <div class="page">
   <nav>
-    <a class="nav-back" href="tucson-pet-finder.vercel.app">← HOME</a>
+    <a class="nav-back" href="/">← HOME</a>
     <div class="nav-title">🐾 Tucson Pet Finder</div>
     <a href="tucson-pet-finder.html" style="font-size:0.75rem;font-weight:700;color:#1A2E4A;background:#7EC8C0;padding:5px 12px;border-radius:20px;text-decoration:none;white-space:nowrap;flex-shrink:0">🌙 Dark</a>
     <div class="nav-live">✓ Free</div>
@@ -255,14 +243,14 @@ footer{background:var(--navy);padding:28px 22px 20px;text-align:center;margin-to
   <div class="hero">
     <div class="hero-icon">🐾</div>
     <h1 class="hero-title">Tucson<br><span>Pet Finder</span></h1>
-    <p class="hero-sub">Lost or found a pet in Tucson? Post a simple alert and your neighbors will see it right away. Quick, easy, and completely free.</p>
+    <p class="hero-sub">Lost or found a pet in Tucson? Post in 60 seconds and neighbors get alerted instantly. Free forever.</p>
     <div class="hero-pills">
       <span class="hero-pill">✓ Free Forever</span>
-      <span class="hero-pill">✓ No Sign-Up Needed</span>
+      <span class="hero-pill">✓ No Sign-Up</span>
       <span class="hero-pill">✓ Real Database</span>
     </div>
   </div>
-  <div class="alert-strip" id="alertStrip" onclick="switchTab('see')" style="cursor:pointer" title="Click to see all alerts">
+  <div class="alert-strip" id="alertStrip" onclick="switchTab('see')">
     <div class="alert-icon">🔍</div>
     <div class="alert-text" id="alertText">Checking Tucson pet alerts...</div>
   </div>
@@ -271,54 +259,134 @@ footer{background:var(--navy);padding:28px 22px 20px;text-align:center;margin-to
     <button class="tab-btn found-tab" id="tabFound" onclick="switchTab('found')">🟢 I Found a Pet</button>
     <button class="tab-btn" id="tabSee" onclick="switchTab('see')">📋 See All</button>
   </div>
+
+  <!-- LOST FORM -->
   <div class="form-panel active" id="formLost">
     <div class="form-banner lost">🔴 Fill in as much as you can — more details means a better chance of finding your pet!</div>
-    <div class="form-row"><label class="form-label">What is your pet's name? * <button type="button" onclick="startVoice('lostName')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><input class="form-input" type="text" id="lostName" placeholder="e.g. Max, Luna, Bella"/><div class="form-err" id="errLostName">Please enter your pet's name</div></div>
+    <div class="form-row">
+      <label class="form-label">What is your pet's name? * <button type="button" onclick="startVoice('lostName',this)" class="spk-btn">🎤 Speak</button></label>
+      <input class="form-input" type="text" id="lostName" placeholder="e.g. Max, Luna, Bella"/>
+      <div class="form-err" id="errLostName">Please enter your pet's name</div>
+    </div>
     <div class="form-row-2">
-      <div><label class="form-label">Type of pet *</label><select class="form-select" id="lostType"><option value="">Choose...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select><div class="form-err" id="errLostType">Please select a type</div></div>
-      <div><label class="form-label">Color / Breed <button type="button" onclick="startVoice('lostBreed')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><input class="form-input" type="text" id="lostBreed" placeholder="e.g. Brown Lab"/></div>
+      <div>
+        <label class="form-label">Type of pet *</label>
+        <select class="form-select" id="lostType"><option value="">Choose...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select>
+        <div class="form-err" id="errLostType">Please select a type</div>
+      </div>
+      <div>
+        <label class="form-label">Color / Breed <button type="button" onclick="startVoice('lostBreed',this)" class="spk-btn">🎤 Speak</button></label>
+        <input class="form-input" type="text" id="lostBreed" placeholder="e.g. Brown Lab"/>
+      </div>
     </div>
-    <div class="form-row"><label class="form-label">Where was your pet last seen? * <button type="button" onclick="startVoice('lostLoc')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><input class="form-input" type="text" id="lostLoc" placeholder="e.g. Near Speedway & Wilmot"/><div class="form-err" id="errLostLoc">Please enter a location</div></div>
-    <div class="form-row"><label class="form-label">Additional details about your pet <button type="button" onclick="startVoice('lostDesc')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><textarea class="form-textarea" id="lostDesc" placeholder="Collar color, any special markings, when they went missing..."></textarea></div>
-    <div class="form-row"><label class="form-label">Your phone number * <button type="button" onclick="startVoice('lostPhone')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><input class="form-input" type="tel" id="lostPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/><div class="form-err" id="errLostPhone">Please enter a valid 10-digit phone number</div></div>
-    <div class="form-row"><label class="form-label">Add a photo — really helps neighbors recognize your pet!</label><div class="photo-upload" onclick="document.getElementById('lostPhoto').click()"><input type="file" id="lostPhoto" accept="image/*" onchange="prevPhoto(this,'lostPrev','lostPhotoHint')"/><div id="lostPhotoHint"><div class="photo-icon">📷</div><div class="photo-txt">Tap here to add a photo<br><strong>JPG or PNG works fine</strong></div></div><img class="photo-prev" id="lostPrev" onclick="expandPhoto(this)" style="cursor:zoom-in"/></div></div>
-    <button class="submit-btn lost-btn" id="lostBtn" onclick="submit('lost')">🚨 Post My Lost Pet Alert</button>
+    <div class="form-row">
+      <label class="form-label">Where was your pet last seen? * <button type="button" onclick="startVoice('lostLoc',this)" class="spk-btn">🎤 Speak</button></label>
+      <input class="form-input" type="text" id="lostLoc" placeholder="e.g. Near Speedway and Wilmot"/>
+      <div class="form-err" id="errLostLoc">Please enter a location</div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Additional details <button type="button" onclick="startVoice('lostDesc',this)" class="spk-btn">🎤 Speak</button></label>
+      <textarea class="form-textarea" id="lostDesc" placeholder="Collar color, any special markings, when they went missing..."></textarea>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Your phone number * <button type="button" onclick="startVoice('lostPhone',this)" class="spk-btn">🎤 Speak</button></label>
+      <input class="form-input" type="tel" id="lostPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/>
+      <div class="form-err" id="errLostPhone">Please enter a valid 10-digit phone number</div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Add a photo — really helps neighbors recognize your pet!</label>
+      <div class="photo-upload" onclick="document.getElementById('lostPhoto').click()">
+        <input type="file" id="lostPhoto" accept="image/*" onchange="prevPhoto(this,'lostPrev','lostPhotoHint')"/>
+        <div id="lostPhotoHint"><div class="photo-icon">📷</div><div class="photo-txt">Tap here to add a photo<br><strong>JPG or PNG works fine</strong></div></div>
+        <img class="photo-prev" id="lostPrev" onclick="expandPhoto(this)" style="cursor:zoom-in"/>
+      </div>
+    </div>
+    <button class="submit-btn lost-btn" id="lostBtn" onclick="doSubmit('lost')">🚨 Post My Lost Pet Alert</button>
   </div>
+
+  <!-- FOUND FORM -->
   <div class="form-panel" id="formFound">
-    <div class="form-banner found">🟢 Thank you for helping! Fill in what you can and we'll alert neighbors right away.</div>
-    <div class="form-row"><label class="form-label">Pet's Name on Collar/Tags <button type="button" onclick="startVoice('foundName')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><input class="finput" type="text" id="foundName" placeholder="e.g. Bella (if seen on tag or collar — optional)"/></div>
-      <div class="form-row-2">
-      <div><label class="form-label">Type of pet *</label><select class="form-select" id="foundType"><option value="">Choose...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select><div class="form-err" id="errFoundType">Please select a type</div></div>
-      <div><label class="form-label">Color / Breed <button type="button" onclick="startVoice('foundBreed')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><input class="form-input" type="text" id="foundBreed" placeholder="e.g. Black cat"/></div>
+    <div class="form-banner found">🟢 Thank you for helping! Fill in what you can and we will alert neighbors right away.</div>
+    <div class="form-row">
+      <label class="form-label">Name on Collar/Tags <button type="button" onclick="startVoice('foundName',this)" class="spk-btn">🎤 Speak</button></label>
+      <input class="form-input" type="text" id="foundName" placeholder="If seen on collar or tags (optional)"/>
     </div>
-    <div class="form-row"><label class="form-label">Where did you find this pet? * <button type="button" onclick="startVoice('foundLoc')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><input class="form-input" type="text" id="foundLoc" placeholder="e.g. Near Grant & Swan"/><div class="form-err" id="errFoundLoc">Please enter a location</div></div>
-    <div class="form-row"><label class="form-label">Describe the pet <button type="button" onclick="startVoice('foundDesc')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><textarea class="form-textarea" id="foundDesc" placeholder="Does it have a collar? Tags? Any markings? Is it friendly or scared?"></textarea></div>
-    <div class="form-row"><label class="form-label">Your phone number * <button type="button" onclick="startVoice('foundPhone')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><input class="form-input" type="tel" id="foundPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/><div class="form-err" id="errFoundPhone">Please enter a valid 10-digit phone number</div></div>
-    <div class="form-row"><label class="form-label">Add a photo of the pet</label><div class="photo-upload" onclick="document.getElementById('foundPhoto').click()"><input type="file" id="foundPhoto" accept="image/*" onchange="prevPhoto(this,'foundPrev','foundPhotoHint')"/><div id="foundPhotoHint"><div class="photo-icon">📷</div><div class="photo-txt">Tap here to add a photo<br><strong>A clear photo helps a lot!</strong></div></div><img class="photo-prev" id="foundPrev" onclick="expandPhoto(this)" style="cursor:zoom-in"/></div></div>
-    <button class="submit-btn found-btn" id="foundBtn" onclick="submit('found')">🟢 Post My Found Pet Alert</button>
+    <div class="form-row-2">
+      <div>
+        <label class="form-label">Type of pet *</label>
+        <select class="form-select" id="foundType"><option value="">Choose...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select>
+        <div class="form-err" id="errFoundType">Please select a type</div>
+      </div>
+      <div>
+        <label class="form-label">Color / Breed <button type="button" onclick="startVoice('foundBreed',this)" class="spk-btn">🎤 Speak</button></label>
+        <input class="form-input" type="text" id="foundBreed" placeholder="e.g. Black cat"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Where did you find this pet? * <button type="button" onclick="startVoice('foundLoc',this)" class="spk-btn">🎤 Speak</button></label>
+      <input class="form-input" type="text" id="foundLoc" placeholder="e.g. Near Grant and Swan"/>
+      <div class="form-err" id="errFoundLoc">Please enter a location</div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Describe the pet <button type="button" onclick="startVoice('foundDesc',this)" class="spk-btn">🎤 Speak</button></label>
+      <textarea class="form-textarea" id="foundDesc" placeholder="Does it have a collar? Tags? Any markings?"></textarea>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Your phone number * <button type="button" onclick="startVoice('foundPhone',this)" class="spk-btn">🎤 Speak</button></label>
+      <input class="form-input" type="tel" id="foundPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/>
+      <div class="form-err" id="errFoundPhone">Please enter a valid 10-digit phone number</div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Add a photo of the pet</label>
+      <div class="photo-upload" onclick="document.getElementById('foundPhoto').click()">
+        <input type="file" id="foundPhoto" accept="image/*" onchange="prevPhoto(this,'foundPrev','foundPhotoHint')"/>
+        <div id="foundPhotoHint"><div class="photo-icon">📷</div><div class="photo-txt">Tap here to add a photo<br><strong>A clear photo helps a lot!</strong></div></div>
+        <img class="photo-prev" id="foundPrev" onclick="expandPhoto(this)" style="cursor:zoom-in"/>
+      </div>
+    </div>
+    <button class="submit-btn found-btn" id="foundBtn" onclick="doSubmit('found')">🟢 Post My Found Pet Alert</button>
   </div>
-  <div class="success-panel" id="successPanel"><div class="success-icon" id="successIcon">🐾</div><div class="success-title" id="successTitle">Your Alert Is Posted!</div><div class="success-msg" id="successMsg">Your alert is now live and saved in our database.</div><button class="success-share" onclick="shareApp()">📲 Share This App With Neighbors</button></div>
-  <div class="listings-section" id="listingsSection"><div class="listings-header"><div class="listings-title">Active Alerts</div><div class="listings-count" id="listingCount"></div></div><div id="listingsContainer"></div></div>
+
+  <!-- SUCCESS -->
+  <div class="success-panel" id="successPanel">
+    <div class="success-icon" id="successIcon">🐾</div>
+    <div class="success-title" id="successTitle">Your Alert Is Posted!</div>
+    <div class="success-msg" id="successMsg">Your alert is now live and saved in our database.</div>
+    <button class="success-share" onclick="shareApp()">📲 Share This App With Neighbors</button>
+  </div>
+
+  <!-- SEE ALL -->
+  <div class="listings-section" id="listingsSection">
+    <div class="listings-header">
+      <div class="listings-title">Active Alerts</div>
+      <div class="listings-count" id="listingCount"></div>
+    </div>
+    <div id="listingsContainer"></div>
+  </div>
+
+  <!-- RESOURCES -->
   <div class="res-section">
     <div class="res-title">📞 Emergency Resources</div>
     <div class="res-grid">
       <a class="res-card" href="tel:5207245900"><div class="res-icon">🐕</div><div class="res-name">Pima Animal Control</div><div class="res-info">520-724-5900<br>Open daily</div></a>
       <a class="res-card" href="tel:5207977177"><div class="res-icon">🏥</div><div class="res-name">Humane Society</div><div class="res-info">520-797-7177<br>Southern AZ</div></a>
       <a class="res-card" href="https://petcolove.org/lost" target="_blank"><div class="res-icon">🔍</div><div class="res-name">Petco Love Lost</div><div class="res-info">Free national<br>pet database</div></a>
-      <a class="res-card" href="mailto:Info@pawfbi.com"><div class="res-icon">🚁</div><div class="res-name">PawFBI</div><div class="res-info">Drone & thermal<br>pet tracking</div></a>
+      <a class="res-card" href="/cdn-cgi/l/email-protection#266f4840496656475140444f0845494b"><div class="res-icon">🚁</div><div class="res-name">PawFBI</div><div class="res-info">Drone and thermal<br>pet tracking</div></a>
     </div>
   </div>
   <div class="share-cta">
     <h3>Know a Tucson neighbor with a lost pet?</h3>
     <p>This app is 100% free for everyone. The more neighbors who use it, the faster pets get home.</p>
-    <div class="share-btns">
-      <button class="sbtn sbtn-p" onclick="shareApp()">📲 Share Tucson Pet Finder</button>
-      <a class="sbtn sbtn-s" href="tucson-connect-v2.html">🏘️ See All Free Tucson Apps</a>
-    </div>
+    <button class="sbtn sbtn-p" onclick="shareApp()">📲 Share Tucson Pet Finder</button>
+    <a class="sbtn sbtn-s" href="tucson-connect-v2.html">🏘️ See All Free Tucson Apps</a>
   </div>
-  <footer><a class="footer-back" href="tucson-connect-v2.html">← Back to Tucson Connect</a><div class="footer-credit">Tucson Pet Finder · 100% Free · Real Database · Built by Lamar Myers<br>VTREI, LLC · Tucson, AZ · 520-258-2714</div></footer>
+  <footer>
+    <a class="footer-back" href="tucson-connect-v2.html">← Back to Tucson Connect</a>
+    <div class="footer-credit">Tucson Pet Finder · 100% Free · Real Database · Built by Lamar Myers<br>VTREI, LLC · Tucson, AZ · 520-258-2714</div>
+  </footer>
+</div>
 
-<!-- Toast -->
+<!-- TOAST -->
 <div class="pet-toast" id="petToast">
   <div class="toast-photo" id="toastPhoto">🐾</div>
   <div class="toast-body">
@@ -330,52 +398,22 @@ footer{background:var(--navy);padding:28px 22px 20px;text-align:center;margin-to
   <div class="toast-close" onclick="dismissToast(false)">✕</div>
 </div>
 
+<!-- SOS FAB -->
 <div class="sos-fab-label">🚨 EMERGENCY SOS</div>
-<button class="sos-fab no-profile" id="sosFab" onclick="openSOS()">🆘</button>
+<button class="sos-fab" id="sosFab" onclick="openSOS()">🆘</button>
 
+<!-- PROFILE FAB -->
 <div class="reg-fab-label" id="regFabLabel">🐾 My Profile</div>
-<button class="reg-fab" id="regFab" onclick="openProfileModal()" aria-label="My profile">🐾</button>
+<button class="reg-fab" id="regFab" onclick="openProfileModal()">🐾</button>
 
+<!-- STRAY FAB -->
 <div class="fab-stray-label">📸 Spot a Stray</div>
-<button class="fab-stray" onclick="openStrayModal()" aria-label="Spot a stray pet">📷</button>
+<button class="fab-stray" onclick="openStrayModal()">📷</button>
 
-<div class="stray-modal" id="strayModal" onclick="closeStrayModal(event)">
-  <div class="stray-sheet">
-    <div class="stray-close" onclick="closeStrayModal()">✕</div>
-    <div class="stray-handle"></div>
-    <div id="strayFormView">
-      <div class="stray-title">📸 Spot a Stray</div>
-      <div class="stray-sub">Saw a stray pet nearby? Take a quick photo — your neighbors will see it right away.</div>
-      <div class="stray-photo-zone" id="strayPhotoZone" onclick="document.getElementById('strayPhotoInput').click()">
-        <input type="file" id="strayPhotoInput" accept="image/*" capture="environment" style="display:none" onchange="loadStrayPhoto(this)"/>
-        <div class="stray-photo-hint" id="strayPhotoHint">
-          <div class="stray-photo-icon">📷</div>
-          <div class="stray-photo-txt">Tap to take a photo</div>
-        </div>
-        <img id="strayPhotoPreview" style="display:none"/>
-      </div>
-      <div class="stray-loc-row" id="strayLocRow" onclick="getStrayLocation()">
-        <div class="stray-loc-icon">📍</div>
-        <div class="stray-loc-text" id="strayLocText">Tap here to capture your current location</div>
-      </div>
-      <div class="stray-row"><input class="stray-input" type="text" id="strayNote" placeholder="Quick note — e.g. 'limping, near the park entrance'" maxlength="120"/></div>
-      <div class="stray-row"><input class="stray-input" type="tel" id="strayPhone" placeholder="Your phone number (optional)" inputmode="numeric" oninput="autoPhone(this)"/></div>
-      <button class="stray-submit" id="straySubmitBtn" onclick="submitStray()">📸 Post This Sighting</button>
-    </div>
-    <div id="straySuccessView" style="display:none">
-      <div class="stray-success">
-        <div class="stray-success-icon">🙌</div>
-        <div class="stray-success-title">Sighting Posted!</div>
-        <div class="stray-success-msg">Your photo and location are now live in the Tucson Pet Finder database. Every neighbor who opens this app will see it. Thank you for helping! 🐾</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-</div>
-<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+<!-- MAIN MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOverlay(event)">
   <div class="modal-sheet">
-    <div class="modal-close" onclick="closeModal()">✕</div>
+    <div class="modal-close" onclick="closeModalOverlay()">✕</div>
     <div class="modal-handle"></div>
     <div class="modal-photo" id="mPhoto">🐾</div>
     <div class="modal-body">
@@ -384,815 +422,11 @@ footer{background:var(--navy);padding:28px 22px 20px;text-align:center;margin-to
       <div class="modal-breed" id="mBreed"></div>
       <div id="mDetails"></div>
       <div class="modal-desc" id="mDesc"></div>
-      <button class="modal-call" id="mCall">📞 Call to Report</button>
-      <button class="modal-reunite" id="mReunite">🎉 This Pet Has Been Reunited!</button>
+      <button class="modal-call" id="mCall">📞 Contact Reporter</button>
+      <button class="modal-reunite" id="mReunite">✅ Mark as Reunited</button>
+      <div id="mExtra"></div>
     </div>
   </div>
-</div>
-<script>
-const URL='https://msuqflssqixsplcearxr.supabase.co';
-const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdXFmbHNzcWl4c3BsY2VhcnhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMzU3NDgsImV4cCI6MjA4OTcxMTc0OH0.BlrDiIu2YdDB7oHJ0fFiSEiBDQGvHCFAUaysR6O24zk';
-const H={'Content-Type':'application/json','apikey':KEY,'Authorization':'Bearer '+KEY};
-
-async function getPets(){try{const r=await fetch(URL+'/rest/v1/pets?select=*&order=created_at.desc',{headers:H});return await r.json()}catch(e){return[]}}
-async function uploadPhoto(base64Data, fileName){
-  try{
-    // Convert base64 to blob
-    const base64=base64Data.split(',')[1];
-    const mime=base64Data.split(',')[0].split(':')[1].split(';')[0];
-    const binary=atob(base64);
-    const arr=new Uint8Array(binary.length);
-    for(let i=0;i<binary.length;i++)arr[i]=binary.charCodeAt(i);
-    const blob=new Blob([arr],{type:mime});
-    
-    const path='pets/'+Date.now()+'-'+fileName;
-    const r=await fetch(URL+'/storage/v1/object/pet-photos/'+path,{
-      method:'POST',
-      headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':mime,'x-upsert':'true'},
-      body:blob
-    });
-    if(!r.ok)return null;
-    return URL+'/storage/v1/object/public/pet-photos/'+path;
-  }catch(e){console.error('Photo upload failed:',e);return null;}
-}
-
-async function addPet(pet){const r=await fetch(URL+'/rest/v1/pets',{method:'POST',headers:{...H,'Prefer':'return=representation'},body:JSON.stringify(pet)});if(!r.ok)throw new Error(await r.text());return r.json()}
-async function patchPet(id,data){await fetch(URL+'/rest/v1/pets?id=eq.'+id,{method:'PATCH',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify(data)})}
-
-function validPhone(p){return p.replace(/\D/g,'').length===10}
-function fmtPhone(p){const d=p.replace(/\D/g,'');return d.length===10?d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6):p}
-function showErr(id,show){const e=document.getElementById(id);if(e)e.style.display=show?'block':'none'}
-function timeAgo(d){const m=Math.floor((Date.now()-new Date(d))/60000);if(m<1)return'Just now';if(m<60)return m+' min ago';const h=Math.floor(m/60);if(h<24)return h+' hour'+(h!==1?'s':'')+' ago';return Math.floor(h/24)+' day'+(Math.floor(h/24)!==1?'s':'')+' ago'}
-function petEmoji(type){return type==='Cat'?'🐱':type==='Bird'?'🐦':type==='Rabbit'?'🐰':'🐕'}
-
-function switchTab(tab){
-  ['Lost','Found','See'].forEach(t=>document.getElementById('tab'+t).classList.remove('active'));
-  const tabEl=document.getElementById('tab'+tab.charAt(0).toUpperCase()+tab.slice(1));
-  if(tabEl)tabEl.classList.add('active');
-  document.getElementById('tabFound').classList.add('found-tab');
-  document.getElementById('formLost').classList.toggle('active',tab==='lost');
-  document.getElementById('formFound').classList.toggle('active',tab==='found');
-  document.getElementById('successPanel').style.display='none';
-  const ls=document.getElementById('listingsSection');
-  if(tab==='see'){
-    ls.style.display='block';
-    const c=document.getElementById('listingsContainer');
-    if(!c.children.length||c.innerHTML.includes('Loading'))renderListings();
-  } else { ls.style.display='none'; }
-}
-
-function prevPhoto(input,pid,hintId){
-  const f=input.files[0];if(!f)return;
-  const r=new FileReader();
-  r.onload=e=>{
-    const i=document.getElementById(pid);
-    i.src=e.target.result;i.style.display='block';
-    if(hintId){const h=document.getElementById(hintId);if(h)h.style.display='none';}
-  };
-  r.readAsDataURL(f);
-}
-
-function autoPhone(input){
-  let v=input.value.replace(/\D/g,'');
-  if(v.length>10)v=v.slice(0,10);
-  if(v.length>=7)input.value=v.slice(0,3)+'-'+v.slice(3,6)+'-'+v.slice(6);
-  else if(v.length>=4)input.value=v.slice(0,3)+'-'+v.slice(3);
-  else input.value=v;
-}
-
-function reportListing(id, name){
-  const reason = prompt('Briefly describe the issue with "' + (name||'this listing') + '":\n\n(Your report helps keep Tucson safe)');
-  if(!reason || !reason.trim()) return;
-  console.log('REPORT:', {id, name, reason, time: new Date().toISOString()});
-  alert('🚨 Thank you for reporting. Our team will review this listing within 24 hours.');
-}
-
-function expandPhoto(img){
-  document.getElementById('photoExpandImg').src = img.src;
-  document.getElementById('photoExpandOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeExpandPhoto(){
-  document.getElementById('photoExpandOverlay').classList.remove('open');
-  document.body.style.overflow='';
-}
-
-// ── VOICE ENGINE ──────────────────────────────────────────────────────────────
-const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-let _recog = null;
-let _activeField = null;
-let _silenceTimer = null;
-let _finalText = '';
-let _isListening = false;
-
-function _getRecog() {
-  if (!SR) return null;
-  if (!_recog) {
-    _recog = new SR();
-    _recog.lang = 'en-US';
-    _recog.maxAlternatives = 1;
-
-    _recog.onresult = e => {
-      if (!_activeField) return;
-      const el = document.getElementById(_activeField);
-      const isPhone = el && (el.type === 'tel' || _activeField.toLowerCase().includes('phone'));
-      _finalText = '';
-      let interim = '';
-      for (let i = 0; i < e.results.length; i++) {
-        if (e.results[i].isFinal) _finalText += e.results[i][0].transcript + ' ';
-        else interim += e.results[i][0].transcript;
-      }
-      if (isPhone) {
-        const raw = (_finalText + interim).replace(/\D/g, '').slice(0, 10);
-        if (raw.length >= 7) el.value = raw.slice(0,3)+'-'+raw.slice(3,6)+'-'+raw.slice(6);
-        else if (raw.length >= 4) el.value = raw.slice(0,3)+'-'+raw.slice(3);
-        else if (raw.length > 0) el.value = raw;
-      } else {
-        el.value = (_finalText + interim).trim();
-      }
-      _resetSilence();
-    };
-
-    _recog.onerror = e => {
-      if (e.error === 'no-speech') return;
-      _stopListening();
-    };
-
-    _recog.onend = () => {
-      _isListening = false;
-      clearTimeout(_silenceTimer);
-      if (_activeField) {
-        const el = document.getElementById(_activeField);
-        if (el) {
-          const isPhone = el.type === 'tel' || _activeField.toLowerCase().includes('phone');
-          if (isPhone && _finalText) {
-            const digits = _finalText.replace(/\D/g, '').slice(0, 10);
-            if (digits.length >= 7) el.value = digits.slice(0,3)+'-'+digits.slice(3,6)+'-'+digits.slice(6);
-            else if (digits.length >= 4) el.value = digits.slice(0,3)+'-'+digits.slice(3);
-            else if (digits.length > 0) el.value = digits;
-          } else if (_finalText.trim()) {
-            el.value = _finalText.trim();
-          }
-          el.style.borderColor = 'var(--border)';
-          el.placeholder = '';
-        }
-      }
-      _updateSpeakBtns(false);
-    };
-  }
-  return _recog;
-}
-
-function _resetSilence() {
-  clearTimeout(_silenceTimer);
-  const el = _activeField ? document.getElementById(_activeField) : null;
-  const isPhone = el && (el.type === 'tel' || (_activeField||'').toLowerCase().includes('phone'));
-  _silenceTimer = setTimeout(() => { if (_recog && _isListening) _recog.stop(); }, isPhone ? 8000 : 15000);
-}
-
-function _stopListening() {
-  clearTimeout(_silenceTimer);
-  _isListening = false;
-  try { if (_recog) _recog.stop(); } catch(e) {}
-  _updateSpeakBtns(false);
-}
-
-function _updateSpeakBtns(listening) {
-  document.querySelectorAll('.speak-btn-active').forEach(b => b.classList.remove('speak-btn-active'));
-}
-
-function startVoice(fieldId) {
-  if (!SR) { alert('Voice input not supported. Try Chrome on Android or Safari on iPhone.'); return; }
-  if (_isListening) {
-    try { if (_recog) _recog.abort(); } catch(e) {}
-    _recog = null;
-    _isListening = false;
-    if (_activeField === fieldId) {
-      const el = document.getElementById(fieldId);
-      if (el) { el.style.borderColor='var(--border)'; el.placeholder=''; }
-      _updateSpeakBtns(false);
-      clearTimeout(_silenceTimer);
-      return;
-    }
-  }
-  _doStart(fieldId);
-}
-
-function _doStart(fieldId) {
-  const el = document.getElementById(fieldId);
-  if (!el) return;
-  const isPhone = el.type === 'tel' || fieldId.toLowerCase().includes('phone');
-
-  if (_recog) {
-    try { _recog.abort(); } catch(e) {}
-    _recog = null;
-  }
-
-  const recog = _getRecog();
-  if (!recog) return;
-
-  _activeField = fieldId;
-  _finalText = '';
-  _isListening = true;
-  recog.continuous = !isPhone;
-  recog.interimResults = !isPhone;
-
-  el.style.borderColor = 'var(--teal2)';
-  el.placeholder = isPhone ? '🎤 Say your number...' : '🎤 Listening... (15s)';
-  _updateSpeakBtns(true);
-  _resetSilence();
-
-  try {
-    recog.start();
-  } catch(e) {
-    console.warn('recog.start error:', e);
-    _isListening = false;
-    el.placeholder = '';
-    el.style.borderColor = 'var(--border)';
-    _updateSpeakBtns(false);
-  }
-}
-
-async function submit(type){
-  let ok=true;
-  if(type==='lost'){
-    const name=document.getElementById('lostName').value.trim();
-    const pt=document.getElementById('lostType').value;
-    const loc=document.getElementById('lostLoc').value.trim();
-    const phone=document.getElementById('lostPhone').value.trim();
-    showErr('errLostName',!name);if(!name)ok=false;
-    showErr('errLostType',!pt);if(!pt)ok=false;
-    showErr('errLostLoc',!loc);if(!loc)ok=false;
-    showErr('errLostPhone',!validPhone(phone));if(!validPhone(phone))ok=false;
-    if(!ok)return;
-    const btn=document.getElementById('lostBtn');btn.disabled=true;btn.textContent='Posting...';
-    try{
-      const lostPhotoFile=document.getElementById('lostPhoto').files[0];
-      let lostPhotoUrl=null;
-      if(lostPhotoFile){const lostB64=document.getElementById('lostPrev').src;lostPhotoUrl=await uploadPhoto(lostB64,lostPhotoFile.name);}
-      await addPet({status:'lost',name,type:pt,breed:document.getElementById('lostBreed').value.trim()||pt,location:loc,description:document.getElementById('lostDesc').value.trim(),phone:fmtPhone(phone),photo_url:lostPhotoUrl||''});
-      showSuccess('lost',name);loadAlertBanner();
-showPetToast();
-
-let _toastPet=null;
-async function showPetToast(){
-  await new Promise(r=>setTimeout(r,2000));
-  const pets=await getPets();
-  const candidates=pets.filter(p=>(p.status==='lost'||p.status==='found')&&petAgeTier(p.created_at)==='watching');
-  if(!candidates.length)return;
-  _toastPet=candidates.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at))[0];
-  const hrs=Math.floor((Date.now()-new Date(_toastPet.created_at))/3600000);
-  const days=hrs>=48?'2 days':'1 day';
-  document.getElementById('toastTitle').textContent=_toastPet.status==='lost'?'👀 Still Missing — '+days+' ago':'🐾 Still Waiting for Owner — '+days;
-  document.getElementById('toastName').textContent=_toastPet.name||'Unknown Pet';
-  document.getElementById('toastSub').textContent='📍 '+(_toastPet.location||'').slice(0,45)+(_toastPet.location?.length>45?'...':'');
-  const photoEl=document.getElementById('toastPhoto');
-  if(_toastPet.photo_url&&!_toastPet.photo_url.startsWith('data:')){
-    photoEl.innerHTML=`<img src="${_toastPet.photo_url}" onerror="this.parentNode.innerHTML='${petEmoji(_toastPet.type)}'" style="width:100%;height:100%;object-fit:cover;border-radius:10px"/>`;
-  } else { photoEl.textContent=petEmoji(_toastPet.type); }
-  document.getElementById('petToast').classList.add('show');
-  setTimeout(()=>dismissToast(false),8000);
-}
-function dismissToast(goToAlert){
-  document.getElementById('petToast').classList.remove('show');
-  if(goToAlert&&_toastPet){switchTab('see');setTimeout(()=>openModal(_toastPet),400);}
-}
-    }catch(e){alert('Error posting. Please try again.');console.error(e)}
-    finally{btn.disabled=false;btn.textContent='🚨 Post My Lost Pet Alert'}
-  } else {
-    const pt=document.getElementById('foundType').value;
-    const loc=document.getElementById('foundLoc').value.trim();
-    const phone=document.getElementById('foundPhone').value.trim();
-    showErr('errFoundType',!pt);if(!pt)ok=false;
-    showErr('errFoundLoc',!loc);if(!loc)ok=false;
-    showErr('errFoundPhone',!validPhone(phone));if(!validPhone(phone))ok=false;
-    if(!ok)return;
-    const btn=document.getElementById('foundBtn');btn.disabled=true;btn.textContent='Posting...';
-    try{
-      const foundPhotoFile=document.getElementById('foundPhoto').files[0];
-      let foundPhotoUrl=null;
-      if(foundPhotoFile){const foundB64=document.getElementById('foundPrev').src;foundPhotoUrl=await uploadPhoto(foundB64,foundPhotoFile.name);}
-      const foundPetName=document.getElementById('foundName')?.value.trim();await addPet({status:'found',name:foundPetName?foundPetName:'Found '+pt,type:pt,breed:document.getElementById('foundBreed').value.trim()||pt,location:loc,description:document.getElementById('foundDesc').value.trim(),phone:fmtPhone(phone),photo_url:foundPhotoUrl||''});
-      showSuccess('found');
-    }catch(e){alert('Error posting. Please try again.');console.error(e)}
-    finally{btn.disabled=false;btn.textContent='🟢 Post My Found Pet Alert'}
-  }
-}
-
-function showSuccess(type,name=''){
-  document.getElementById('formLost').classList.remove('active');
-  document.getElementById('formFound').classList.remove('active');
-  const sp=document.getElementById('successPanel');sp.style.display='block';
-  if(type==='lost'){
-    document.getElementById('successIcon').textContent='🚨';
-    document.getElementById('successTitle').textContent=name?name+"'s Alert Is Live!":'Your Alert Is Posted!';
-    document.getElementById('successTitle').style.color='var(--red)';
-    document.getElementById('successMsg').textContent='Saved in our real database — every Tucson neighbor who opens this app will see it. Please share this app to get more eyes looking! 💙';
-    sp.style.borderColor='rgba(192,57,43,0.4)';
-  } else {
-    document.getElementById('successIcon').textContent='🟢';
-    document.getElementById('successTitle').textContent='Found Pet Report Is Live!';
-    document.getElementById('successTitle').style.color='var(--green)';
-    document.getElementById('successMsg').textContent='Thank you! Your report is in our database. The owner will be able to find and contact you directly. You are making a real difference for a Tucson family today! 💚';
-    sp.style.borderColor='rgba(30,132,73,0.4)';
-  }
-  sp.scrollIntoView({behavior:'smooth',block:'center'});
-}
-
-// ── AGE TIER HELPERS ─────────────────────────────────────────────────────────
-function petAgeTier(createdAt){
-  const hrs=(Date.now()-new Date(createdAt))/3600000;
-  if(hrs<24)return'hot';if(hrs<72)return'watching';return'archived';
-}
-function petAgeLabel(createdAt){
-  const hrs=(Date.now()-new Date(createdAt))/3600000;
-  if(hrs<1)return'Just posted';
-  if(hrs<24)return Math.floor(hrs)+'h ago · Active';
-  if(hrs<48)return'1 day ago · Watching';
-  if(hrs<72)return'2 days ago · Watching';
-  return Math.floor(hrs/24)+' days ago';
-}
-function buildCard(pet){
-  const tier=petAgeTier(pet.created_at);
-  const skip=['reunited','registered'].includes(pet.status);
-  let cls='listing-card';
-  if(pet.status==='found')cls+=' found-card';
-  if(pet.status==='stray')cls+=' stray-card';
-  if(pet.status==='reunited')cls+=' reunited';
-  if(tier==='watching'&&!skip)cls+=' watching';
-  if(tier==='archived'&&!skip)cls+=' archived';
-  const dotClass=tier==='hot'?'age-dot-hot':tier==='watching'?'age-dot-watching':'age-dot-archived';
-  const photoHtml=pet.photo_url&&!pet.photo_url.startsWith('data:')
-    ?`<img src="${pet.photo_url}" onerror="this.style.display='none';this.parentNode.innerHTML='${petEmoji(pet.type)}'" />`
-    :petEmoji(pet.type);
-  const d=document.createElement('div');
-  d.className=cls;d.onclick=()=>openModal(pet);
-  d.innerHTML=`<div class="listing-photo">${photoHtml}</div><div class="listing-info"><div class="listing-top"><span class="age-dot ${dotClass}"></span><span class="listing-type type-${pet.status}">${pet.status==='lost'?'LOST':pet.status==='found'?'FOUND':pet.status.toUpperCase()}</span><span class="listing-name">${pet.name||'Unknown'}</span></div><div class="listing-breed">${pet.breed||pet.type}</div><div class="listing-loc">📍 ${pet.location}</div></div><div class="listing-time">${petAgeLabel(pet.created_at)}</div>`;
-  return d;
-}
-function tierDivider(type){
-  const d=document.createElement('div');
-  d.className='tier-divider tier-'+type;
-  const labels={hot:'🔴 Active — Last 24 Hours',watching:'👀 Still Out There — 1–3 Days',archived:'📁 Older Alerts'};
-  d.innerHTML=`<div class="tier-divider-line"></div><div class="tier-label">${labels[type]}</div><div class="tier-divider-line"></div>`;
-  return d;
-}
-async function renderListings(){
-  const c=document.getElementById('listingsContainer');
-  c.innerHTML='<div class="state-box">Loading alerts from Tucson database...</div>';
-  const pets=await getPets();
-  const skip=['reunited','registered'];
-  const hot=pets.filter(p=>!skip.includes(p.status)&&petAgeTier(p.created_at)==='hot');
-  const watching=pets.filter(p=>!skip.includes(p.status)&&petAgeTier(p.created_at)==='watching');
-  const archived=pets.filter(p=>!skip.includes(p.status)&&petAgeTier(p.created_at)==='archived');
-  const reunited=pets.filter(p=>p.status==='reunited');
-  document.getElementById('listingCount').textContent=hot.length+' hot · '+watching.length+' watching · '+archived.length+' older';
-  c.innerHTML='';
-  if(!pets.filter(p=>!skip.includes(p.status)).length){
-    c.innerHTML='<div class="state-box"><div class="empty-icon">🐾</div><div class="empty-title">No alerts yet</div><div class="empty-sub">Be the first to post!</div></div>';return;
-  }
-  if(hot.length){c.appendChild(tierDivider('hot'));hot.forEach(p=>c.appendChild(buildCard(p)));}
-  if(watching.length){c.appendChild(tierDivider('watching'));watching.forEach(p=>c.appendChild(buildCard(p)));}
-  if(archived.length){
-    const wrap=document.createElement('div');
-    const toggle=document.createElement('div');
-    toggle.style.cssText='text-align:center;padding:12px 0;cursor:pointer';
-    toggle.innerHTML=`<span style="font-size:0.82rem;color:var(--text-light);border:1px solid var(--border);padding:7px 18px;border-radius:20px;background:var(--bg2)">📁 Show ${archived.length} older alert${archived.length!==1?'s':''}</span>`;
-    toggle.onclick=()=>{wrap.innerHTML='';c.appendChild(tierDivider('archived'));archived.forEach(p=>c.appendChild(buildCard(p)));if(reunited.length)reunited.forEach(p=>c.appendChild(buildCard(p)));};
-    wrap.appendChild(toggle);c.appendChild(wrap);
-  }
-  // Reunited hidden from main list — shown only inside archive toggle
-}
-
-async function loadAlertBanner(){
-  const pets=await getPets();
-  const lost=pets.filter(p=>p.status==='lost').length;
-  const el=document.getElementById('alertText');
-  const strip=document.getElementById('alertStrip');
-  const found=pets.filter(p=>p.status==='found').length;
-  if(lost===0&&found===0){
-    el.textContent='No active alerts in Tucson right now. Post if you've lost or found a pet.';
-    strip.style.background='var(--teal-light)';strip.style.borderColor='rgba(26,122,110,0.3)';
-    document.querySelector('.alert-icon').textContent='✅';
-    el.style.color='var(--teal)';
-  } else {
-    const parts=[];
-    if(lost>0)parts.push(`<strong>${lost} pet${lost!==1?'s':''} missing</strong>`);
-    if(found>0)parts.push(`<strong>${found} found</strong> waiting for owner`);
-    el.innerHTML=parts.join(' · ')+` in Tucson. <span style='text-decoration:underline;opacity:0.7'>Tap to view →</span>`;
-    el.style.color='';
-  }
-}
-
-let _currentPet = null;
-
-function openModal(pet){
-  _currentPet = pet;
-  const ph=document.getElementById('mPhoto');
-  ph.innerHTML=pet.photo_url&&!pet.photo_url.startsWith('data:')?`<img src="${pet.photo_url}" onerror="this.parentNode.innerHTML='${petEmoji(pet.type)}'"/>`:petEmoji(pet.type);
-  const badge=document.getElementById('mBadge');
-  badge.textContent=pet.status==='lost'?'🔴 LOST PET':pet.status==='found'?'🟢 FOUND PET':pet.status==='reunited'?'🎉 REUNITED':'📸 STRAY';
-  badge.style.background=pet.status==='lost'?'var(--red-light)':pet.status==='found'?'var(--green-light)':'var(--bg2)';
-  badge.style.color=pet.status==='lost'?'var(--red)':pet.status==='found'?'var(--green)':'var(--text-light)';
-  document.getElementById('mTitle').textContent=pet.name||'Unknown';
-  document.getElementById('mBreed').textContent=(pet.breed||pet.type)+' · '+pet.type;
-  document.getElementById('mDesc').textContent=pet.description||'No additional details provided.';
-  document.getElementById('mDetails').innerHTML=`<div class="modal-detail"><span class="modal-dlbl">Location</span><span class="modal-dval" style="color:var(--text-mid);font-weight:400">${pet.location}</span></div><div class="modal-detail" style="border:none"><span class="modal-dlbl">Posted</span><span class="modal-dval" style="color:var(--text-mid);font-weight:400">${timeAgo(pet.created_at)}</span></div>`;
-
-  const cb=document.getElementById('mCall');
-  const rb=document.getElementById('mReunite');
-  cb.style.display='none'; rb.style.display='none';
-
-  const existingExtra=document.getElementById('safetyBlock');
-  if(existingExtra)existingExtra.remove();
-  const extraDiv=document.createElement('div');
-  extraDiv.id='safetyBlock';
-
-  if(pet.status==='lost'){
-    cb.textContent='📞 Call Reporter: '+pet.phone;
-    cb.onclick=()=>window.location.href='tel:'+pet.phone.replace(/\D/g,'');
-    cb.style.display='block';
-    extraDiv.innerHTML=`
-      <button class="modal-claim-lost" onclick="openClaimFlow('lost')">🐕 This Is My Pet — I'm the Owner</button>
-      <div class="photo-match-note" style="margin-top:8px"><span>🔒</span><span>Starts a <strong>verification checklist</strong> before contact info is shared.</span></div>
-      <div class="safety-banner"><strong>🤝 Safe Meetup Spots</strong> Always meet in public.
-        <div class="safety-places"><span class="safety-place">🏪 Walgreens</span><span class="safety-place">🚔 Police Station</span><span class="safety-place">☕ Starbucks</span><span class="safety-place">🏥 Fire Station</span></div>
-      </div>
-      <button class="report-btn" onclick="reportListing('${pet.id}','${(pet.name||'').replace(/'/g,'')}')">🚨 Report Suspicious Activity</button>`;
-  } else if(pet.status==='found'){
-    cb.textContent='📞 Contact Finder: '+pet.phone;
-    cb.onclick=()=>window.location.href='tel:'+pet.phone.replace(/\D/g,'');
-    cb.style.display='block';
-    extraDiv.innerHTML=`
-      <button class="modal-claim-found" onclick="openClaimFlow('found')">🏠 This Is My Pet — Reunite Now</button>
-      <div class="photo-match-note" style="margin-top:8px"><span>🔒</span><span>Opens a <strong>quick verification</strong> before the finder's info is shared.</span></div>
-      <div class="safety-banner"><strong>🤝 Safe Meetup Spots</strong> Always meet in public.
-        <div class="safety-places"><span class="safety-place">🏪 Walgreens</span><span class="safety-place">🚔 Police Station</span><span class="safety-place">☕ Starbucks</span><span class="safety-place">🏥 Fire Station</span></div>
-      </div>
-      <button class="report-btn" onclick="reportListing('${pet.id}','${(pet.name||'').replace(/'/g,'')}')">🚨 Report Suspicious Activity</button>`;
-  } else if(pet.status==='reunited'){
-    extraDiv.innerHTML=`<div style="text-align:center;padding:16px 0;font-size:0.9rem;color:var(--text-light)">🎉 This pet has been reunited with their family!</div>`;
-  }
-
-  if(pet.status!=='reunited'){
-    rb.style.display='block';
-    rb.textContent='✅ Mark as Reunited';
-    rb.onclick=()=>openClaimFlow('reunite');
-  }
-  document.getElementById('mReunite').after(extraDiv);
-  document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-
-function openClaimFlow(petStatus){
-  if(!_currentPet) return;
-  const pet = _currentPet;
-  const overlay = document.getElementById('verifyOverlay');
-  const vc = document.getElementById('verifyContent');
-  const isReunite = petStatus === 'reunite';
-  vc.innerHTML=`
-    <div class="verify-title">${isReunite?'✅ Confirm Reunification':petStatus==='lost'?'🐕 Claim Your Pet':'🏠 Claim Your Pet'}</div>
-    <div class="verify-sub">${isReunite?`Confirm that <strong style="color:var(--navy)">${pet.name||'this pet'}</strong> has been safely returned to their owner.`:`Before we connect you, confirm you are the owner of <strong style="color:var(--navy)">${pet.name||'this pet'}</strong>.`}</div>
-    <div class="verify-checklist">
-      <div class="verify-checklist-title">✅ Verification Checklist</div>
-      <div class="verify-check"><input type="checkbox" id="chk1" onchange="updateClaimBtn()"><label for="chk1">${isReunite?'The owner has been <strong>positively identified</strong>':'I can describe a <strong>unique marking</strong> on this pet'}</label></div>
-      <div class="verify-check"><input type="checkbox" id="chk2" onchange="updateClaimBtn()"><label for="chk2">${isReunite?'The pet and owner have <strong>already reunited in person</strong>':'I have <strong>photos of me with this pet</strong> available'}</label></div>
-      <div class="verify-check"><input type="checkbox" id="chk3" onchange="updateClaimBtn()"><label for="chk3">${isReunite?'I <strong>personally witnessed</strong> the reunion or I am the owner/finder':'I know my pet's <strong>vet name or clinic</strong>'}</label></div>
-      <div class="verify-check"><input type="checkbox" id="chk4" onchange="updateClaimBtn()"><label for="chk4">${isReunite?'I understand this will <strong>permanently remove the alert</strong>':'I will meet the finder in a <strong>public place</strong>'}</label></div>
-    </div>
-    ${!isReunite?`
-    <div style="margin-bottom:12px"><label style="font-size:0.88rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Describe a unique feature your pet has *</label><input class="verify-input" id="claimMark" placeholder="e.g. white patch on left ear..." oninput="updateClaimBtn()"/></div>
-    <div style="margin-bottom:12px"><label style="font-size:0.88rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Your phone number *</label><input class="verify-input" type="tel" id="claimPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this);updateClaimBtn()"/></div>`:''}
-    <button class="verify-confirm-btn" id="claimConfirmBtn" onclick="confirmClaim('${isReunite}')">
-      ${isReunite?'🎉 Yes — Mark as Reunited':'🔓 Verified — Connect Me Now'}
-    </button>
-    <p style="font-size:0.75rem;color:var(--text-light);text-align:center;margin-top:10px;line-height:1.5">${isReunite?'This removes the alert permanently from the active list.':'By proceeding you confirm this is your pet.'}</p>`;
-  overlay.classList.add('open');
-  document.body.style.overflow='hidden';
-}
-
-function updateClaimBtn(){
-  const chks=['chk1','chk2','chk3','chk4'].every(id=>document.getElementById(id)?.checked);
-  const mark=(document.getElementById('claimMark')?.value||'').trim().length>3;
-  const phone=document.getElementById('claimPhone')?.value.replace(/\D/g,'').length===10;
-  const btn=document.getElementById('claimConfirmBtn');
-  if(btn)btn.classList.toggle('ready',chks&&mark&&phone);
-}
-
-async function confirmClaim(isReunite){
-  if(!_currentPet) return;
-  const pet = _currentPet;
-  const vc = document.getElementById('verifyContent');
-  if(isReunite==='true'){
-    try{
-      await patchPet(pet.id,{status:'reunited'});
-      vc.innerHTML=`<div style="text-align:center;padding:30px 0"><div style="font-size:3rem;margin-bottom:14px">🎉</div><div style="font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--teal);margin-bottom:10px">Reunited!</div><div style="font-size:0.9rem;color:var(--text-mid);line-height:1.6"><strong>${pet.name||'This pet'}</strong> is home safe and has been removed from the active list.<br><br>The Tucson community is smiling! 💙</div></div>`;
-      setTimeout(()=>{closeVerify();document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';renderListings();loadAlertBanner();},2500);
-    }catch(e){alert('Error updating. Please try again.');}
-    return;
-  }
-  const phone=document.getElementById('claimPhone')?.value.trim()||'';
-  const mark=document.getElementById('claimMark')?.value.trim()||'';
-  if(!phone||!mark)return;
-  const contactPhone=pet.phone||'';
-  vc.innerHTML=`<div style="text-align:center;padding:30px 0"><div style="font-size:3rem;margin-bottom:14px">🎉</div><div style="font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--teal);margin-bottom:10px">You're Verified!</div><div style="font-size:0.9rem;color:var(--text-mid);line-height:1.6;margin-bottom:20px">Ownership confirmed for <strong>${pet.name||'your pet'}</strong>. Contact the ${pet.status==='found'?'finder':'reporter'} now:</div>${contactPhone?`<a href="tel:${contactPhone.replace(/\D/g,'')}" style="display:block;background:var(--navy);color:#fff;font-size:1rem;font-weight:700;padding:16px;border-radius:12px;text-decoration:none;text-align:center;margin-bottom:12px">📞 Call ${pet.status==='found'?'Finder':'Reporter'}: ${contactPhone}</a>`:''}<div class="safety-banner"><strong>🤝 Safe Meetup Reminder</strong> Meet in public — Walgreens, Starbucks, or Police Station.</div></div>`;
-}
-
-function closeVerify(){
-  document.getElementById('verifyOverlay').classList.remove('open');
-  document.body.style.overflow='';
-}
-
-// ════════════════════════════════════════════════════════════════════════════
-// PROFILE SYSTEM
-// ════════════════════════════════════════════════════════════════════════════
-const PROFILE_KEY = 'tpf_profile_id';
-function getProfileId(){ return localStorage.getItem(PROFILE_KEY); }
-function setProfileId(id){ localStorage.setItem(PROFILE_KEY, id); }
-
-async function saveProfile(ownerName, ownerPhone){
-  const r=await fetch(URL+'/rest/v1/profiles',{method:'POST',headers:{...H,'Prefer':'return=representation'},body:JSON.stringify({owner_name:ownerName,owner_phone:fmtPhone(ownerPhone),pets:[]})});
-  if(!r.ok)throw new Error(await r.text());
-  const data=await r.json(); return data[0].id;
-}
-async function getProfile(profileId){
-  const r=await fetch(URL+'/rest/v1/profiles?id=eq.'+profileId+'&select=*',{headers:H});
-  if(!r.ok)return null;
-  const data=await r.json(); return data[0]||null;
-}
-async function updateProfilePets(profileId,pets){
-  await fetch(URL+'/rest/v1/profiles?id=eq.'+profileId,{method:'PATCH',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify({pets})});
-}
-
-async function openProfileModal(){
-  document.getElementById('regOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
-  const pc=document.getElementById('profileContent');
-  pc.innerHTML=`<div style="text-align:center;padding:30px;color:var(--text-mid);font-size:0.9rem">Loading profile...</div>`;
-  const pid=getProfileId();
-  if(pid){
-    const local=localStorage.getItem('tpf_profile_local');
-    if(local){renderProfileDashboard(JSON.parse(local));return;}
-    const profile=await getProfile(pid);
-    if(profile){renderProfileDashboard(profile);return;}
-  }
-  renderProfileCreate();
-}
-function closeProfileModal(){document.getElementById('regOverlay').classList.remove('open');document.body.style.overflow='';}
-
-function renderProfileCreate(){
-  const pc=document.getElementById('profileContent');
-  pc.innerHTML=`
-    <div style="font-family:'Lora',serif;font-size:1.15rem;font-weight:700;color:var(--navy);margin-bottom:6px">🐾 Create Your Profile</div>
-    <div style="font-size:0.9rem;color:var(--text-mid);margin-bottom:18px;line-height:1.5">No account needed — just your name and phone. Register up to 4 pets and get a one-tap 🆘 SOS emergency button.</div>
-    <div style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:12px;padding:14px 16px;margin-bottom:18px">
-      <div style="font-size:0.85rem;font-weight:700;color:var(--teal);margin-bottom:8px">✅ What you get with a profile</div>
-      <div style="font-size:0.85rem;color:var(--text-mid);line-height:1.8">🆘 One-tap SOS emergency post<br>✅ Verified Owner badge when claiming<br>🐾 Up to 4 pets registered<br>📞 Your info pre-filled automatically</div>
-    </div>
-    <div style="margin-bottom:12px"><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Your Name *</label><input class="verify-input" id="profName" placeholder="e.g. Lamar Myers"/></div>
-    <div style="margin-bottom:18px"><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Your Phone *</label><input class="verify-input" type="tel" id="profPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/></div>
-    <button class="verify-confirm-btn ready" onclick="createProfile()" style="background:var(--navy)">🐾 Create My Profile →</button>
-    <p style="font-size:0.75rem;color:var(--text-light);text-align:center;margin-top:10px">No password. No email. Just you and your pets. 🌵</p>`;
-}
-
-async function createProfile(){
-  const name=document.getElementById('profName').value.trim();
-  const phone=document.getElementById('profPhone').value.trim();
-  if(!name||phone.replace(/\D/g,'').length!==10){alert('Please enter your name and a valid 10-digit phone.');return;}
-  const btn=document.querySelector('#profileContent .verify-confirm-btn');
-  btn.disabled=true;btn.textContent='Creating...';
-  try{
-    const id=await saveProfile(name,phone);
-    setProfileId(id);updateSOSButton(true);
-    const profile=await getProfile(id);renderProfileDashboard(profile);
-  }catch(e){
-    const p={id:'local_'+Date.now(),owner_name:name,owner_phone:fmtPhone(phone),pets:[]};
-    localStorage.setItem('tpf_profile_local',JSON.stringify(p));
-    setProfileId(p.id);updateSOSButton(true);renderProfileDashboard(p);
-  }
-}
-
-function petEmoji2(type){return type==='Cat'?'🐱':type==='Bird'?'🐦':type==='Rabbit'?'🐰':'🐕';}
-
-function renderProfileDashboard(profile){
-  const pc=document.getElementById('profileContent');
-  const pets=profile.pets||[];
-  const slots=[0,1,2,3].map(i=>{
-    const p=pets[i];
-    if(p)return`<div class="pet-slot filled" onclick="editPetSlot(${i})"><div class="pet-slot-top"><span class="pet-slot-emoji">${petEmoji2(p.type)}</span><div><div class="pet-slot-name">${p.name}</div><div class="pet-slot-detail">${p.breed||p.type}${p.marking?' · '+p.marking:''}</div></div><span style="margin-left:auto;font-size:0.78rem;color:var(--green);font-weight:700">✅ Registered</span></div></div>`;
-    return`<div class="pet-slot" onclick="addPetToProfile(${i})"><div class="pet-slot-add">+ Add Pet ${i+1}</div></div>`;
-  }).join('');
-  pc.innerHTML=`
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
-      <div style="font-size:2rem">🐾</div>
-      <div><div style="font-family:'Lora',serif;font-size:1.05rem;font-weight:700;color:var(--navy)">${profile.owner_name}</div><div style="font-size:0.8rem;color:var(--teal);font-weight:600">${profile.owner_phone} · ✅ Verified Owner</div></div>
-    </div>
-    <div style="font-size:0.85rem;font-weight:700;color:var(--navy);margin-bottom:10px">My Pets (${pets.filter(Boolean).length}/4 registered)</div>
-    ${slots}
-    ${pets.filter(Boolean).length>0?`<div style="background:var(--red-light);border:2px solid rgba(192,57,43,0.25);border-radius:12px;padding:14px 16px;margin-top:16px"><div style="font-size:0.85rem;font-weight:700;color:var(--red);margin-bottom:6px">🆘 SOS Emergency Button Active</div><div style="font-size:0.85rem;color:var(--text-mid);line-height:1.5">Your red SOS button is live. One tap posts an emergency alert instantly with all your pet's info.</div></div>`:`<div style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:12px;padding:14px 16px;margin-top:16px;text-align:center;font-size:0.88rem;color:var(--text-mid)">Add at least one pet to activate your SOS button.</div>`}
-    <button class="verify-confirm-btn ready" onclick="closeProfileModal()" style="margin-top:16px;background:var(--navy)">✓ Done</button>`;
-}
-
-let _editingSlot=-1;
-function addPetToProfile(slot){_editingSlot=slot;renderAddPetForm();}
-function editPetSlot(slot){_editingSlot=slot;renderAddPetForm();}
-
-function renderAddPetForm(){
-  const pc=document.getElementById('profileContent');
-  pc.innerHTML=`
-    <button onclick="reopenDashboard()" style="background:none;border:none;color:var(--teal);font-size:0.88rem;font-weight:600;cursor:pointer;margin-bottom:14px">← Back to Profile</button>
-    <div style="font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:6px">Add Pet ${_editingSlot+1}</div>
-    <div style="font-size:0.88rem;color:var(--text-mid);margin-bottom:18px">This info is used for instant SOS posts and verified ownership.</div>
-    <div style="margin-bottom:12px"><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Pet Name *</label><input class="verify-input" id="addPetName" placeholder="e.g. Mojo"/></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
-      <div><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Type *</label><select class="verify-input" id="addPetType"><option value="">Select...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select></div>
-      <div><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Breed / Color</label><input class="verify-input" id="addPetBreed" placeholder="e.g. Black lab"/></div>
-    </div>
-    <div style="margin-bottom:12px"><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Unique Marking</label><input class="verify-input" id="addPetMark" placeholder="e.g. white spot on left ear"/></div>
-    <div style="margin-bottom:12px"><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Neighborhood / Area</label><input class="verify-input" id="addPetArea" placeholder="e.g. Midtown Tucson near Speedway"/></div>
-    <div style="margin-bottom:18px"><label style="font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px">Vet Name & Phone (optional)</label><input class="verify-input" id="addPetVet" placeholder="e.g. Dr. Smith — 520-555-1234"/></div>
-    <button class="verify-confirm-btn ready" onclick="savePetToProfile()" style="background:var(--green)">✅ Save This Pet</button>`;
-}
-
-async function reopenDashboard(){
-  const pid=getProfileId();
-  const local=localStorage.getItem('tpf_profile_local');
-  if(local){renderProfileDashboard(JSON.parse(local));return;}
-  if(pid){const p=await getProfile(pid);if(p)renderProfileDashboard(p);}
-}
-
-async function savePetToProfile(){
-  const name=document.getElementById('addPetName').value.trim();
-  const type=document.getElementById('addPetType').value;
-  if(!name||!type){alert('Pet name and type are required.');return;}
-  const pet={name,type,breed:document.getElementById('addPetBreed').value.trim()||type,marking:document.getElementById('addPetMark').value.trim(),area:document.getElementById('addPetArea').value.trim(),vet:document.getElementById('addPetVet').value.trim()};
-  const pid=getProfileId();
-  let profile=null;
-  const local=localStorage.getItem('tpf_profile_local');
-  if(local)profile=JSON.parse(local);
-  else if(pid)profile=await getProfile(pid);
-  if(!profile)return;
-  const pets=profile.pets||[];
-  pets[_editingSlot]=pet;profile.pets=pets;
-  if(local)localStorage.setItem('tpf_profile_local',JSON.stringify(profile));
-  else await updateProfilePets(pid,pets);
-  updateSOSButton(pets.filter(Boolean).length>0);
-  renderProfileDashboard(profile);
-}
-
-function updateSOSButton(hasPets){
-  const fab=document.getElementById('sosFab');
-  if(!fab)return;
-  fab.classList.toggle('has-profile',hasPets);
-  fab.classList.toggle('no-profile',!hasPets);
-}
-
-function openSOS(){
-  const pid=getProfileId();
-  if(!pid){openProfileModal();return;}
-  document.getElementById('sosOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
-  const local=localStorage.getItem('tpf_profile_local');
-  if(local){renderSOSPick(JSON.parse(local));return;}
-  document.getElementById('sosContent').innerHTML=`<div style="text-align:center;padding:24px;color:var(--text-mid)">Loading your pets...</div>`;
-  getProfile(pid).then(p=>{if(p)renderSOSPick(p);});
-}
-
-function renderSOSPick(profile){
-  window._sosProfile=profile;
-  const sc=document.getElementById('sosContent');
-  const pets=(profile.pets||[]).filter(Boolean);
-  if(!pets.length){
-    sc.innerHTML=`<div style="font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--red);margin-bottom:10px">🆘 SOS Emergency</div><div style="font-size:0.9rem;color:var(--text-mid);margin-bottom:18px">Add pets to your profile first.</div><button class="verify-confirm-btn ready" onclick="closeSOS();openProfileModal()" style="background:var(--navy)">Go to My Profile</button>`;
-    return;
-  }
-  sc.innerHTML=`<div style="font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--red);margin-bottom:6px">🆘 Emergency SOS</div><div style="font-size:0.9rem;color:var(--text-mid);margin-bottom:18px">Which pet is missing? An alert posts <strong>instantly</strong>.</div>`+
-    pets.map((p,i)=>`<button class="sos-pick-btn" onclick="triggerSOS(${i})"><span class="sos-pick-emoji">${petEmoji2(p.type)}</span><div><div class="sos-pick-name">${p.name}</div><div class="sos-pick-detail">${p.breed||p.type}${p.marking?' · '+p.marking:''}</div></div><span style="margin-left:auto;color:var(--red);font-size:1.2rem">🆘</span></button>`).join('')+
-    `<button onclick="closeSOS()" style="width:100%;background:none;border:2px solid var(--border);border-radius:10px;padding:12px;color:var(--text-light);font-size:0.9rem;cursor:pointer;margin-top:4px">Cancel</button>`;
-}
-
-async function triggerSOS(i){
-  const profile=window._sosProfile;
-  const pet=profile.pets[i];
-  const sc=document.getElementById('sosContent');
-  sc.innerHTML=`<div style="text-align:center;padding:30px"><div style="font-size:2.5rem;margin-bottom:14px">🆘</div><div style="font-family:'Lora',serif;font-size:1rem;font-weight:700;color:var(--red);margin-bottom:8px">Posting Emergency Alert...</div><div style="font-size:0.85rem;color:var(--text-mid)">Alerting all Tucson neighbors</div></div>`;
-  try{
-    await addPet({status:'lost',name:pet.name,type:pet.type,breed:pet.breed||pet.type,location:pet.area||'Tucson, AZ',description:`🆘 SOS EMERGENCY — Owner: ${profile.owner_name}. Marking: ${pet.marking||'Not provided'}. Vet: ${pet.vet||'Not provided'}.`,phone:profile.owner_phone,photo_url:''});
-    sc.innerHTML=`<div style="text-align:center;padding:30px"><div style="font-size:3rem;margin-bottom:14px">🆘</div><div style="font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--red);margin-bottom:10px">Alert Posted!</div><div style="font-size:0.9rem;color:var(--text-mid);line-height:1.6;margin-bottom:20px">Emergency alert for <strong>${pet.name}</strong> is now live for all Tucson neighbors.</div><button class="verify-confirm-btn ready" onclick="closeSOS();switchTab('see')" style="background:var(--red)">👁 View Live Alert</button></div>`;
-    loadAlertBanner();
-  }catch(e){sc.innerHTML=`<div style="text-align:center;padding:20px;color:var(--red)">Error. <button onclick="triggerSOS(${i})" style="color:var(--navy);font-weight:700;cursor:pointer">Try again</button></div>`;}
-}
-
-function closeSOS(){document.getElementById('sosOverlay').classList.remove('open');document.body.style.overflow='';}
-
-(function initProfile(){
-  const pid=getProfileId();
-  const local=localStorage.getItem('tpf_profile_local');
-  if(pid||local){
-    const p=local?JSON.parse(local):null;
-    const hasPets=p?(p.pets||[]).filter(Boolean).length>0:true;
-    updateSOSButton(hasPets);
-  }
-})();
-
-function closeModal(e){
-  if(e&&e.target!==document.getElementById('modalOverlay')&&!e.target.classList.contains('modal-close'))return;
-  document.getElementById('modalOverlay').classList.remove('open');
-  document.body.style.overflow='';
-}
-
-async function markReunited(id,name){ openClaimFlow('reunite'); }
-
-function shareApp(){
-  const text='🐾 FREE app for Tucson pet owners — Tucson Pet Finder! Post lost or found pets and neighbors nearby get alerted right away. Real database — every neighbor sees the same listings. No sign-up. No cost. Check it out: tucson-connect.vercel.app/tucson-pet-finder-v2.html';
-  if(navigator.share)navigator.share({title:'Tucson Pet Finder — Free!',text,url:window.location.href});
-  else navigator.clipboard.writeText(text).then(()=>alert('Copied! You can now paste this message into Nextdoor, Facebook, or a text message.'));
-}
-
-loadAlertBanner();
-
-let strayLatLng = null;
-let strayPhotoData = null;
-
-function openStrayModal(){
-  document.getElementById('strayModal').classList.add('open');
-  document.getElementById('strayFormView').style.display='block';
-  document.getElementById('straySuccessView').style.display='none';
-  document.body.style.overflow='hidden';
-}
-
-function closeStrayModal(e){
-  if(e && e.target !== document.getElementById('strayModal') && !e.target.classList.contains('stray-close')) return;
-  document.getElementById('strayModal').classList.remove('open');
-  document.body.style.overflow='';
-  strayLatLng=null; strayPhotoData=null;
-  document.getElementById('strayPhotoPreview').style.display='none';
-  document.getElementById('strayPhotoHint').style.display='flex';
-  document.getElementById('strayLocText').textContent='Tap here to capture your current location';
-  document.getElementById('strayLocText').className='stray-loc-text';
-  document.getElementById('strayNote').value='';
-  document.getElementById('strayPhone').value='';
-  document.getElementById('strayPhotoInput').value='';
-}
-
-function loadStrayPhoto(input){
-  const f=input.files[0]; if(!f)return;
-  const r=new FileReader();
-  r.onload=e=>{
-    strayPhotoData=e.target.result;
-    const img=document.getElementById('strayPhotoPreview');
-    img.src=strayPhotoData; img.style.display='block';
-    document.getElementById('strayPhotoHint').style.display='none';
-  };
-  r.readAsDataURL(f);
-}
-
-function getStrayLocation(){
-  const el=document.getElementById('strayLocText');
-  el.textContent='Getting your location...';
-  if(!navigator.geolocation){el.textContent='GPS not available on this device';return;}
-  navigator.geolocation.getCurrentPosition(
-    pos=>{
-      strayLatLng={lat:pos.coords.latitude,lng:pos.coords.longitude};
-      el.textContent='✅ Location saved ('+strayLatLng.lat.toFixed(4)+', '+strayLatLng.lng.toFixed(4)+')';
-      el.className='stray-loc-text got';
-    },
-    ()=>{el.textContent='Could not get location — tap to try again';el.className='stray-loc-text';}
-  );
-}
-
-async function submitStray(){
-  if(!strayPhotoData){alert('Please take or upload a photo first!');return;}
-  const btn=document.getElementById('straySubmitBtn');
-  btn.disabled=true; btn.textContent='Posting...';
-  const note=document.getElementById('strayNote').value.trim();
-  const phone=document.getElementById('strayPhone').value.trim();
-  const locStr=strayLatLng
-    ?'GPS: '+strayLatLng.lat.toFixed(5)+', '+strayLatLng.lng.toFixed(5)
-    :'Location not captured';
-  try{
-    await addPet({
-      status:'stray',
-      name:'Stray Sighting',
-      type:'Unknown',
-      breed:'Unknown',
-      location:locStr,
-      description:note||'No additional notes.',
-      phone:phone?fmtPhone(phone):'',
-      photo_url:strayPhotoData
-    });
-    document.getElementById('strayFormView').style.display='none';
-    document.getElementById('straySuccessView').style.display='block';
-    loadAlertBanner();
-  }catch(e){alert('Error posting. Please try again.');console.error(e);}
-  finally{btn.disabled=false;btn.textContent='📸 Post This Sighting';}
-}
-
-</script>
-
-<div class="photo-expand-overlay" id="photoExpandOverlay" onclick="closeExpandPhoto()">
-  <div class="photo-expand-close" onclick="closeExpandPhoto()">✕</div>
-  <img id="photoExpandImg" src="" alt="Pet photo"/>
 </div>
 
 <!-- VERIFY MODAL -->
@@ -1219,5 +453,628 @@ async function submitStray(){
   </div>
 </div>
 
+<!-- STRAY MODAL -->
+<div class="stray-modal" id="strayModal" onclick="closeStrayModal(event)">
+  <div class="stray-sheet">
+    <div class="stray-close" onclick="closeStrayModal()">✕</div>
+    <div class="stray-handle"></div>
+    <div id="strayFormView">
+      <div class="stray-title">📸 Spot a Stray</div>
+      <div class="stray-sub">Saw a stray nearby? Take a quick photo — your neighbors will see it right away.</div>
+      <div class="stray-photo-zone" onclick="document.getElementById('strayPhotoInput').click()">
+        <input type="file" id="strayPhotoInput" accept="image/*" capture="environment" style="display:none" onchange="loadStrayPhoto(this)"/>
+        <div class="stray-photo-hint" id="strayPhotoHint"><div class="stray-photo-icon">📷</div><div class="stray-photo-txt">Tap to take a photo</div></div>
+        <img id="strayPhotoPreview" style="display:none"/>
+      </div>
+      <div class="stray-loc-row" onclick="getStrayLocation()">
+        <div class="stray-loc-icon">📍</div>
+        <div class="stray-loc-text" id="strayLocText">Tap here to capture your current location</div>
+      </div>
+      <div class="stray-row"><input class="stray-input" type="text" id="strayNote" placeholder="Quick note — e.g. limping, near the park entrance" maxlength="120"/></div>
+      <div class="stray-row"><input class="stray-input" type="tel" id="strayPhone" placeholder="Your phone number (optional)" inputmode="numeric" oninput="autoPhone(this)"/></div>
+      <button class="stray-submit" id="straySubmitBtn" onclick="submitStray()">📸 Post This Sighting</button>
+    </div>
+    <div id="straySuccessView" style="display:none">
+      <div style="text-align:center;padding:20px 0">
+        <div style="font-size:2.5rem;margin-bottom:10px">🙌</div>
+        <div style="font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--gold);margin-bottom:8px">Sighting Posted!</div>
+        <div style="font-size:0.92rem;color:var(--text-mid);line-height:1.6">Your photo and location are now live. Every neighbor who opens this app will see it. Thank you for helping! 🐾</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PHOTO EXPAND -->
+<div class="photo-expand-overlay" id="photoExpandOverlay" onclick="closeExpandPhoto()">
+  <div class="photo-expand-close" onclick="closeExpandPhoto()">✕</div>
+  <img id="photoExpandImg" src="" alt="Pet photo"/>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── SUPABASE ───────────────────────────────────────────────────────────────
+var SURL = "https://msuqflssqixsplcearxr.supabase.co";
+var SKEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdXFmbHNzcWl4c3BsY2VhcnhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMzU3NDgsImV4cCI6MjA4OTcxMTc0OH0.BlrDiIu2YdDB7oHJ0fFiSEiBDQGvHCFAUaysR6O24zk";
+var SH = {"Content-Type":"application/json","apikey":SKEY,"Authorization":"Bearer "+SKEY};
+
+async function getPets() {
+  try { var r = await fetch(SURL+"/rest/v1/pets?select=*&order=created_at.desc",{headers:SH}); return await r.json(); }
+  catch(e) { return []; }
+}
+async function addPet(pet) {
+  var r = await fetch(SURL+"/rest/v1/pets",{method:"POST",headers:Object.assign({},SH,{"Prefer":"return=representation"}),body:JSON.stringify(pet)});
+  if(!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+async function patchPet(id,data) {
+  await fetch(SURL+"/rest/v1/pets?id=eq."+id,{method:"PATCH",headers:Object.assign({},SH,{"Prefer":"return=minimal"}),body:JSON.stringify(data)});
+}
+async function uploadPhoto(b64,fileName) {
+  try {
+    var base64=b64.split(",")[1]; var mime=b64.split(",")[0].split(":")[1].split(";")[0];
+    var binary=atob(base64); var arr=new Uint8Array(binary.length);
+    for(var i=0;i<binary.length;i++) arr[i]=binary.charCodeAt(i);
+    var blob=new Blob([arr],{type:mime}); var path="pets/"+Date.now()+"-"+fileName;
+    var r=await fetch(SURL+"/storage/v1/object/pet-photos/"+path,{method:"POST",headers:{"apikey":SKEY,"Authorization":"Bearer "+SKEY,"Content-Type":mime,"x-upsert":"true"},body:blob});
+    if(!r.ok) return null;
+    return SURL+"/storage/v1/object/public/pet-photos/"+path;
+  } catch(e) { return null; }
+}
+async function saveProfile(n,p) {
+  var r=await fetch(SURL+"/rest/v1/profiles",{method:"POST",headers:Object.assign({},SH,{"Prefer":"return=representation"}),body:JSON.stringify({owner_name:n,owner_phone:fmtPhone(p),pets:[]})});
+  if(!r.ok) throw new Error(await r.text());
+  var d=await r.json(); return d[0].id;
+}
+async function getProfile(id) {
+  var r=await fetch(SURL+"/rest/v1/profiles?id=eq."+id+"&select=*",{headers:SH});
+  if(!r.ok) return null; var d=await r.json(); return d[0]||null;
+}
+async function updateProfilePets(id,pets) {
+  await fetch(SURL+"/rest/v1/profiles?id=eq."+id,{method:"PATCH",headers:Object.assign({},SH,{"Prefer":"return=minimal"}),body:JSON.stringify({pets:pets})});
+}
+
+// ── UTILS ──────────────────────────────────────────────────────────────────
+function validPhone(p){return p.replace(/\D/g,"").length===10;}
+function fmtPhone(p){var d=p.replace(/\D/g,"");return d.length===10?d.slice(0,3)+"-"+d.slice(3,6)+"-"+d.slice(6):p;}
+function showErr(id,show){var e=document.getElementById(id);if(e)e.style.display=show?"block":"none";}
+function timeAgo(d){var m=Math.floor((Date.now()-new Date(d))/60000);if(m<1)return"Just now";if(m<60)return m+" min ago";var h=Math.floor(m/60);if(h<24)return h+" hour"+(h!==1?"s":"")+" ago";return Math.floor(h/24)+" day"+(Math.floor(h/24)!==1?"s":"")+" ago";}
+function petEmoji(type){if(type==="Cat")return"🐱";if(type==="Bird")return"🐦";if(type==="Rabbit")return"🐰";return"🐕";}
+function petAgeTier(d){var h=(Date.now()-new Date(d))/3600000;if(h<24)return"hot";if(h<72)return"watching";return"archived";}
+function petAgeLabel(d){var h=(Date.now()-new Date(d))/3600000;if(h<1)return"Just posted";if(h<24)return Math.floor(h)+"h ago · Active";if(h<48)return"1 day ago · Watching";if(h<72)return"2 days ago · Watching";return Math.floor(h/24)+" days ago";}
+function autoPhone(input){var v=input.value.replace(/\D/g,"");if(v.length>10)v=v.slice(0,10);if(v.length>=7)input.value=v.slice(0,3)+"-"+v.slice(3,6)+"-"+v.slice(6);else if(v.length>=4)input.value=v.slice(0,3)+"-"+v.slice(3);else input.value=v;}
+
+// ── TABS ───────────────────────────────────────────────────────────────────
+function switchTab(tab){
+  ["Lost","Found","See"].forEach(function(t){document.getElementById("tab"+t).classList.remove("active");});
+  var el=document.getElementById("tab"+tab.charAt(0).toUpperCase()+tab.slice(1));
+  if(el) el.classList.add("active");
+  document.getElementById("tabFound").classList.add("found-tab");
+  document.getElementById("formLost").classList.toggle("active",tab==="lost");
+  document.getElementById("formFound").classList.toggle("active",tab==="found");
+  document.getElementById("successPanel").style.display="none";
+  var ls=document.getElementById("listingsSection");
+  if(tab==="see"){
+    ls.style.display="block";
+    var c=document.getElementById("listingsContainer");
+    if(!c.children.length||c.innerHTML.indexOf("Loading")>=0) renderListings();
+  } else { ls.style.display="none"; }
+}
+
+// ── PHOTO ──────────────────────────────────────────────────────────────────
+function prevPhoto(input,pid,hintId){
+  var f=input.files[0]; if(!f) return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var img=document.getElementById(pid); img.src=e.target.result; img.style.display="block";
+    var h=document.getElementById(hintId); if(h) h.style.display="none";
+  };
+  reader.readAsDataURL(f);
+}
+function expandPhoto(img){document.getElementById("photoExpandImg").src=img.src;document.getElementById("photoExpandOverlay").classList.add("open");document.body.style.overflow="hidden";}
+function closeExpandPhoto(){document.getElementById("photoExpandOverlay").classList.remove("open");document.body.style.overflow="";}
+
+// ── VOICE ──────────────────────────────────────────────────────────────────
+var _SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+var _recog=null,_activeField=null,_activeBtn=null,_silenceTimer=null,_finalText="",_isListening=false;
+
+function _setBtn(btn,listening){
+  if(!btn) return;
+  if(listening){
+    btn.setAttribute("data-orig",btn.textContent);
+    btn.textContent="🔴 Listening...";
+    btn.classList.add("listening");
+    btn.style.color="var(--red)";
+    btn.style.borderColor="var(--red)";
+  } else {
+    var orig=btn.getAttribute("data-orig");
+    if(orig) btn.textContent=orig;
+    btn.classList.remove("listening");
+    btn.style.color="";
+    btn.style.borderColor="";
+  }
+}
+
+function startVoice(fieldId,btn){
+  if(!btn && window.event) btn=window.event.currentTarget||window.event.target;
+  if(!_SR){
+    alert("Voice input not supported on this browser.\n\niPhone: use Safari\nAndroid: use Chrome\n\nMake sure microphone permission is allowed for this site.");
+    return;
+  }
+  if(_isListening){
+    if(_recog){try{_recog.abort();}catch(e){}}
+    _recog=null; _isListening=false;
+    _setBtn(_activeBtn,false);
+    if(_activeField===fieldId){
+      var el=document.getElementById(fieldId);
+      if(el){el.style.borderColor="";el.placeholder="";}
+      clearTimeout(_silenceTimer);
+      _activeField=null; _activeBtn=null;
+      return;
+    }
+  }
+  _activeBtn=btn||null;
+  doVoiceStart(fieldId);
+}
+
+function doVoiceStart(fieldId){
+  var el=document.getElementById(fieldId); if(!el) return;
+  var isPhone=el.type==="tel"||fieldId.toLowerCase().indexOf("phone")>=0;
+  if(_recog){try{_recog.abort();}catch(e){}} _recog=new _SR();
+  _recog.lang="en-US"; _recog.maxAlternatives=1;
+  _recog.continuous=!isPhone; _recog.interimResults=!isPhone;
+  _activeField=fieldId; _finalText=""; _isListening=true;
+  el.style.borderColor="var(--teal2)";
+  el.placeholder=isPhone?"🎤 Say your number...":"🎤 Listening... speak now!";
+  el.focus();
+  _setBtn(_activeBtn,true);
+  clearTimeout(_silenceTimer);
+  _silenceTimer=setTimeout(function(){if(_recog&&_isListening)_recog.stop();},isPhone?8000:15000);
+  _recog.onresult=function(e){
+    _finalText=""; var interim="";
+    for(var i=0;i<e.results.length;i++){if(e.results[i].isFinal)_finalText+=e.results[i][0].transcript+" ";else interim+=e.results[i][0].transcript;}
+    var val=(_finalText+interim).trim();
+    if(isPhone){var raw=val.replace(/\D/g,"").slice(0,10);if(raw.length>=7)val=raw.slice(0,3)+"-"+raw.slice(3,6)+"-"+raw.slice(6);else if(raw.length>=4)val=raw.slice(0,3)+"-"+raw.slice(3);else val=raw;}
+    el.value=val;
+    clearTimeout(_silenceTimer);
+    _silenceTimer=setTimeout(function(){if(_recog&&_isListening)_recog.stop();},isPhone?8000:15000);
+  };
+  _recog.onerror=function(e){
+    if(e.error==="no-speech") return;
+    _isListening=false; _setBtn(_activeBtn,false);
+    el.style.borderColor=""; el.placeholder="";
+    clearTimeout(_silenceTimer);
+    if(e.error==="not-allowed"||e.error==="service-not-allowed"){
+      alert("Microphone access was denied.\n\nTo fix this:\n• iPhone Safari: Settings → Safari → Microphone → Allow\n• Android Chrome: tap the 🔒 lock icon in the address bar → Microphone → Allow\n\nThen reload the page and try again.");
+    } else if(e.error==="network"){
+      alert("Voice recognition needs an internet connection. Please check your connection and try again.");
+    }
+  };
+  _recog.onend=function(){
+    _isListening=false; clearTimeout(_silenceTimer);
+    if(_finalText.trim()) el.value=_finalText.trim();
+    el.style.borderColor=""; el.placeholder="";
+    _setBtn(_activeBtn,false);
+    _activeField=null; _activeBtn=null;
+  };
+  try{_recog.start();}catch(e){_isListening=false;el.style.borderColor="";el.placeholder="";_setBtn(_activeBtn,false);console.warn("Voice start error:",e);}
+}
+
+// ── SUBMIT ─────────────────────────────────────────────────────────────────
+async function doSubmit(type){
+  var ok=true;
+  if(type==="lost"){
+    var name=document.getElementById("lostName").value.trim();
+    var pt=document.getElementById("lostType").value;
+    var loc=document.getElementById("lostLoc").value.trim();
+    var phone=document.getElementById("lostPhone").value.trim();
+    showErr("errLostName",!name);if(!name)ok=false;
+    showErr("errLostType",!pt);if(!pt)ok=false;
+    showErr("errLostLoc",!loc);if(!loc)ok=false;
+    showErr("errLostPhone",!validPhone(phone));if(!validPhone(phone))ok=false;
+    if(!ok) return;
+    var btn=document.getElementById("lostBtn"); btn.disabled=true; btn.textContent="Posting...";
+    try{
+      var pf=document.getElementById("lostPhoto").files[0]; var pu=null;
+      if(pf) pu=await uploadPhoto(document.getElementById("lostPrev").src,pf.name);
+      await addPet({status:"lost",name:name,type:pt,breed:document.getElementById("lostBreed").value.trim()||pt,location:loc,description:document.getElementById("lostDesc").value.trim(),phone:fmtPhone(phone),photo_url:pu||""});
+      showSuccess("lost",name); loadAlertBanner();
+    }catch(e){alert("Error posting. Please try again.");console.error(e);}
+    finally{btn.disabled=false;btn.textContent="🚨 Post My Lost Pet Alert";}
+  } else {
+    var pt2=document.getElementById("foundType").value;
+    var loc2=document.getElementById("foundLoc").value.trim();
+    var phone2=document.getElementById("foundPhone").value.trim();
+    showErr("errFoundType",!pt2);if(!pt2)ok=false;
+    showErr("errFoundLoc",!loc2);if(!loc2)ok=false;
+    showErr("errFoundPhone",!validPhone(phone2));if(!validPhone(phone2))ok=false;
+    if(!ok) return;
+    var btn2=document.getElementById("foundBtn"); btn2.disabled=true; btn2.textContent="Posting...";
+    try{
+      var pf2=document.getElementById("foundPhoto").files[0]; var pu2=null;
+      if(pf2) pu2=await uploadPhoto(document.getElementById("foundPrev").src,pf2.name);
+      var fn2=document.getElementById("foundName").value.trim();
+      await addPet({status:"found",name:fn2||"Found "+pt2,type:pt2,breed:document.getElementById("foundBreed").value.trim()||pt2,location:loc2,description:document.getElementById("foundDesc").value.trim(),phone:fmtPhone(phone2),photo_url:pu2||""});
+      showSuccess("found"); loadAlertBanner();
+    }catch(e){alert("Error posting. Please try again.");console.error(e);}
+    finally{btn2.disabled=false;btn2.textContent="🟢 Post My Found Pet Alert";}
+  }
+}
+
+function showSuccess(type,name){
+  document.getElementById("formLost").classList.remove("active");
+  document.getElementById("formFound").classList.remove("active");
+  var sp=document.getElementById("successPanel"); sp.style.display="block";
+  if(type==="lost"){
+    document.getElementById("successIcon").textContent="🚨";
+    document.getElementById("successTitle").textContent=name?name+"s Alert Is Live!":"Your Alert Is Posted!";
+    document.getElementById("successTitle").style.color="var(--red)";
+    document.getElementById("successMsg").textContent="Saved in our database — every Tucson neighbor who opens this app will see it. Share to get more eyes looking!";
+    sp.style.borderColor="rgba(192,57,43,0.4)";
+  } else {
+    document.getElementById("successIcon").textContent="🟢";
+    document.getElementById("successTitle").textContent="Found Pet Report Is Live!";
+    document.getElementById("successTitle").style.color="var(--green)";
+    document.getElementById("successMsg").textContent="Thank you! The owner will be able to find and contact you directly.";
+    sp.style.borderColor="rgba(30,132,73,0.4)";
+  }
+  sp.scrollIntoView({behavior:"smooth",block:"center"});
+}
+
+// ── LISTINGS ───────────────────────────────────────────────────────────────
+function buildCard(pet){
+  var tier=petAgeTier(pet.created_at);
+  var cls="listing-card";
+  if(pet.status==="found") cls+=" found-card";
+  if(tier==="watching"&&pet.status!=="reunited") cls+=" watching";
+  var dotCls=tier==="hot"?"dot-hot":tier==="watching"?"dot-watching":"dot-archived";
+  var photoHtml=(pet.photo_url&&pet.photo_url.indexOf("data:")<0)?"<img src=\""+pet.photo_url+"\" onerror=\"this.style.display='none'\"/>":petEmoji(pet.type);
+  var typeCls="type-"+(pet.status==="stray"?"stray":pet.status==="reunited"?"reunited":pet.status==="found"?"found":"lost");
+  var typeLabel=pet.status==="stray"?"STRAY":pet.status==="lost"?"LOST":pet.status==="found"?"FOUND":"REUNITED";
+  var d=document.createElement("div"); d.className=cls; d.onclick=function(){openModal(pet);};
+  d.innerHTML="<div class=\"listing-photo\">"+photoHtml+"</div><div class=\"listing-info\"><div class=\"listing-top\"><span class=\"age-dot "+dotCls+"\"></span><span class=\"listing-type "+typeCls+"\">"+typeLabel+"</span><span class=\"listing-name\">"+(pet.name||"Unknown")+"</span></div><div class=\"listing-breed\">"+(pet.breed||pet.type)+"</div><div class=\"listing-loc\">📍 "+pet.location+"</div></div><div class=\"listing-time\">"+petAgeLabel(pet.created_at)+"</div>";
+  return d;
+}
+
+function tierDivider(type){
+  var labels={hot:"🔴 Active — Last 24 Hours",watching:"👀 Still Out There — 1-3 Days",archived:"📁 Older Alerts"};
+  var d=document.createElement("div"); d.className="tier-div tier-"+type;
+  d.innerHTML="<div class=\"tier-div-line\"></div><div class=\"tier-lbl\">"+labels[type]+"</div><div class=\"tier-div-line\"></div>";
+  return d;
+}
+
+async function renderListings(){
+  var c=document.getElementById("listingsContainer");
+  c.innerHTML="<div class=\"state-box\">Loading alerts from Tucson database...</div>";
+  var pets=await getPets();
+  var skip=["reunited","registered"];
+  var hot=pets.filter(function(p){return skip.indexOf(p.status)<0&&petAgeTier(p.created_at)==="hot";});
+  var watching=pets.filter(function(p){return skip.indexOf(p.status)<0&&petAgeTier(p.created_at)==="watching";});
+  var archived=pets.filter(function(p){return skip.indexOf(p.status)<0&&petAgeTier(p.created_at)==="archived";});
+  document.getElementById("listingCount").textContent=hot.length+" hot · "+watching.length+" watching";
+  c.innerHTML="";
+  if(!pets.filter(function(p){return skip.indexOf(p.status)<0;}).length){
+    c.innerHTML="<div class=\"state-box\">🐾<br><br>No alerts yet in Tucson.<br>Be the first to post!</div>";return;
+  }
+  if(hot.length){c.appendChild(tierDivider("hot"));hot.forEach(function(p){c.appendChild(buildCard(p));});}
+  if(watching.length){c.appendChild(tierDivider("watching"));watching.forEach(function(p){c.appendChild(buildCard(p));});}
+  if(archived.length){
+    var wrap=document.createElement("div");
+    var toggle=document.createElement("div");
+    toggle.style.cssText="text-align:center;padding:12px 0;cursor:pointer";
+    toggle.innerHTML="<span style=\"font-size:0.82rem;color:var(--text-light);border:1px solid var(--border);padding:7px 18px;border-radius:20px;background:var(--bg2)\">📁 Show "+archived.length+" older alert"+(archived.length!==1?"s":"")+"</span>";
+    toggle.onclick=function(){wrap.innerHTML="";c.appendChild(tierDivider("archived"));archived.forEach(function(p){c.appendChild(buildCard(p));});};
+    wrap.appendChild(toggle); c.appendChild(wrap);
+  }
+}
+
+// ── ALERT BANNER ───────────────────────────────────────────────────────────
+async function loadAlertBanner(){
+  var pets=await getPets();
+  var lost=pets.filter(function(p){return p.status==="lost";}).length;
+  var found=pets.filter(function(p){return p.status==="found";}).length;
+  var el=document.getElementById("alertText");
+  var strip=document.getElementById("alertStrip");
+  if(lost===0&&found===0){
+    el.textContent="No active alerts in Tucson right now. Post below if you lost or found a pet.";
+    strip.style.background="var(--teal-light)"; strip.style.borderColor="rgba(26,122,110,0.3)";
+    document.querySelector(".alert-icon").textContent="✅"; el.style.color="var(--teal)";
+  } else {
+    var parts=[];
+    if(lost>0) parts.push("<strong>"+lost+" pet"+(lost!==1?"s":"")+" missing</strong>");
+    if(found>0) parts.push("<strong>"+found+" found</strong> waiting for owner");
+    el.innerHTML=parts.join(" · ")+" in Tucson. <span style='text-decoration:underline;opacity:0.7'>Tap to view →</span>";
+    el.style.color=""; strip.style.background=""; strip.style.borderColor="";
+    document.querySelector(".alert-icon").textContent="🔍";
+  }
+}
+
+// ── MODAL ──────────────────────────────────────────────────────────────────
+var _currentPet=null;
+
+function openModal(pet){
+  _currentPet=pet;
+  var ph=document.getElementById("mPhoto");
+  if(pet.photo_url&&pet.photo_url.indexOf("data:")<0) ph.innerHTML="<img src=\""+pet.photo_url+"\" onerror=\"this.parentNode.innerHTML='"+petEmoji(pet.type)+"'\"/>";
+  else ph.innerHTML=petEmoji(pet.type);
+  var badge=document.getElementById("mBadge");
+  badge.textContent=pet.status==="lost"?"🔴 LOST PET":pet.status==="found"?"🟢 FOUND PET":pet.status==="reunited"?"🎉 REUNITED":"📸 STRAY";
+  badge.style.background=pet.status==="lost"?"var(--red-light)":pet.status==="found"?"var(--green-light)":"var(--bg2)";
+  badge.style.color=pet.status==="lost"?"var(--red)":pet.status==="found"?"var(--green)":"var(--text-light)";
+  document.getElementById("mTitle").textContent=pet.name||"Unknown";
+  document.getElementById("mBreed").textContent=(pet.breed||pet.type)+" · "+pet.type;
+  document.getElementById("mDesc").textContent=pet.description||"No additional details provided.";
+  document.getElementById("mDetails").innerHTML=
+    "<div class=\"modal-detail\"><span class=\"modal-dlbl\">Location</span><span class=\"modal-dval\">"+pet.location+"</span></div>"
+    +"<div class=\"modal-detail\" style=\"border:none\"><span class=\"modal-dlbl\">Posted</span><span class=\"modal-dval\">"+timeAgo(pet.created_at)+"</span></div>";
+  var cb=document.getElementById("mCall"); var rb=document.getElementById("mReunite"); var extra=document.getElementById("mExtra");
+  extra.innerHTML=""; cb.style.display="none"; rb.style.display="none";
+  if(pet.status==="lost"){
+    cb.textContent="📞 Call Reporter: "+pet.phone;
+    cb.onclick=function(){window.location.href="tel:"+pet.phone.replace(/\D/g,"");};
+    cb.style.display="block"; rb.style.display="block"; rb.onclick=function(){openClaimFlow("reunite");};
+    extra.innerHTML="<button class=\"claim-lost-btn\" onclick=\"openClaimFlow('lost')\">🐕 This Is My Pet — I Am the Owner</button>"
+      +"<div class=\"safety-note\"><span>🔒</span><span>Starts a <strong>verification checklist</strong> before contact info is shared.</span></div>"
+      +"<div class=\"safety-banner\"><strong>🤝 Safe Meetup Spots</strong>Always meet in a public place.<div class=\"safety-places\"><span class=\"safety-place\">🏪 Walgreens</span><span class=\"safety-place\">🚔 Police Station</span><span class=\"safety-place\">☕ Starbucks</span><span class=\"safety-place\">🏥 Fire Station</span></div></div>"
+      +"<button class=\"report-btn\" onclick=\"reportListing()\">🚨 Report Suspicious Activity</button>";
+  } else if(pet.status==="found"){
+    cb.textContent="📞 Contact Finder: "+pet.phone;
+    cb.onclick=function(){window.location.href="tel:"+pet.phone.replace(/\D/g,"");};
+    cb.style.display="block"; rb.style.display="block"; rb.onclick=function(){openClaimFlow("reunite");};
+    extra.innerHTML="<button class=\"claim-found-btn\" onclick=\"openClaimFlow('found')\">🏠 This Is My Pet — Reunite Now</button>"
+      +"<div class=\"safety-note\"><span>🔒</span><span>Opens a <strong>quick verification</strong> before the finder's info is shared.</span></div>"
+      +"<div class=\"safety-banner\"><strong>🤝 Safe Meetup Spots</strong>Always meet in a public place.<div class=\"safety-places\"><span class=\"safety-place\">🏪 Walgreens</span><span class=\"safety-place\">🚔 Police Station</span><span class=\"safety-place\">☕ Starbucks</span><span class=\"safety-place\">🏥 Fire Station</span></div></div>"
+      +"<button class=\"report-btn\" onclick=\"reportListing()\">🚨 Report Suspicious Activity</button>";
+  } else if(pet.status==="reunited"){
+    extra.innerHTML="<div style=\"text-align:center;padding:16px 0;font-size:0.9rem;color:var(--text-light)\">🎉 This pet has been reunited with their family!</div>";
+  }
+  document.getElementById("modalOverlay").classList.add("open");
+  document.body.style.overflow="hidden";
+}
+
+function closeModalOverlay(e){
+  if(e&&e.target!==document.getElementById("modalOverlay")&&!e.target.classList.contains("modal-close")) return;
+  document.getElementById("modalOverlay").classList.remove("open");
+  document.body.style.overflow="";
+}
+
+function reportListing(){var r=prompt("Briefly describe the issue:");if(!r||!r.trim())return;alert("Thank you for reporting. Our team will review within 24 hours.");}
+
+// ── CLAIM / VERIFY ─────────────────────────────────────────────────────────
+function openClaimFlow(petStatus){
+  if(!_currentPet) return;
+  var pet=_currentPet; var isReunite=petStatus==="reunite";
+  var vc=document.getElementById("verifyContent");
+  var title=isReunite?"✅ Confirm Reunification":petStatus==="lost"?"🐕 Claim Your Pet":"🏠 Claim Your Pet";
+  var sub=isReunite?"Confirm that "+pet.name+" has been safely returned to their owner.":"Before we connect you, confirm you are the owner of "+pet.name+".";
+  var chk1=isReunite?"The owner has been positively identified":"I can describe a unique marking on this pet";
+  var chk2=isReunite?"The pet and owner have already reunited in person":"I have photos of me with this pet available";
+  var chk3=isReunite?"I personally witnessed the reunion":"I know my pets vet name or clinic";
+  var chk4=isReunite?"I understand this will permanently remove the alert":"I will meet the finder in a public place";
+  var extra=isReunite?"":"<div style=\"margin-bottom:12px\"><label style=\"font-size:0.88rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px\">Describe a unique feature your pet has *</label><input class=\"verify-input\" id=\"claimMark\" placeholder=\"e.g. white patch on left ear...\"/></div><div style=\"margin-bottom:12px\"><label style=\"font-size:0.88rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px\">Your phone number *</label><input class=\"verify-input\" type=\"tel\" id=\"claimPhone\" placeholder=\"520-XXX-XXXX\" inputmode=\"numeric\" oninput=\"autoPhone(this)\"/></div>";
+  var btnTxt=isReunite?"🎉 Yes — Mark as Reunited":"🔓 Verified — Connect Me Now";
+  vc.innerHTML="<div class=\"verify-title\">"+title+"</div><div class=\"verify-sub\">"+sub+"</div>"
+    +"<div class=\"verify-checklist\"><div class=\"verify-checklist-title\">✅ Verification Checklist</div>"
+    +"<div class=\"verify-check\"><input type=\"checkbox\" id=\"chk1\" onchange=\"checkClaimBtn()\"><label for=\"chk1\">"+chk1+"</label></div>"
+    +"<div class=\"verify-check\"><input type=\"checkbox\" id=\"chk2\" onchange=\"checkClaimBtn()\"><label for=\"chk2\">"+chk2+"</label></div>"
+    +"<div class=\"verify-check\"><input type=\"checkbox\" id=\"chk3\" onchange=\"checkClaimBtn()\"><label for=\"chk3\">"+chk3+"</label></div>"
+    +"<div class=\"verify-check\"><input type=\"checkbox\" id=\"chk4\" onchange=\"checkClaimBtn()\"><label for=\"chk4\">"+chk4+"</label></div></div>"
+    +extra
+    +"<button class=\"verify-confirm-btn\" id=\"claimConfirmBtn\" onclick=\"doConfirmClaim('"+isReunite+"')\">"+btnTxt+"</button>"
+    +"<p style=\"font-size:0.75rem;color:var(--text-light);text-align:center;margin-top:10px;line-height:1.5\">"+(isReunite?"This removes the alert permanently.":"By proceeding you confirm this is your pet.")+"</p>";
+  document.getElementById("verifyOverlay").classList.add("open");
+  document.body.style.overflow="hidden";
+}
+
+function checkClaimBtn(){
+  var ok=["chk1","chk2","chk3","chk4"].every(function(id){var e=document.getElementById(id);return e&&e.checked;});
+  var mEl=document.getElementById("claimMark"); var pEl=document.getElementById("claimPhone");
+  var mOk=mEl?mEl.value.trim().length>3:true; var pOk=pEl?pEl.value.replace(/\D/g,"").length===10:true;
+  var btn=document.getElementById("claimConfirmBtn");
+  if(btn){if(ok&&mOk&&pOk)btn.classList.add("ready");else btn.classList.remove("ready");}
+}
+
+async function doConfirmClaim(isReuniteStr){
+  if(!_currentPet) return; var pet=_currentPet;
+  var vc=document.getElementById("verifyContent");
+  if(isReuniteStr==="true"){
+    try{
+      await patchPet(pet.id,{status:"reunited"});
+      vc.innerHTML="<div style=\"text-align:center;padding:30px 0\"><div style=\"font-size:3rem;margin-bottom:14px\">🎉</div><div style=\"font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--green);margin-bottom:10px\">Reunited!</div><div style=\"font-size:0.9rem;color:var(--text-mid);line-height:1.6\">"+(pet.name||"This pet")+" is home safe and removed from the active list. Tucson is smiling! 💙</div></div>";
+      setTimeout(function(){closeVerify();document.getElementById("modalOverlay").classList.remove("open");document.body.style.overflow="";renderListings();loadAlertBanner();},2500);
+    }catch(e){alert("Error updating. Please try again.");}
+  } else {
+    var phone=document.getElementById("claimPhone")?document.getElementById("claimPhone").value.trim():"";
+    var mark=document.getElementById("claimMark")?document.getElementById("claimMark").value.trim():"";
+    if(!phone||!mark) return;
+    var cp=pet.phone||"";
+    var callLink=cp?"<a href=\"tel:"+cp.replace(/\D/g,"")+"\" style=\"display:block;background:var(--navy);color:#fff;font-size:1rem;font-weight:700;padding:16px;border-radius:12px;text-decoration:none;text-align:center;margin-bottom:12px\">📞 Call "+(pet.status==="found"?"Finder":"Reporter")+": "+cp+"</a>":"";
+    vc.innerHTML="<div style=\"text-align:center;padding:30px 0\"><div style=\"font-size:3rem;margin-bottom:14px\">🎉</div><div style=\"font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--teal);margin-bottom:10px\">You Are Verified!</div><div style=\"font-size:0.9rem;color:var(--text-mid);line-height:1.6;margin-bottom:20px\">Ownership confirmed for <strong>"+(pet.name||"your pet")+"</strong>. Contact the "+(pet.status==="found"?"finder":"reporter")+" directly:</div>"+callLink+"<div class=\"safety-banner\"><strong>🤝 Safe Meetup Reminder</strong>Meet in public — Walgreens, Starbucks, or Police Station.</div></div>";
+  }
+}
+
+function closeVerify(){document.getElementById("verifyOverlay").classList.remove("open");document.body.style.overflow="";}
+
+// ── TOAST ──────────────────────────────────────────────────────────────────
+var _toastPet=null;
+async function showPetToast(){
+  await new Promise(function(r){setTimeout(r,2000);});
+  var pets=await getPets();
+  var cands=pets.filter(function(p){return(p.status==="lost"||p.status==="found")&&petAgeTier(p.created_at)==="watching";});
+  if(!cands.length) return;
+  _toastPet=cands.sort(function(a,b){return new Date(a.created_at)-new Date(b.created_at);})[0];
+  var hrs=Math.floor((Date.now()-new Date(_toastPet.created_at))/3600000);
+  var days=hrs>=48?"2 days":"1 day";
+  document.getElementById("toastTitle").textContent=_toastPet.status==="lost"?"👀 Still Missing — "+days+" ago":"🐾 Still Waiting for Owner — "+days;
+  document.getElementById("toastName").textContent=_toastPet.name||"Unknown Pet";
+  document.getElementById("toastSub").textContent="📍 "+(_toastPet.location||"").slice(0,45);
+  var pe=document.getElementById("toastPhoto");
+  if(_toastPet.photo_url&&_toastPet.photo_url.indexOf("data:")<0) pe.innerHTML="<img src=\""+_toastPet.photo_url+"\" style=\"width:100%;height:100%;object-fit:cover;border-radius:10px\" onerror=\"this.parentNode.textContent='"+petEmoji(_toastPet.type)+"'\"/>";
+  else pe.textContent=petEmoji(_toastPet.type);
+  document.getElementById("petToast").classList.add("show");
+  setTimeout(function(){dismissToast(false);},8000);
+}
+function dismissToast(go){
+  document.getElementById("petToast").classList.remove("show");
+  if(go&&_toastPet){switchTab("see");setTimeout(function(){openModal(_toastPet);},400);}
+}
+
+// ── PROFILE ────────────────────────────────────────────────────────────────
+var PROFILE_KEY="tpf_profile_id";
+function getProfileId(){return localStorage.getItem(PROFILE_KEY);}
+function setProfileId(id){localStorage.setItem(PROFILE_KEY,id);}
+
+async function openProfileModal(){
+  document.getElementById("regOverlay").classList.add("open"); document.body.style.overflow="hidden";
+  var pc=document.getElementById("profileContent");
+  pc.innerHTML="<div style=\"text-align:center;padding:30px;color:var(--text-mid)\">Loading...</div>";
+  var pid=getProfileId();
+  if(pid){var local=localStorage.getItem("tpf_profile_local");if(local){renderProfileDashboard(JSON.parse(local));return;}var p=await getProfile(pid);if(p){renderProfileDashboard(p);return;}}
+  renderProfileCreate();
+}
+function closeProfileModal(){document.getElementById("regOverlay").classList.remove("open");document.body.style.overflow="";}
+
+function renderProfileCreate(){
+  var pc=document.getElementById("profileContent");
+  pc.innerHTML="<div class=\"verify-title\">🐾 Create Your Profile</div>"
+    +"<div class=\"verify-sub\">No account needed — just your name and phone. Register up to 4 pets and get a one-tap SOS emergency button.</div>"
+    +"<div style=\"background:var(--teal-light);border:1px solid var(--teal2);border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:0.85rem;color:var(--text-mid);line-height:1.8\">🆘 One-tap SOS emergency post<br>✅ Verified Owner badge when claiming<br>🐾 Up to 4 pets registered</div>"
+    +"<div style=\"margin-bottom:12px\"><label style=\"font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px\">Your Name *</label><input class=\"verify-input\" id=\"profName\" placeholder=\"e.g. Lamar Myers\"/></div>"
+    +"<div style=\"margin-bottom:18px\"><label style=\"font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px\">Your Phone *</label><input class=\"verify-input\" type=\"tel\" id=\"profPhone\" placeholder=\"520-XXX-XXXX\" inputmode=\"numeric\" oninput=\"autoPhone(this)\"/></div>"
+    +"<button class=\"verify-confirm-btn ready\" onclick=\"createProfile()\" style=\"background:var(--navy)\">🐾 Create My Profile</button>"
+    +"<p style=\"font-size:0.75rem;color:var(--text-light);text-align:center;margin-top:10px\">No password. No email. Just you and your pets.</p>";
+}
+
+async function createProfile(){
+  var name=document.getElementById("profName").value.trim(); var phone=document.getElementById("profPhone").value.trim();
+  if(!name||!validPhone(phone)){alert("Please enter your name and a valid phone number.");return;}
+  try{var id=await saveProfile(name,phone);setProfileId(id);updateSOSButton(true);var p=await getProfile(id);renderProfileDashboard(p);}
+  catch(e){var p={id:"local_"+Date.now(),owner_name:name,owner_phone:fmtPhone(phone),pets:[]};localStorage.setItem("tpf_profile_local",JSON.stringify(p));setProfileId(p.id);updateSOSButton(true);renderProfileDashboard(p);}
+}
+
+function renderProfileDashboard(profile){
+  var pc=document.getElementById("profileContent"); var pets=profile.pets||[];
+  var slots=[0,1,2,3].map(function(i){
+    var p=pets[i];
+    if(p) return "<div class=\"pet-slot filled\" onclick=\"editPetSlot("+i+")\"><div class=\"pet-slot-top\"><span class=\"pet-slot-emoji\">"+petEmoji(p.type)+"</span><div><div class=\"pet-slot-name\">"+p.name+"</div><div class=\"pet-slot-detail\">"+(p.breed||p.type)+(p.marking?" · "+p.marking:"")+"</div></div><span style=\"margin-left:auto;font-size:0.78rem;color:var(--green);font-weight:700\">✅ Registered</span></div></div>";
+    return "<div class=\"pet-slot\" onclick=\"addPetToProfile("+i+")\"><div class=\"pet-slot-add\">+ Add Pet "+(i+1)+"</div></div>";
+  }).join("");
+  var sosTip=pets.filter(Boolean).length>0
+    ?"<div style=\"background:var(--red-light);border:2px solid rgba(192,57,43,0.25);border-radius:12px;padding:14px 16px;margin-top:16px\"><div style=\"font-size:0.85rem;font-weight:700;color:var(--red);margin-bottom:6px\">🆘 SOS Emergency Button Active</div><div style=\"font-size:0.85rem;color:var(--text-mid);line-height:1.5\">Your red SOS button is live. One tap posts an emergency alert instantly with all your pet's info.</div></div>"
+    :"<div style=\"background:var(--teal-light);border:1px solid var(--teal2);border-radius:12px;padding:14px 16px;margin-top:16px;text-align:center;font-size:0.88rem;color:var(--text-mid)\">Add at least one pet above to activate your SOS button.</div>";
+  pc.innerHTML="<div style=\"display:flex;align-items:center;gap:12px;margin-bottom:18px\"><div style=\"font-size:2rem\">🐾</div><div><div style=\"font-family:'Lora',serif;font-size:1.05rem;font-weight:700;color:var(--navy)\">"+profile.owner_name+"</div><div style=\"font-size:0.8rem;color:var(--teal);font-weight:600\">"+profile.owner_phone+" · ✅ Verified Owner</div></div></div>"
+    +"<div style=\"font-size:0.85rem;font-weight:700;color:var(--navy);margin-bottom:10px\">My Pets ("+pets.filter(Boolean).length+"/4 registered)</div>"
+    +slots+sosTip
+    +"<button class=\"verify-confirm-btn ready\" onclick=\"closeProfileModal()\" style=\"margin-top:16px;background:var(--navy)\">✓ Done</button>";
+}
+
+var _editingSlot=-1;
+function addPetToProfile(slot){_editingSlot=slot;renderAddPetForm();}
+function editPetSlot(slot){_editingSlot=slot;renderAddPetForm();}
+
+function renderAddPetForm(){
+  var pc=document.getElementById("profileContent");
+  pc.innerHTML="<button onclick=\"reopenDashboard()\" style=\"background:none;border:none;color:var(--teal);font-size:0.88rem;font-weight:600;cursor:pointer;margin-bottom:14px\">← Back to Profile</button>"
+    +"<div class=\"verify-title\">Add Pet "+(_editingSlot+1)+"</div>"
+    +"<div class=\"verify-sub\">Used for instant SOS posts and verified ownership.</div>"
+    +"<div style=\"margin-bottom:12px\"><label style=\"font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px\">Pet Name *</label><input class=\"verify-input\" id=\"addPetName\" placeholder=\"e.g. Mojo\"/></div>"
+    +"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px\"><div><label style=\"font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px\">Type *</label><select class=\"verify-input\" id=\"addPetType\" style=\"color:var(--text)\"><option value=\"\">Select...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select></div><div><label style=\"font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px\">Breed / Color</label><input class=\"verify-input\" id=\"addPetBreed\" placeholder=\"e.g. Black lab\"/></div></div>"
+    +"<div style=\"margin-bottom:12px\"><label style=\"font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px\">Unique Marking</label><input class=\"verify-input\" id=\"addPetMark\" placeholder=\"e.g. white spot on left ear\"/></div>"
+    +"<div style=\"margin-bottom:12px\"><label style=\"font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px\">Neighborhood / Area</label><input class=\"verify-input\" id=\"addPetArea\" placeholder=\"e.g. Midtown Tucson near Speedway\"/></div>"
+    +"<div style=\"margin-bottom:18px\"><label style=\"font-size:0.9rem;font-weight:700;color:var(--navy);display:block;margin-bottom:6px\">Vet Name and Phone (optional)</label><input class=\"verify-input\" id=\"addPetVet\" placeholder=\"e.g. Dr. Smith 520-555-1234\"/></div>"
+    +"<button class=\"verify-confirm-btn ready\" onclick=\"savePetToProfile()\" style=\"background:var(--green)\">✅ Save This Pet</button>";
+}
+
+async function reopenDashboard(){
+  var local=localStorage.getItem("tpf_profile_local"); if(local){renderProfileDashboard(JSON.parse(local));return;}
+  var pid=getProfileId(); if(pid){var p=await getProfile(pid);if(p)renderProfileDashboard(p);}
+}
+
+async function savePetToProfile(){
+  var name=document.getElementById("addPetName").value.trim(); var type=document.getElementById("addPetType").value;
+  if(!name||!type){alert("Pet name and type are required.");return;}
+  var pet={name:name,type:type,breed:document.getElementById("addPetBreed").value.trim()||type,marking:document.getElementById("addPetMark").value.trim(),area:document.getElementById("addPetArea").value.trim(),vet:document.getElementById("addPetVet").value.trim()};
+  var pid=getProfileId(); var profile=null;
+  var local=localStorage.getItem("tpf_profile_local");
+  if(local) profile=JSON.parse(local); else if(pid) profile=await getProfile(pid);
+  if(!profile) return;
+  var pets=profile.pets||[]; pets[_editingSlot]=pet; profile.pets=pets;
+  if(local) localStorage.setItem("tpf_profile_local",JSON.stringify(profile)); else await updateProfilePets(pid,pets);
+  updateSOSButton(pets.filter(Boolean).length>0);
+  renderProfileDashboard(profile);
+}
+
+function updateSOSButton(hasPets){var fab=document.getElementById("sosFab");if(!fab)return;if(hasPets)fab.classList.add("visible");else fab.classList.remove("visible");}
+
+// ── SOS ────────────────────────────────────────────────────────────────────
+function openSOS(){
+  var pid=getProfileId(); if(!pid){openProfileModal();return;}
+  document.getElementById("sosOverlay").classList.add("open"); document.body.style.overflow="hidden";
+  var local=localStorage.getItem("tpf_profile_local");
+  if(local){renderSOSPick(JSON.parse(local));return;}
+  document.getElementById("sosContent").innerHTML="<div style=\"text-align:center;padding:24px;color:var(--text-mid)\">Loading your pets...</div>";
+  getProfile(pid).then(function(p){if(p)renderSOSPick(p);});
+}
+
+function renderSOSPick(profile){
+  window._sosProfile=profile; var sc=document.getElementById("sosContent");
+  var pets=(profile.pets||[]).filter(Boolean);
+  if(!pets.length){sc.innerHTML="<div class=\"verify-title\" style=\"color:var(--red)\">🆘 SOS Emergency</div><div class=\"verify-sub\">Add pets to your profile first.</div><button class=\"verify-confirm-btn ready\" onclick=\"closeSOS();openProfileModal()\" style=\"background:var(--navy)\">Go to My Profile</button>";return;}
+  sc.innerHTML="<div class=\"verify-title\" style=\"color:var(--red)\">🆘 Emergency SOS</div><div class=\"verify-sub\">Which pet is missing? An alert posts <strong>instantly</strong>.</div>"
+    +pets.map(function(p,i){return "<button class=\"sos-pick-btn\" onclick=\"triggerSOS("+i+")\"><span class=\"sos-pick-emoji\">"+petEmoji(p.type)+"</span><div><div class=\"sos-pick-name\">"+p.name+"</div><div class=\"sos-pick-detail\">"+(p.breed||p.type)+(p.marking?" · "+p.marking:"")+"</div></div><span style=\"margin-left:auto;color:var(--red);font-size:1.2rem\">🆘</span></button>";}).join("")
+    +"<button onclick=\"closeSOS()\" style=\"width:100%;background:none;border:2px solid var(--border);border-radius:10px;padding:12px;color:var(--text-light);font-size:0.9rem;cursor:pointer;margin-top:4px\">Cancel</button>";
+}
+
+async function triggerSOS(i){
+  var profile=window._sosProfile; var pet=profile.pets[i]; var sc=document.getElementById("sosContent");
+  sc.innerHTML="<div style=\"text-align:center;padding:30px\"><div style=\"font-size:3rem;margin-bottom:14px\">🆘</div><div style=\"font-family:'Lora',serif;font-size:1rem;font-weight:700;color:var(--red);margin-bottom:8px\">Posting Emergency Alert...</div><div style=\"font-size:0.85rem;color:var(--text-mid)\">Alerting all Tucson neighbors</div></div>";
+  try{
+    await addPet({status:"lost",name:pet.name,type:pet.type,breed:pet.breed||pet.type,location:pet.area||"Tucson, AZ",description:"SOS EMERGENCY — Owner: "+profile.owner_name+". Marking: "+(pet.marking||"Not provided")+". Vet: "+(pet.vet||"Not provided")+".",phone:profile.owner_phone,photo_url:""});
+    sc.innerHTML="<div style=\"text-align:center;padding:30px\"><div style=\"font-size:3rem;margin-bottom:14px\">🆘</div><div style=\"font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--red);margin-bottom:10px\">Alert Posted!</div><div style=\"font-size:0.9rem;color:var(--text-mid);line-height:1.6;margin-bottom:20px\">Emergency alert for <strong>"+pet.name+"</strong> is now live for all Tucson neighbors.</div><button class=\"verify-confirm-btn ready\" onclick=\"closeSOS();switchTab('see')\" style=\"background:var(--red)\">👁 View Live Alert</button></div>";
+    loadAlertBanner();
+  }catch(e){sc.innerHTML="<div style=\"text-align:center;padding:20px;color:var(--red)\">Error. <button onclick=\"triggerSOS("+i+")\" style=\"color:var(--navy);font-weight:700;cursor:pointer\">Try again</button></div>";}
+}
+
+function closeSOS(){document.getElementById("sosOverlay").classList.remove("open");document.body.style.overflow="";}
+
+// ── STRAY ──────────────────────────────────────────────────────────────────
+var _strayLatLng=null,_strayPhotoData=null;
+
+function openStrayModal(){document.getElementById("strayModal").classList.add("open");document.getElementById("strayFormView").style.display="block";document.getElementById("straySuccessView").style.display="none";document.body.style.overflow="hidden";}
+function closeStrayModal(e){
+  if(e&&e.target!==document.getElementById("strayModal")&&!e.target.classList.contains("stray-close")) return;
+  document.getElementById("strayModal").classList.remove("open"); document.body.style.overflow="";
+  _strayLatLng=null;_strayPhotoData=null;
+  document.getElementById("strayPhotoPreview").style.display="none";
+  document.getElementById("strayPhotoHint").style.display="flex";
+  document.getElementById("strayLocText").textContent="Tap here to capture your current location";
+  document.getElementById("strayLocText").className="stray-loc-text";
+  document.getElementById("strayNote").value=""; document.getElementById("strayPhone").value=""; document.getElementById("strayPhotoInput").value="";
+}
+function loadStrayPhoto(input){var f=input.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){_strayPhotoData=e.target.result;var img=document.getElementById("strayPhotoPreview");img.src=_strayPhotoData;img.style.display="block";document.getElementById("strayPhotoHint").style.display="none";};r.readAsDataURL(f);}
+function getStrayLocation(){var el=document.getElementById("strayLocText");el.textContent="Getting your location...";if(!navigator.geolocation){el.textContent="GPS not available";return;}navigator.geolocation.getCurrentPosition(function(pos){_strayLatLng={lat:pos.coords.latitude,lng:pos.coords.longitude};el.textContent="✅ Location saved ("+_strayLatLng.lat.toFixed(4)+", "+_strayLatLng.lng.toFixed(4)+")";el.className="stray-loc-text got";},function(){el.textContent="Could not get location — tap to try again";el.className="stray-loc-text";});}
+async function submitStray(){
+  if(!_strayPhotoData){alert("Please take or upload a photo first!");return;}
+  var btn=document.getElementById("straySubmitBtn"); btn.disabled=true; btn.textContent="Posting...";
+  var note=document.getElementById("strayNote").value.trim(); var phone=document.getElementById("strayPhone").value.trim();
+  var loc=_strayLatLng?"GPS: "+_strayLatLng.lat.toFixed(5)+", "+_strayLatLng.lng.toFixed(5):"Location not captured";
+  try{await addPet({status:"stray",name:"Stray Sighting",type:"Unknown",breed:"Unknown",location:loc,description:note||"No additional notes.",phone:phone?fmtPhone(phone):"",photo_url:_strayPhotoData});document.getElementById("strayFormView").style.display="none";document.getElementById("straySuccessView").style.display="block";loadAlertBanner();}
+  catch(e){alert("Error posting. Please try again.");console.error(e);}
+  finally{btn.disabled=false;btn.textContent="📸 Post This Sighting";}
+}
+
+// ── SHARE ──────────────────────────────────────────────────────────────────
+function shareApp(){
+  var text="🐾 FREE app for Tucson pet owners — Tucson Pet Finder! Post lost or found pets and neighbors get alerted right away. No sign-up. No cost. Try it: tucson-pet-finder.vercel.app/tucson-pet-finder-v2.html";
+  if(navigator.share) navigator.share({title:"Tucson Pet Finder",text:text,url:window.location.href});
+  else navigator.clipboard.writeText(text).then(function(){alert("Copied! Paste in Nextdoor or a text message.");});
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+(function(){
+  var pid=getProfileId(); var local=localStorage.getItem("tpf_profile_local");
+  if(pid||local){var p=local?JSON.parse(local):null;var h=p?(p.pets||[]).filter(Boolean).length>0:true;updateSOSButton(h);}
+})();
+loadAlertBanner();
+showPetToast();
+</script>
 </body>
 </html>

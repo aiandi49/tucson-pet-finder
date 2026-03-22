@@ -6,7 +6,12 @@
 <title>Tucson Pet Finder — Free Lost & Found Pet Alerts</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#020810;--bg2:#040d1a;--panel:rgba(6,18,40,0.92);--teal:#00FFD4;--teal-glow:rgba(0,255,212,0.25);--teal-dim:rgba(0,255,212,0.07);--gold:#FFD700;--green:#00FF88;--red:#FF4466;--blue:#00AAFF;--text:#C8E8FF;--text-dim:#4A6A88;--border:rgba(0,255,212,0.12);--border-bright:rgba(0,255,212,0.4)}
+:root{
+  --bg:#020810;--bg2:#040d1a;--panel:rgba(6,18,40,0.92);
+  --teal:#00FFD4;--teal-glow:rgba(0,255,212,0.25);--teal-dim:rgba(0,255,212,0.07);
+  --gold:#FFD700;--green:#00FF88;--red:#FF4466;--text:#C8E8FF;
+  --text-dim:#4A6A88;--border:rgba(0,255,212,0.12);--border-bright:rgba(0,255,212,0.4);
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:20px;line-height:1.7;min-height:100vh;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
@@ -16,12 +21,12 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;fo
 .orb2{width:350px;height:350px;bottom:-80px;right:-80px;background:radial-gradient(circle,rgba(255,100,50,0.05),transparent 70%);animation:o2 17s ease-in-out infinite}
 @keyframes o1{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,25px)}}
 @keyframes o2{0%,100%{transform:translate(0,0)}50%{transform:translate(-30px,-20px)}}
-nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(2,8,16,0.98);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;gap:12px}
-.page{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:64px 0 80px}
-.nav-back{color:var(--teal);font-family:'Share Tech Mono',monospace;font-size:0.78rem;letter-spacing:0.08em;text-decoration:none;display:flex;align-items:center;gap:6px}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(2,8,16,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;gap:12px}
+.page{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:64px 0 160px}
+.nav-back{color:var(--teal);font-family:'Share Tech Mono',monospace;font-size:0.78rem;letter-spacing:0.08em;text-decoration:none}
 .nav-title{font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;color:#fff;flex:1}
 .nav-live{font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--green);border:1px solid rgba(0,255,136,0.3);padding:4px 12px;border-radius:20px;display:flex;align-items:center;gap:5px}
-.nav-live::before{content:'●';animation:blink 1.5s infinite}
+.nav-live::before{content:"●";animation:blink 1.5s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
 .hero{padding:36px 20px 28px;text-align:center}
 .hero-icon{font-size:3rem;margin-bottom:12px;animation:pawPulse 3s ease-in-out infinite}
@@ -30,9 +35,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(2,8,16,0.98
 .hero-title span{color:var(--teal);text-shadow:0 0 20px var(--teal-glow)}
 .hero-sub{font-size:1rem;color:#7A9AB8;font-weight:300;line-height:1.6;max-width:320px;margin:0 auto 20px}
 .hero-stats{display:flex;justify-content:center;gap:24px}
-.hstat-num{font-family:'Orbitron',sans-serif;font-size:1.4rem;font-weight:700;color:var(--teal);text-shadow:0 0 12px var(--teal-glow);line-height:1}
+.hstat-num{font-family:'Orbitron',sans-serif;font-size:1.4rem;font-weight:700;color:var(--teal);line-height:1}
 .hstat-lbl{font-size:0.78rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em}
-.alert-strip{margin:20px 16px;background:rgba(255,68,102,0.08);border:1px solid rgba(255,68,102,0.25);border-radius:12px;padding:14px 16px;display:flex;gap:12px;align-items:center}
+.alert-strip{margin:20px 16px;background:rgba(255,68,102,0.08);border:1px solid rgba(255,68,102,0.25);border-radius:12px;padding:14px 16px;display:flex;gap:12px;align-items:center;cursor:pointer}
 .alert-icon{font-size:1.4rem;flex-shrink:0}
 .alert-text{font-size:0.95rem;color:#FFAAAA;line-height:1.5}
 .alert-text strong{color:#fff}
@@ -45,6 +50,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(2,8,16,0.98
 .form-title{font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;margin-bottom:18px}
 .form-title.lost{color:var(--teal)}.form-title.found{color:var(--green)}
 .form-row{margin-bottom:16px}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .form-label{font-family:'Share Tech Mono',monospace;font-size:0.82rem;color:var(--text-dim);letter-spacing:0.08em;text-transform:uppercase;display:block;margin-bottom:8px}
 .form-input,.form-select,.form-textarea{width:100%;background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:10px;padding:16px 18px;font-family:'Rajdhani',sans-serif;font-size:1.15rem;color:var(--text);outline:none;transition:border-color 0.2s;-webkit-appearance:none}
 .form-input::placeholder,.form-textarea::placeholder{color:var(--text-dim)}
@@ -52,8 +58,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(2,8,16,0.98
 .form-select{color:var(--text);background:rgba(0,0,0,0.5)}
 .form-select option{background:#040d1a}
 .form-textarea{resize:none;min-height:80px;line-height:1.5}
-.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .form-err{font-size:0.72rem;color:var(--red);margin-top:4px;display:none}
+.spk-btn{background:rgba(0,255,212,0.1);border:1px solid var(--border-bright);border-radius:6px;color:var(--teal);font-size:0.75rem;padding:2px 8px;cursor:pointer;margin-left:6px;font-family:'Share Tech Mono',monospace}
+.spk-btn.listening{background:rgba(0,255,212,0.3);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
 .photo-upload{width:100%;border:1px dashed var(--border-bright);border-radius:10px;padding:20px;text-align:center;cursor:pointer;background:rgba(0,0,0,0.3);transition:background 0.2s}
 .photo-upload:hover{background:var(--teal-dim)}
 .photo-upload input{display:none}
@@ -61,7 +69,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(2,8,16,0.98
 .photo-txt{font-size:0.82rem;color:var(--text-dim)}
 .photo-txt strong{color:var(--teal)}
 .photo-prev{display:none;width:100%;height:180px;object-fit:cover;border-radius:8px;margin-top:10px;border:1px solid var(--border-bright)}
-.photo-upload-inner{display:flex;flex-direction:column;align-items:center}
 .submit-btn{width:100%;background:var(--teal);color:var(--bg);font-family:'Orbitron',sans-serif;font-size:0.8rem;font-weight:700;letter-spacing:0.08em;padding:15px;border-radius:10px;border:none;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 20px var(--teal-glow);margin-top:4px}
 .submit-btn.found-btn{background:var(--green);box-shadow:0 4px 20px rgba(0,255,136,0.4)}
 .submit-btn:disabled{opacity:0.6;cursor:not-allowed}
@@ -75,73 +82,49 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(2,8,16,0.98
 .listings-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .listings-title{font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.15em}
 .listings-count{font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--teal)}
-
-/* ── AGE TIER SECTION DIVIDERS ── */
-.tier-divider{display:flex;align-items:center;gap:10px;margin:20px 0 12px}
-.tier-divider-line{flex:1;height:1px;background:var(--border)}
-.tier-label{font-family:'Orbitron',sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:0.12em;white-space:nowrap;padding:3px 10px;border-radius:20px}
-.tier-hot .tier-label{color:var(--red);border:1px solid rgba(255,68,102,0.3);background:rgba(255,68,102,0.08)}
-.tier-watching .tier-label{color:var(--gold);border:1px solid rgba(255,215,0,0.3);background:rgba(255,215,0,0.06)}
-.tier-archived .tier-label{color:var(--text-dim);border:1px solid var(--border);background:transparent}
-
-/* ── CARD AGE STATES ── */
-.listing-card.watching{opacity:0.82;border-color:rgba(255,215,0,0.2)}
-.listing-card.watching:hover{border-color:rgba(255,215,0,0.4)}
-.listing-card.archived{opacity:0.45;filter:grayscale(0.3)}
-.age-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:2px}
-.age-dot-hot{background:var(--red);box-shadow:0 0 6px var(--red);animation:dotPulse 1.5s infinite}
-.age-dot-watching{background:var(--gold)}
-.age-dot-archived{background:var(--text-dim)}
-@keyframes dotPulse{0%,100%{opacity:1}50%{opacity:0.3}}
-
-/* ── TOAST NOTIFICATION ── */
-.pet-toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);z-index:800;background:rgba(4,13,26,0.97);border:1px solid var(--border-bright);border-radius:16px;padding:14px 18px;max-width:340px;width:calc(100% - 40px);display:flex;gap:12px;align-items:center;opacity:0;transition:all 0.4s ease;pointer-events:none;backdrop-filter:blur(16px)}
-.pet-toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
-.toast-photo{width:52px;height:52px;border-radius:10px;background:var(--teal-dim);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;overflow:hidden}
-.toast-photo img{width:100%;height:100%;object-fit:cover;border-radius:10px}
-.toast-body{flex:1;min-width:0}
-.toast-title{font-family:'Orbitron',sans-serif;font-size:0.68rem;font-weight:700;color:var(--red);margin-bottom:3px;letter-spacing:0.06em}
-.toast-name{font-size:0.9rem;font-weight:600;color:#fff;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.toast-sub{font-size:0.72rem;color:var(--text-dim);line-height:1.3}
-.toast-close{font-size:0.8rem;color:var(--text-dim);cursor:pointer;flex-shrink:0;padding:4px}
-.toast-view{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--teal);text-decoration:underline;cursor:pointer;margin-top:4px;display:inline-block}
+.tier-div{display:flex;align-items:center;gap:10px;margin:20px 0 12px}
+.tier-div-line{flex:1;height:1px;background:var(--border)}
+.tier-lbl{font-family:'Orbitron',sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:0.12em;white-space:nowrap;padding:3px 10px;border-radius:20px}
+.tier-hot .tier-lbl{color:var(--red);border:1px solid rgba(255,68,102,0.3);background:rgba(255,68,102,0.08)}
+.tier-watching .tier-lbl{color:var(--gold);border:1px solid rgba(255,215,0,0.3);background:rgba(255,215,0,0.06)}
+.tier-archived .tier-lbl{color:var(--text-dim);border:1px solid var(--border);background:transparent}
 .listing-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;display:flex;gap:14px;align-items:flex-start;cursor:pointer;transition:border-color 0.2s}
 .listing-card:hover{border-color:var(--border-bright)}
 .listing-card.found-card{border-color:rgba(0,255,136,0.15)}
-.listing-card.reunited{opacity:0.5}.listing-card.stray-card{border-color:rgba(255,215,0,0.25)}
+.listing-card.watching{opacity:0.82;border-color:rgba(255,215,0,0.2)}
 .listing-photo{width:70px;height:70px;border-radius:10px;background:var(--teal-dim);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0;overflow:hidden}
-.listing-photo img{width:100%;height:100%;object-fit:cover}
+.listing-photo img{width:100%;height:100%;object-fit:cover;border-radius:10px}
 .listing-info{flex:1;min-width:0}
 .listing-top{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap}
 .listing-type{font-family:'Share Tech Mono',monospace;font-size:0.58rem;padding:2px 8px;border-radius:4px;letter-spacing:0.08em;flex-shrink:0}
 .type-lost{background:rgba(255,68,102,0.12);color:var(--red);border:1px solid rgba(255,68,102,0.3)}
 .type-found{background:rgba(0,255,136,0.1);color:var(--green);border:1px solid rgba(0,255,136,0.3)}
-.type-reunited{background:rgba(255,255,255,0.06);color:var(--text-dim);border:1px solid rgba(255,255,255,0.1)}.type-stray{background:rgba(255,215,0,0.1);color:var(--gold);border:1px solid rgba(255,215,0,0.3)}
+.type-stray{background:rgba(255,215,0,0.1);color:var(--gold);border:1px solid rgba(255,215,0,0.3)}
+.type-reunited{background:rgba(255,255,255,0.06);color:var(--text-dim);border:1px solid rgba(255,255,255,0.1)}
+.age-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:2px}
+.dot-hot{background:var(--red);box-shadow:0 0 6px var(--red);animation:dotPulse 1.5s infinite}
+.dot-watching{background:var(--gold)}
+.dot-archived{background:var(--text-dim)}
+@keyframes dotPulse{0%,100%{opacity:1}50%{opacity:0.3}}
 .listing-name{font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .listing-breed{font-size:0.82rem;color:#7A9AB8;font-weight:300;margin-bottom:4px}
 .listing-loc{font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--text-dim)}
 .listing-time{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--text-dim);text-align:right;flex-shrink:0;white-space:nowrap}
-.state-box{text-align:center;padding:32px 20px;font-family:'Share Tech Mono',monospace;font-size:0.78rem;color:var(--text-dim);letter-spacing:0.1em}
-.empty-icon{font-size:2.5rem;margin-bottom:12px}
-.empty-title{font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;color:var(--text-dim);margin-bottom:6px}
-.empty-sub{font-size:0.82rem;color:var(--text-dim);font-weight:300}
+.state-box{text-align:center;padding:32px 20px;color:var(--text-dim);font-family:'Share Tech Mono',monospace;font-size:0.78rem}
 .res-section{margin:0 16px 28px}
 .res-title{font-family:'Orbitron',sans-serif;font-size:0.65rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:14px}
 .res-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.res-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;text-decoration:none;display:block;transition:border-color 0.2s,transform 0.2s}
+.res-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;text-decoration:none;display:block;transition:border-color 0.2s}
 .res-card:hover{border-color:var(--border-bright)}
-.res-card:active{transform:scale(0.97)}
 .res-icon{font-size:1.3rem;margin-bottom:6px}
 .res-name{font-family:'Orbitron',sans-serif;font-size:0.68rem;font-weight:700;color:var(--teal);margin-bottom:2px;line-height:1.3}
 .res-info{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--text-dim);line-height:1.4}
 .share-cta{margin:0 16px 32px;background:linear-gradient(135deg,rgba(0,255,212,0.07),rgba(0,170,255,0.05));border:1px solid var(--border-bright);border-radius:16px;padding:22px 20px;text-align:center}
 .share-cta h3{font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;color:var(--teal);margin-bottom:8px}
 .share-cta p{font-size:0.85rem;color:#8AADCC;font-weight:300;line-height:1.6;margin-bottom:14px}
-.share-btns{display:flex;flex-direction:column;gap:8px}
-.sbtn{padding:12px;border-radius:10px;font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.05em;border:none;cursor:pointer;transition:all 0.2s;text-decoration:none;display:block;text-align:center}
+.sbtn{padding:12px;border-radius:10px;font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:700;border:none;cursor:pointer;transition:all 0.2s;text-decoration:none;display:block;text-align:center;margin-bottom:8px}
 .sbtn-p{background:var(--teal);color:var(--bg);box-shadow:0 4px 14px var(--teal-glow)}
 .sbtn-s{background:transparent;color:var(--text-dim);border:1px solid var(--border)}
-.sbtn:active{transform:scale(0.97)}
 footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--border);margin:0 16px}
 .footer-back{font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--teal);text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin-bottom:12px;padding:8px 16px;border:1px solid var(--border);border-radius:20px}
 .footer-credit{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--text-dim);line-height:1.8}
@@ -156,16 +139,79 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
 .modal-breed{font-size:0.88rem;color:#7A9AB8;font-weight:300;margin-bottom:18px}
 .modal-detail{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:0.88rem}
 .modal-dlbl{color:var(--text-dim);font-family:'Share Tech Mono',monospace;font-size:0.68rem;letter-spacing:0.1em}
-.modal-dval{color:#fff;font-weight:500}
+.modal-dval{color:#8AADCC;font-weight:400;text-align:right;max-width:60%}
 .modal-desc{margin:14px 0 18px;font-size:0.88rem;color:#8AADCC;font-weight:300;line-height:1.6}
 .modal-call{width:100%;background:var(--teal);color:var(--bg);font-family:'Orbitron',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.06em;padding:14px;border-radius:10px;border:none;cursor:pointer;margin-bottom:8px;box-shadow:0 4px 20px var(--teal-glow)}
-.modal-reunite{width:100%;background:transparent;color:var(--green);font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.06em;padding:12px;border-radius:10px;border:1px solid rgba(0,255,136,0.3);cursor:pointer;transition:all 0.2s}
+.modal-reunite{width:100%;background:transparent;color:var(--green);font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:700;padding:12px;border-radius:10px;border:1px solid rgba(0,255,136,0.3);cursor:pointer;transition:all 0.2s;margin-bottom:8px}
 .modal-reunite:hover{background:rgba(0,255,136,0.08)}
 .modal-close{position:absolute;top:16px;right:16px;width:30px;height:30px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text-dim);cursor:pointer}
-
-.fab-stray{position:fixed;bottom:24px;right:20px;z-index:500;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#FF9500);border:none;box-shadow:0 4px 20px rgba(255,215,0,0.45);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.5rem;transition:transform 0.2s,box-shadow 0.2s;-webkit-tap-highlight-color:transparent}
+.claim-lost-btn{width:100%;background:linear-gradient(135deg,#ff2244,#ff6644);color:#fff;font-family:'Orbitron',sans-serif;font-size:0.8rem;font-weight:700;padding:15px;border-radius:10px;border:none;cursor:pointer;margin-bottom:8px;box-shadow:0 4px 20px rgba(255,34,68,0.4);animation:claimP 2s ease-in-out infinite}
+.claim-found-btn{width:100%;background:linear-gradient(135deg,#00aa44,#00ff88);color:#000;font-family:'Orbitron',sans-serif;font-size:0.8rem;font-weight:700;padding:15px;border-radius:10px;border:none;cursor:pointer;margin-bottom:8px;box-shadow:0 4px 20px rgba(0,255,136,0.35);animation:claimP2 2s ease-in-out infinite}
+@keyframes claimP{0%,100%{box-shadow:0 4px 20px rgba(255,34,68,0.4)}50%{box-shadow:0 4px 30px rgba(255,34,68,0.7)}}
+@keyframes claimP2{0%,100%{box-shadow:0 4px 20px rgba(0,255,136,0.35)}50%{box-shadow:0 4px 30px rgba(0,255,136,0.6)}}
+.safety-note{background:rgba(0,255,212,0.06);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:10px 0;font-size:0.8rem;color:var(--text-dim);line-height:1.5;display:flex;gap:8px;align-items:flex-start}
+.safety-banner{background:rgba(255,215,0,0.07);border:1px solid rgba(255,215,0,0.3);border-radius:12px;padding:14px 16px;margin:10px 0;font-size:0.82rem;color:#FFD700;line-height:1.6}
+.safety-banner strong{color:#fff;display:block;margin-bottom:4px;font-family:'Orbitron',sans-serif;font-size:0.72rem;letter-spacing:0.08em}
+.safety-places{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.safety-place{background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.2);border-radius:6px;padding:3px 10px;font-size:0.72rem;color:var(--gold);font-family:'Share Tech Mono',monospace}
+.report-btn{width:100%;background:transparent;color:rgba(255,68,102,0.7);font-family:'Share Tech Mono',monospace;font-size:0.68rem;padding:10px;border-radius:8px;border:1px solid rgba(255,68,102,0.2);cursor:pointer;margin-top:8px;transition:all 0.2s}
+.report-btn:hover{background:rgba(255,68,102,0.08);color:var(--red)}
+.verify-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.88);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px}
+.verify-overlay.open{display:flex}
+.verify-sheet{background:#040d1a;border:1px solid var(--border-bright);border-radius:20px;padding:28px 22px;width:100%;max-width:460px;max-height:88vh;overflow-y:auto;position:relative}
+.verify-close{position:absolute;top:14px;right:16px;width:30px;height:30px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text-dim);cursor:pointer;z-index:10}
+.verify-title{font-family:'Orbitron',sans-serif;font-size:0.95rem;font-weight:700;color:var(--teal);margin-bottom:6px}
+.verify-sub{font-size:0.85rem;color:var(--text-dim);margin-bottom:20px;line-height:1.5;font-weight:300}
+.verify-checklist{background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:14px 0}
+.verify-checklist-title{font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--teal);letter-spacing:0.1em;margin-bottom:10px}
+.verify-check{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.verify-check:last-of-type{border-bottom:none}
+.verify-check input[type=checkbox]{width:20px;height:20px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
+.verify-check label{font-size:0.88rem;color:var(--text);cursor:pointer;line-height:1.4}
+.verify-input{width:100%;background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-family:'Rajdhani',sans-serif;font-size:1rem;color:var(--text);outline:none;margin-top:6px;transition:border-color 0.2s}
+.verify-input:focus{border-color:var(--border-bright)}
+.verify-input::placeholder{color:var(--text-dim)}
+.verify-confirm-btn{width:100%;background:var(--teal);color:var(--bg);font-family:'Orbitron',sans-serif;font-size:0.8rem;font-weight:700;padding:14px;border-radius:10px;border:none;cursor:pointer;margin-top:14px;opacity:0.4;pointer-events:none;transition:all 0.2s}
+.verify-confirm-btn.ready{opacity:1;pointer-events:auto}
+.pet-toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);z-index:800;background:rgba(4,13,26,0.97);border:1px solid var(--border-bright);border-radius:16px;padding:14px 18px;max-width:340px;width:calc(100% - 40px);display:flex;gap:12px;align-items:center;opacity:0;transition:all 0.4s ease;pointer-events:none;backdrop-filter:blur(16px)}
+.pet-toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+.toast-photo{width:52px;height:52px;border-radius:10px;background:var(--teal-dim);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;overflow:hidden}
+.toast-photo img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+.toast-body{flex:1;min-width:0}
+.toast-title{font-family:'Orbitron',sans-serif;font-size:0.68rem;font-weight:700;color:var(--red);margin-bottom:3px}
+.toast-name{font-size:0.9rem;font-weight:600;color:#fff;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toast-sub{font-size:0.72rem;color:var(--text-dim);line-height:1.3}
+.toast-view{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--teal);text-decoration:underline;cursor:pointer;margin-top:4px;display:inline-block}
+.toast-close{font-size:0.8rem;color:var(--text-dim);cursor:pointer;flex-shrink:0;padding:4px}
+.fab-stray{position:fixed;bottom:24px;right:20px;z-index:500;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#FF9500);border:none;box-shadow:0 4px 20px rgba(255,215,0,0.45);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.5rem;transition:transform 0.2s;-webkit-tap-highlight-color:transparent}
 .fab-stray:active{transform:scale(0.92)}
-.fab-stray-label{position:fixed;bottom:38px;right:88px;z-index:500;background:rgba(2,8,16,0.92);border:1px solid var(--gold);color:var(--gold);font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap}
+.fab-stray-label{position:fixed;bottom:38px;right:88px;z-index:500;background:rgba(2,8,16,0.92);border:1px solid var(--gold);color:var(--gold);font-family:'Share Tech Mono',monospace;font-size:0.6rem;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap}
+.reg-fab{position:fixed;bottom:100px;right:20px;z-index:500;background:linear-gradient(135deg,#4444ff,#8844ff);border:none;border-radius:50%;width:54px;height:54px;font-size:1.3rem;cursor:pointer;box-shadow:0 4px 16px rgba(100,100,255,0.4);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;-webkit-tap-highlight-color:transparent}
+.reg-fab:active{transform:scale(0.92)}
+.reg-fab-label{position:fixed;bottom:116px;right:84px;z-index:500;background:rgba(2,8,16,0.92);border:1px solid rgba(100,100,255,0.4);color:#8888ff;font-family:'Share Tech Mono',monospace;font-size:0.6rem;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap}
+.sos-fab{position:fixed;bottom:176px;right:20px;z-index:500;background:linear-gradient(135deg,#cc0000,#ff3322);border:none;border-radius:50%;width:54px;height:54px;font-size:1.4rem;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(200,0,0,0.6);animation:sosPulse 2.5s ease-in-out infinite;-webkit-tap-highlight-color:transparent}
+.sos-fab.visible{display:flex}
+.sos-fab:active{transform:scale(0.92)}
+@keyframes sosPulse{0%,100%{box-shadow:0 4px 20px rgba(200,0,0,0.6)}50%{box-shadow:0 4px 32px rgba(255,50,0,0.9)}}
+.sos-fab-label{position:fixed;bottom:192px;right:84px;z-index:500;background:rgba(2,8,16,0.92);border:1px solid rgba(200,0,0,0.5);color:#ff4444;font-family:'Share Tech Mono',monospace;font-size:0.6rem;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap;display:none}
+.sos-fab.visible ~ .sos-fab-label{display:block}
+.pet-slot{background:rgba(0,255,212,0.04);border:1px dashed var(--border-bright);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:all 0.2s}
+.pet-slot:hover{background:rgba(0,255,212,0.08)}
+.pet-slot.filled{border-style:solid;border-color:rgba(0,255,136,0.3);background:rgba(0,255,136,0.05)}
+.pet-slot-top{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.pet-slot-emoji{font-size:1.4rem}
+.pet-slot-name{font-family:'Orbitron',sans-serif;font-size:0.78rem;font-weight:700;color:#fff}
+.pet-slot-detail{font-size:0.78rem;color:var(--text-dim)}
+.pet-slot-add{font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--teal);text-align:center;padding:6px 0}
+.sos-pick-btn{width:100%;background:rgba(255,50,0,0.1);border:1px solid rgba(255,50,0,0.35);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:all 0.2s;text-align:left}
+.sos-pick-btn:hover{background:rgba(255,50,0,0.18);border-color:rgba(255,50,0,0.6)}
+.sos-pick-emoji{font-size:1.8rem;flex-shrink:0}
+.sos-pick-name{font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;color:#fff;margin-bottom:2px}
+.sos-pick-detail{font-size:0.78rem;color:var(--text-dim)}
+.photo-expand-overlay{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,0.92);display:none;align-items:center;justify-content:center;cursor:zoom-out}
+.photo-expand-overlay.open{display:flex}
+.photo-expand-overlay img{max-width:95vw;max-height:90vh;object-fit:contain;border-radius:10px;border:1px solid var(--border-bright)}
+.photo-expand-close{position:absolute;top:16px;right:16px;width:36px;height:36px;background:rgba(255,255,255,0.1);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;color:#fff;cursor:pointer}
 .stray-modal{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);display:none;align-items:flex-end;justify-content:center}
 .stray-modal.open{display:flex}
 .stray-sheet{background:#040d1a;border:1px solid var(--border-bright);border-radius:20px 20px 0 0;padding:24px 20px 40px;width:100%;max-width:480px;animation:slideUp 0.3s ease both;position:relative}
@@ -185,97 +231,10 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
 .stray-input{width:100%;background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-family:'Rajdhani',sans-serif;font-size:1.05rem;color:var(--text);outline:none}
 .stray-input:focus{border-color:var(--border-bright)}
 .stray-input::placeholder{color:var(--text-dim)}
-.stray-submit{width:100%;background:linear-gradient(135deg,var(--gold),#FF9500);color:#020810;font-family:'Orbitron',sans-serif;font-size:0.82rem;font-weight:700;letter-spacing:0.06em;padding:16px;border-radius:12px;border:none;cursor:pointer;margin-top:4px;box-shadow:0 4px 16px rgba(255,215,0,0.3)}
+.stray-submit{width:100%;background:linear-gradient(135deg,var(--gold),#FF9500);color:#020810;font-family:'Orbitron',sans-serif;font-size:0.82rem;font-weight:700;padding:16px;border-radius:12px;border:none;cursor:pointer;margin-top:4px;box-shadow:0 4px 16px rgba(255,215,0,0.3)}
 .stray-submit:disabled{opacity:0.6;cursor:not-allowed}
 .stray-close{position:absolute;top:14px;right:16px;width:30px;height:30px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text-dim);cursor:pointer}
 .stray-success{text-align:center;padding:16px 0 8px}
-.stray-success-icon{font-size:2.5rem;margin-bottom:10px}
-.stray-success-title{font-family:'Orbitron',sans-serif;font-size:0.95rem;font-weight:700;color:var(--gold);margin-bottom:6px}
-.stray-success-msg{font-size:0.85rem;color:#8AADCC;font-weight:300;line-height:1.6}
-
-.photo-expand-overlay{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,0.92);display:none;align-items:center;justify-content:center;cursor:zoom-out}
-.photo-expand-overlay.open{display:flex}
-.photo-expand-overlay img{max-width:95vw;max-height:90vh;object-fit:contain;border-radius:10px;border:1px solid var(--border-bright)}
-.photo-expand-close{position:absolute;top:16px;right:16px;width:36px;height:36px;background:rgba(255,255,255,0.1);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;color:#fff;cursor:pointer}
-
-.safety-banner{background:rgba(255,215,0,0.07);border:1px solid rgba(255,215,0,0.3);border-radius:12px;padding:14px 16px;margin:14px 0;font-size:0.82rem;color:#FFD700;line-height:1.6}
-.safety-banner strong{color:#fff;display:block;margin-bottom:4px;font-family:'Orbitron',sans-serif;font-size:0.72rem;letter-spacing:0.08em}
-.safety-places{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.safety-place{background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.2);border-radius:6px;padding:3px 10px;font-size:0.72rem;color:var(--gold);font-family:'Share Tech Mono',monospace}
-.photo-match-note{background:rgba(0,255,212,0.06);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:10px 0;font-size:0.8rem;color:var(--text-dim);line-height:1.5;display:flex;gap:8px;align-items:flex-start}
-.report-btn{width:100%;background:transparent;color:rgba(255,68,102,0.7);font-family:'Share Tech Mono',monospace;font-size:0.68rem;letter-spacing:0.06em;padding:10px;border-radius:8px;border:1px solid rgba(255,68,102,0.2);cursor:pointer;margin-top:8px;transition:all 0.2s}
-.report-btn:hover{background:rgba(255,68,102,0.08);color:var(--red);border-color:rgba(255,68,102,0.4)}
-
-/* ── CLAIM / REUNITE FLOW ── */
-.modal-claim-lost{width:100%;background:linear-gradient(135deg,#ff2244,#ff6644);color:#fff;font-family:'Orbitron',sans-serif;font-size:0.8rem;font-weight:700;letter-spacing:0.06em;padding:15px;border-radius:10px;border:none;cursor:pointer;margin-bottom:8px;box-shadow:0 4px 20px rgba(255,34,68,0.4);animation:claimPulse 2s ease-in-out infinite}
-@keyframes claimPulse{0%,100%{box-shadow:0 4px 20px rgba(255,34,68,0.4)}50%{box-shadow:0 4px 30px rgba(255,34,68,0.7)}}
-.modal-claim-found{width:100%;background:linear-gradient(135deg,#00aa44,#00ff88);color:#000;font-family:'Orbitron',sans-serif;font-size:0.8rem;font-weight:700;letter-spacing:0.06em;padding:15px;border-radius:10px;border:none;cursor:pointer;margin-bottom:8px;box-shadow:0 4px 20px rgba(0,255,136,0.35);animation:claimPulse2 2s ease-in-out infinite}
-@keyframes claimPulse2{0%,100%{box-shadow:0 4px 20px rgba(0,255,136,0.35)}50%{box-shadow:0 4px 30px rgba(0,255,136,0.6)}}
-
-/* ── VERIFY MODAL ── */
-.verify-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.88);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px}
-.verify-overlay.open{display:flex}
-.verify-sheet{background:#040d1a;border:1px solid var(--border-bright);border-radius:20px;padding:28px 22px;width:100%;max-width:460px;max-height:88vh;overflow-y:auto;position:relative}
-.verify-close{position:absolute;top:14px;right:16px;width:30px;height:30px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text-dim);cursor:pointer}
-.verify-title{font-family:'Orbitron',sans-serif;font-size:0.95rem;font-weight:700;color:var(--teal);margin-bottom:6px}
-.verify-sub{font-size:0.85rem;color:var(--text-dim);margin-bottom:20px;line-height:1.5;font-weight:300}
-.verify-step{background:rgba(0,255,212,0.04);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start}
-.verify-step-num{font-family:'Orbitron',sans-serif;font-size:0.7rem;font-weight:700;color:var(--teal);background:rgba(0,255,212,0.1);border:1px solid var(--border-bright);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
-.verify-step-text{font-size:0.88rem;color:var(--text);line-height:1.5}
-.verify-step-text strong{color:#fff;display:block;margin-bottom:2px;font-family:'Orbitron',sans-serif;font-size:0.72rem;letter-spacing:0.06em}
-.verify-check{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
-.verify-check:last-of-type{border-bottom:none}
-.verify-check input[type=checkbox]{width:20px;height:20px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
-.verify-check label{font-size:0.88rem;color:var(--text);cursor:pointer;line-height:1.4}
-.verify-checklist{background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:14px 0}
-.verify-checklist-title{font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--teal);letter-spacing:0.1em;margin-bottom:10px}
-.verify-confirm-btn{width:100%;background:var(--teal);color:var(--bg);font-family:'Orbitron',sans-serif;font-size:0.8rem;font-weight:700;letter-spacing:0.06em;padding:14px;border-radius:10px;border:none;cursor:pointer;margin-top:14px;box-shadow:0 4px 20px var(--teal-glow);opacity:0.4;pointer-events:none;transition:all 0.2s}
-.verify-confirm-btn.ready{opacity:1;pointer-events:auto}
-.verify-input{width:100%;background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-family:'Rajdhani',sans-serif;font-size:1rem;color:var(--text);outline:none;margin-top:6px;transition:border-color 0.2s}
-.verify-input:focus{border-color:var(--border-bright)}
-.verify-input::placeholder{color:var(--text-dim)}
-
-/* ── PET REGISTRATION ── */
-.reg-fab{position:fixed;bottom:100px;right:20px;z-index:500;background:linear-gradient(135deg,#4444ff,#8844ff);border:none;border-radius:50%;width:54px;height:54px;font-size:1.3rem;cursor:pointer;box-shadow:0 4px 16px rgba(100,100,255,0.4);display:flex;align-items:center;justify-content:center;transition:transform 0.2s}
-.reg-fab:active{transform:scale(0.92)}
-.reg-fab-label{position:fixed;bottom:116px;right:84px;z-index:500;background:rgba(2,8,16,0.92);border:1px solid rgba(100,100,255,0.4);color:#8888ff;font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.06em;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap}
-.verified-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(0,255,212,0.1);border:1px solid var(--border-bright);color:var(--teal);font-family:'Share Tech Mono',monospace;font-size:0.62rem;padding:3px 9px;border-radius:20px;letter-spacing:0.06em}
-.listing-verified{margin-top:4px}
-
-/* ── SOS EMERGENCY BUTTON ── */
-.sos-fab{position:fixed;bottom:176px;right:20px;z-index:500;background:linear-gradient(135deg,#cc0000,#ff3322);border:none;border-radius:50%;width:54px;height:54px;font-size:1.4rem;cursor:pointer;box-shadow:0 4px 20px rgba(200,0,0,0.6);display:flex;align-items:center;justify-content:center;animation:sosPulse 2.5s ease-in-out infinite;-webkit-tap-highlight-color:transparent}
-.sos-fab.has-profile{display:flex}
-.sos-fab.no-profile{display:none}
-@keyframes sosPulse{0%,100%{box-shadow:0 4px 20px rgba(200,0,0,0.6)}50%{box-shadow:0 4px 32px rgba(255,50,0,0.9)}}
-.sos-fab:active{transform:scale(0.92)}
-.sos-fab-label{position:fixed;bottom:192px;right:84px;z-index:500;background:rgba(2,8,16,0.92);border:1px solid rgba(200,0,0,0.5);color:#ff4444;font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap;display:none}
-.sos-fab.has-profile ~ .sos-fab-label{display:block}
-
-/* ── PROFILE SHEET ── */
-.profile-sheet{background:#040d1a;border:1px solid var(--border-bright);border-radius:20px;padding:24px 20px 32px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto;position:relative}
-.profile-step{display:none}.profile-step.active{display:block}
-.profile-tab-row{display:flex;gap:8px;margin-bottom:20px}
-.profile-tab{flex:1;padding:10px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-dim);font-family:'Orbitron',sans-serif;font-size:0.62rem;font-weight:700;cursor:pointer;text-align:center;letter-spacing:0.06em;transition:all 0.2s}
-.profile-tab.active{background:rgba(0,255,212,0.12);border-color:var(--border-bright);color:var(--teal)}
-.pet-slot{background:rgba(0,255,212,0.04);border:1px dashed var(--border-bright);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:all 0.2s}
-.pet-slot:hover{background:rgba(0,255,212,0.08)}
-.pet-slot.filled{border-style:solid;border-color:rgba(0,255,136,0.3);background:rgba(0,255,136,0.05)}
-.pet-slot-top{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.pet-slot-emoji{font-size:1.4rem}
-.pet-slot-name{font-family:'Orbitron',sans-serif;font-size:0.78rem;font-weight:700;color:#fff}
-.pet-slot-detail{font-size:0.78rem;color:var(--text-dim)}
-.pet-slot-add{font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--teal);text-align:center;padding:6px 0}
-
-/* ── SOS PICK MODAL ── */
-.sos-pick-btn{width:100%;background:rgba(255,50,0,0.1);border:1px solid rgba(255,50,0,0.35);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:all 0.2s;text-align:left}
-.sos-pick-btn:hover{background:rgba(255,50,0,0.18);border-color:rgba(255,50,0,0.6)}
-.sos-pick-emoji{font-size:1.8rem;flex-shrink:0}
-.sos-pick-name{font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;color:#fff;margin-bottom:2px}
-.sos-pick-detail{font-size:0.78rem;color:var(--text-dim)}
-.sos-posting{text-align:center;padding:30px 0}
-.sos-posting-icon{font-size:3rem;margin-bottom:14px;animation:sosSpin 0.8s linear infinite}
-@keyframes sosSpin{to{transform:rotate(360deg)}}
-.sos-posted{text-align:center;padding:30px 0}
 </style>
 </head>
 <body>
@@ -284,7 +243,7 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
 <div class="orb orb2"></div>
 <div class="page">
   <nav>
-    <a class="nav-back" href="tucson-pet-finder.vercel.app">← HOME</a>
+    <a class="nav-back" href="/">← HOME</a>
     <div class="nav-title">🐾 PET FINDER</div>
     <a href="tucson-pet-finder-v2.html" style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--gold);border:1px solid rgba(255,215,0,0.3);padding:3px 10px;border-radius:20px;text-decoration:none;white-space:nowrap;flex-shrink:0">☀️ LIGHT</a>
     <div class="nav-live">LIVE</div>
@@ -294,12 +253,12 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
     <h1 class="hero-title">TUCSON<br><span>PET FINDER</span></h1>
     <p class="hero-sub">Lost or found a pet in Tucson? Post in 60 seconds. Neighbors get alerted instantly. Free forever.</p>
     <div class="hero-stats">
-      <div class="hstat"><div class="hstat-num">5mi</div><div class="hstat-lbl">Alert Radius</div></div>
-      <div class="hstat"><div class="hstat-num">FREE</div><div class="hstat-lbl">Always</div></div>
-      <div class="hstat"><div class="hstat-num">60s</div><div class="hstat-lbl">To Post</div></div>
+      <div><div class="hstat-num">5mi</div><div class="hstat-lbl">Alert Radius</div></div>
+      <div><div class="hstat-num">FREE</div><div class="hstat-lbl">Always</div></div>
+      <div><div class="hstat-num">60s</div><div class="hstat-lbl">To Post</div></div>
     </div>
   </div>
-  <div class="alert-strip" id="alertStrip" onclick="switchTab('see')" style="cursor:pointer" title="Click to see all alerts">
+  <div class="alert-strip" id="alertStrip" onclick="switchTab('see')" title="Click to see all alerts">
     <div class="alert-icon">🔍</div>
     <div class="alert-text" id="alertText">Checking Tucson alerts...</div>
   </div>
@@ -308,54 +267,134 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
     <button class="tab-btn found-tab" id="tabFound" onclick="switchTab('found')">🟢 I FOUND A PET</button>
     <button class="tab-btn" id="tabSee" onclick="switchTab('see')">📋 SEE ALL</button>
   </div>
+
+  <!-- LOST FORM -->
   <div class="form-panel active" id="formLost">
     <div class="form-title lost">🔴 Report a Lost Pet</div>
-    <div class="form-row"><label class="form-label">Pet's Name * <button type="button" onclick="startVoice('lostName')" style="background:rgba(0,255,212,0.1);border:1px solid var(--border-bright);border-radius:6px;color:var(--teal);font-size:0.75rem;padding:2px 8px;cursor:pointer;margin-left:6px;font-family:'Share Tech Mono',monospace">🎤 Speak</button></label><input class="form-input" type="text" id="lostName" placeholder="e.g. Max, Luna, Bella"/><div class="form-err" id="errLostName">Please enter your pet's name</div></div>
-    <div class="form-row-2">
-      <div><label class="form-label">Type *</label><select class="form-select" id="lostType"><option value="">Select...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select><div class="form-err" id="errLostType">Please select type</div></div>
-      <div><label class="form-label">Color / Breed <button type="button" onclick="startVoice('lostBreed')" style="background:rgba(0,255,212,0.1);border:1px solid var(--border-bright);border-radius:6px;color:var(--teal);font-size:0.75rem;padding:2px 8px;cursor:pointer;margin-left:6px;font-family:'Share Tech Mono',monospace">🎤 Speak</button></label><input class="form-input" type="text" id="lostBreed" placeholder="e.g. Brown lab"/></div>
+    <div class="form-row">
+      <label class="form-label">Pet's Name * <button type="button" onclick="startVoice('lostName',this)" class="spk-btn">🎤 Speak</button></label>
+      <input class="form-input" type="text" id="lostName" placeholder="e.g. Max, Luna, Bella"/>
+      <div class="form-err" id="errLostName">Please enter your pet's name</div>
     </div>
-    <div class="form-row"><label class="form-label">Last Seen Location * <button type="button" onclick="startVoice('lostLoc')" style="background:rgba(0,255,212,0.1);border:1px solid var(--border-bright);border-radius:6px;color:var(--teal);font-size:0.75rem;padding:2px 8px;cursor:pointer;margin-left:6px">🎤 Speak</button></label><input class="form-input" type="text" id="lostLoc" placeholder="e.g. Near Speedway & Wilmot"/><div class="form-err" id="errLostLoc">Please enter location</div></div>
-    <div class="form-row"><label class="form-label">Description & Details <button type="button" onclick="startVoice('lostDesc')" style="background:rgba(0,255,212,0.1);border:1px solid var(--border-bright);border-radius:6px;color:var(--teal);font-size:0.75rem;padding:2px 8px;cursor:pointer;margin-left:6px">🎤 Speak</button></label><textarea class="form-textarea" id="lostDesc" placeholder="Collar color, markings, when last seen..."></textarea></div>
-    <div class="form-row"><label class="form-label">Your Phone Number * <button type="button" onclick="startVoice('lostPhone')" style="background:rgba(0,255,212,0.1);border:1px solid var(--border-bright);border-radius:6px;color:var(--teal);font-size:0.75rem;padding:2px 8px;cursor:pointer;margin-left:6px;font-family:'Share Tech Mono',monospace">🎤 Speak</button></label><input class="form-input" type="tel" id="lostPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/><div class="form-err" id="errLostPhone">Please enter a valid 10-digit phone number</div></div>
-    <div class="form-row"><label class="form-label">Photo (helps a lot!)</label><div class="photo-upload" onclick="document.getElementById('lostPhoto').click()"><input type="file" id="lostPhoto" accept="image/*" onchange="prevPhoto(this,'lostPrev','lostPhotoHint')"/><div id="lostPhotoHint"><div class="photo-icon">📷</div><div class="photo-txt">Tap to add photo<br><strong>JPG or PNG</strong></div></div><img class="photo-prev" id="lostPrev" onclick="expandPhoto(this)" style="cursor:zoom-in"/></div></div>
-    <button class="submit-btn" id="lostBtn" onclick="submit('lost')">🚨 POST LOST PET ALERT</button>
+    <div class="form-row-2">
+      <div>
+        <label class="form-label">Type *</label>
+        <select class="form-select" id="lostType"><option value="">Select...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select>
+        <div class="form-err" id="errLostType">Please select type</div>
+      </div>
+      <div>
+        <label class="form-label">Color / Breed <button type="button" onclick="startVoice('lostBreed',this)" class="spk-btn">🎤 Speak</button></label>
+        <input class="form-input" type="text" id="lostBreed" placeholder="e.g. Brown lab"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Last Seen Location * <button type="button" onclick="startVoice('lostLoc',this)" class="spk-btn">🎤 Speak</button></label>
+      <input class="form-input" type="text" id="lostLoc" placeholder="e.g. Near Speedway and Wilmot"/>
+      <div class="form-err" id="errLostLoc">Please enter location</div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Description <button type="button" onclick="startVoice('lostDesc',this)" class="spk-btn">🎤 Speak</button></label>
+      <textarea class="form-textarea" id="lostDesc" placeholder="Collar color, markings, when last seen..."></textarea>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Your Phone * <button type="button" onclick="startVoice('lostPhone',this)" class="spk-btn">🎤 Speak</button></label>
+      <input class="form-input" type="tel" id="lostPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/>
+      <div class="form-err" id="errLostPhone">Please enter a valid 10-digit phone number</div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Photo (helps a lot!)</label>
+      <div class="photo-upload" onclick="document.getElementById('lostPhoto').click()">
+        <input type="file" id="lostPhoto" accept="image/*" onchange="prevPhoto(this,'lostPrev','lostPhotoHint')"/>
+        <div id="lostPhotoHint"><div class="photo-icon">📷</div><div class="photo-txt">Tap to add photo<br><strong>JPG or PNG</strong></div></div>
+        <img class="photo-prev" id="lostPrev" onclick="expandPhoto(this)" style="cursor:zoom-in"/>
+      </div>
+    </div>
+    <button class="submit-btn" id="lostBtn" onclick="doSubmit('lost')">🚨 POST LOST PET ALERT</button>
   </div>
+
+  <!-- FOUND FORM -->
   <div class="form-panel" id="formFound">
     <div class="form-title found">🟢 Report a Found Pet</div>
-    <div class="form-row"><label class="form-label">Pet's Name on Collar/Tags <button type="button" onclick="startVoice('foundName')" style="background:rgba(0,255,212,0.1);border:1px solid var(--border-bright);border-radius:6px;color:var(--teal);font-size:0.75rem;padding:2px 8px;cursor:pointer;margin-left:6px;font-family:'Share Tech Mono',monospace">🎤 Speak</button></label><input class="form-input" type="text" id="foundName" placeholder="e.g. Bella (if seen on tag or collar — optional)"/></div>
-      <div class="form-row-2">
-      <div><label class="form-label">Type *</label><select class="form-select" id="foundType"><option value="">Select...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select><div class="form-err" id="errFoundType">Please select type</div></div>
-      <div><label class="form-label">Color / Breed <button type="button" onclick="startVoice('foundBreed')" style="background:rgba(0,255,212,0.1);border:1px solid var(--border-bright);border-radius:6px;color:var(--teal);font-size:0.75rem;padding:2px 8px;cursor:pointer;margin-left:6px;font-family:'Share Tech Mono',monospace">🎤 Speak</button></label><input class="form-input" type="text" id="foundBreed" placeholder="e.g. Black cat"/></div>
+    <div class="form-row">
+      <label class="form-label">Name on Collar/Tags <button type="button" onclick="startVoice('foundName',this)" class="spk-btn">🎤 Speak</button></label>
+      <input class="form-input" type="text" id="foundName" placeholder="If visible on collar (optional)"/>
     </div>
-    <div class="form-row"><label class="form-label">Where Found * <button type="button" onclick="startVoice('foundLoc')" style="background:rgba(0,255,212,0.1);border:1px solid var(--border-bright);border-radius:6px;color:var(--teal);font-size:0.75rem;padding:2px 8px;cursor:pointer;margin-left:6px">🎤 Speak</button></label><input class="form-input" type="text" id="foundLoc" placeholder="e.g. Grant & Swan area"/><div class="form-err" id="errFoundLoc">Please enter location</div></div>
-    <div class="form-row"><label class="form-label">Description <button type="button" onclick="startVoice('foundDesc')" style="background:rgba(0,255,212,0.1);border:1px solid var(--border-bright);border-radius:6px;color:var(--teal);font-size:0.75rem;padding:2px 8px;cursor:pointer;margin-left:6px">🎤 Speak</button></label><textarea class="form-textarea" id="foundDesc" placeholder="Collar? Tags? Any identifying features..."></textarea></div>
-    <div class="form-row"><label class="form-label">Your Phone Number * <button type="button" onclick="startVoice('foundPhone')" style="background:rgba(0,255,212,0.1);border:1px solid var(--border-bright);border-radius:6px;color:var(--teal);font-size:0.75rem;padding:2px 8px;cursor:pointer;margin-left:6px;font-family:'Share Tech Mono',monospace">🎤 Speak</button></label><input class="form-input" type="tel" id="foundPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/><div class="form-err" id="errFoundPhone">Please enter a valid 10-digit phone number</div></div>
-    <div class="form-row"><label class="form-label">Photo</label><div class="photo-upload" onclick="document.getElementById('foundPhoto').click()"><input type="file" id="foundPhoto" accept="image/*" onchange="prevPhoto(this,'foundPrev','foundPhotoHint')"/><div id="foundPhotoHint"><div class="photo-icon">📷</div><div class="photo-txt">Tap to add photo<br><strong>Really helps!</strong></div></div><img class="photo-prev" id="foundPrev" onclick="expandPhoto(this)" style="cursor:zoom-in"/></div></div>
-    <button class="submit-btn found-btn" id="foundBtn" onclick="submit('found')">🟢 POST FOUND PET ALERT</button>
+    <div class="form-row-2">
+      <div>
+        <label class="form-label">Type *</label>
+        <select class="form-select" id="foundType"><option value="">Select...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select>
+        <div class="form-err" id="errFoundType">Please select type</div>
+      </div>
+      <div>
+        <label class="form-label">Color / Breed <button type="button" onclick="startVoice('foundBreed',this)" class="spk-btn">🎤 Speak</button></label>
+        <input class="form-input" type="text" id="foundBreed" placeholder="e.g. Black cat"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Where Found * <button type="button" onclick="startVoice('foundLoc',this)" class="spk-btn">🎤 Speak</button></label>
+      <input class="form-input" type="text" id="foundLoc" placeholder="e.g. Grant and Swan area"/>
+      <div class="form-err" id="errFoundLoc">Please enter location</div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Description <button type="button" onclick="startVoice('foundDesc',this)" class="spk-btn">🎤 Speak</button></label>
+      <textarea class="form-textarea" id="foundDesc" placeholder="Collar? Tags? Any identifying features..."></textarea>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Your Phone * <button type="button" onclick="startVoice('foundPhone',this)" class="spk-btn">🎤 Speak</button></label>
+      <input class="form-input" type="tel" id="foundPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/>
+      <div class="form-err" id="errFoundPhone">Please enter a valid 10-digit phone number</div>
+    </div>
+    <div class="form-row">
+      <label class="form-label">Photo</label>
+      <div class="photo-upload" onclick="document.getElementById('foundPhoto').click()">
+        <input type="file" id="foundPhoto" accept="image/*" onchange="prevPhoto(this,'foundPrev','foundPhotoHint')"/>
+        <div id="foundPhotoHint"><div class="photo-icon">📷</div><div class="photo-txt">Tap to add photo<br><strong>Really helps!</strong></div></div>
+        <img class="photo-prev" id="foundPrev" onclick="expandPhoto(this)" style="cursor:zoom-in"/>
+      </div>
+    </div>
+    <button class="submit-btn found-btn" id="foundBtn" onclick="doSubmit('found')">🟢 POST FOUND PET ALERT</button>
   </div>
-  <div class="success-panel" id="successPanel"><div class="success-icon" id="successIcon">🐾</div><div class="success-title" id="successTitle">Alert Posted!</div><div class="success-msg" id="successMsg">Your alert is live for all Tucson neighbors.</div><div class="success-share" onclick="shareApp()">📲 Share this app with neighbors →</div></div>
-  <div class="listings-section" id="listingsSection"><div class="listings-header"><div class="listings-title">Active Alerts</div><div class="listings-count" id="listingCount"></div></div><div id="listingsContainer"></div></div>
+
+  <!-- SUCCESS -->
+  <div class="success-panel" id="successPanel">
+    <div class="success-icon" id="successIcon">🐾</div>
+    <div class="success-title" id="successTitle">Alert Posted!</div>
+    <div class="success-msg" id="successMsg">Your alert is live for all Tucson neighbors.</div>
+    <div class="success-share" onclick="shareApp()">📲 Share this app with neighbors →</div>
+  </div>
+
+  <!-- SEE ALL -->
+  <div class="listings-section" id="listingsSection">
+    <div class="listings-header">
+      <div class="listings-title">Active Alerts</div>
+      <div class="listings-count" id="listingCount"></div>
+    </div>
+    <div id="listingsContainer"></div>
+  </div>
+
+  <!-- RESOURCES -->
   <div class="res-section">
     <div class="res-title">🆘 Emergency Resources</div>
     <div class="res-grid">
       <a class="res-card" href="tel:5207245900"><div class="res-icon">🐕</div><div class="res-name">Pima Animal Control</div><div class="res-info">520-724-5900<br>Open daily</div></a>
       <a class="res-card" href="tel:5207977177"><div class="res-icon">🏥</div><div class="res-name">Humane Society</div><div class="res-info">520-797-7177<br>Southern AZ</div></a>
       <a class="res-card" href="https://petcolove.org/lost" target="_blank"><div class="res-icon">🔍</div><div class="res-name">Petco Love Lost</div><div class="res-info">National database<br>Free posting</div></a>
-      <a class="res-card" href="mailto:Info@pawfbi.com"><div class="res-icon">🚁</div><div class="res-name">PawFBI</div><div class="res-info">Drone & thermal<br>pet tracking</div></a>
+      <a class="res-card" href="/cdn-cgi/l/email-protection#4e072028210e3e2f39282c27602d2123"><div class="res-icon">🚁</div><div class="res-name">PawFBI</div><div class="res-info">Drone and thermal<br>pet tracking</div></a>
     </div>
   </div>
   <div class="share-cta">
     <h3>🌐 Know a Tucson neighbor with a lost pet?</h3>
     <p>This app is 100% free. The more neighbors who use it, the faster pets get home.</p>
-    <div class="share-btns">
-      <button class="sbtn sbtn-p" onclick="shareApp()">📲 Share Tucson Pet Finder</button>
-      <a class="sbtn sbtn-s" href="tucson-connect.html">🏘️ See All Free Tucson Apps</a>
-    </div>
+    <button class="sbtn sbtn-p" onclick="shareApp()">📲 Share Tucson Pet Finder</button>
+    <a class="sbtn sbtn-s" href="tucson-connect.html">🏘️ See All Free Tucson Apps</a>
   </div>
-  <footer><a class="footer-back" href="tucson-connect.html">← Back to Tucson Connect</a><div class="footer-credit">Tucson Pet Finder · 100% Free · Real Database · Built by Lamar Myers<br>VTREI, LLC · Tucson, AZ · 520-258-2714</div></footer>
+  <footer>
+    <a class="footer-back" href="tucson-connect.html">← Back to Tucson Connect</a>
+    <div class="footer-credit">Tucson Pet Finder · 100% Free · Real Database · Built by Lamar Myers<br>VTREI, LLC · Tucson, AZ · 520-258-2714</div>
+  </footer>
+</div>
 
-<!-- Toast Notification -->
+<!-- TOAST -->
 <div class="pet-toast" id="petToast">
   <div class="toast-photo" id="toastPhoto">🐾</div>
   <div class="toast-body">
@@ -367,56 +406,22 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
   <div class="toast-close" onclick="dismissToast(false)">✕</div>
 </div>
 
-<!-- SOS Emergency FAB (visible only when profile exists) -->
+<!-- SOS FAB -->
 <div class="sos-fab-label">🚨 EMERGENCY SOS</div>
-<button class="sos-fab no-profile" id="sosFab" onclick="openSOS()" aria-label="Emergency SOS post">🆘</button>
+<button class="sos-fab" id="sosFab" onclick="openSOS()">🆘</button>
 
-<!-- Profile / Register FAB -->
+<!-- PROFILE FAB -->
 <div class="reg-fab-label" id="regFabLabel">🐾 MY PROFILE</div>
-<button class="reg-fab" id="regFab" onclick="openProfileModal()" aria-label="My profile">🐾</button>
+<button class="reg-fab" id="regFab" onclick="openProfileModal()">🐾</button>
 
-<!-- Spot a Stray FAB -->
+<!-- STRAY FAB -->
 <div class="fab-stray-label">📸 SPOT A STRAY</div>
-<button class="fab-stray" onclick="openStrayModal()" aria-label="Spot a stray pet">📷</button>
+<button class="fab-stray" onclick="openStrayModal()">📷</button>
 
-<!-- Spot a Stray Modal -->
-<div class="stray-modal" id="strayModal" onclick="closeStrayModal(event)">
-  <div class="stray-sheet">
-    <div class="stray-close" onclick="closeStrayModal()">✕</div>
-    <div class="stray-handle"></div>
-    <div id="strayFormView">
-      <div class="stray-title">📸 SPOT A STRAY</div>
-      <div class="stray-sub">Saw a stray? Snap a photo — neighbors will see it instantly.</div>
-      <div class="stray-photo-zone" id="strayPhotoZone" onclick="document.getElementById('strayPhotoInput').click()">
-        <input type="file" id="strayPhotoInput" accept="image/*" capture="environment" style="display:none" onchange="loadStrayPhoto(this)"/>
-        <div class="stray-photo-hint" id="strayPhotoHint">
-          <div class="stray-photo-icon">📷</div>
-          <div class="stray-photo-txt">TAP TO TAKE PHOTO</div>
-        </div>
-        <img id="strayPhotoPreview" style="display:none"/>
-      </div>
-      <div class="stray-loc-row" id="strayLocRow" onclick="getStrayLocation()">
-        <div class="stray-loc-icon">📍</div>
-        <div class="stray-loc-text" id="strayLocText">Tap to capture your GPS location</div>
-      </div>
-      <div class="stray-row"><input class="stray-input" type="text" id="strayNote" placeholder="Quick note — e.g. 'limping, near park entrance'" maxlength="120"/></div>
-      <div class="stray-row"><input class="stray-input" type="tel" id="strayPhone" placeholder="Your phone (optional) 520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/></div>
-      <button class="stray-submit" id="straySubmitBtn" onclick="submitStray()">📸 POST STRAY SIGHTING</button>
-    </div>
-    <div id="straySuccessView" style="display:none">
-      <div class="stray-success">
-        <div class="stray-success-icon">🙌</div>
-        <div class="stray-success-title">Sighting Posted!</div>
-        <div class="stray-success-msg">Your photo and location are live in the Tucson database. Every neighbor who opens this app will see it. Thank you for looking out! 🐾</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-</div>
-<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+<!-- MAIN MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOverlay(event)">
   <div class="modal-sheet" style="position:relative">
-    <div class="modal-close" onclick="closeModal()">✕</div>
+    <div class="modal-close" onclick="closeModalOverlay()">✕</div>
     <div class="modal-handle"></div>
     <div class="modal-photo" id="mPhoto">🐾</div>
     <div class="modal-title" id="mTitle"></div>
@@ -424,1077 +429,12 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
     <div id="mDetails"></div>
     <div class="modal-desc" id="mDesc"></div>
     <button class="modal-call" id="mCall">📞 Contact Reporter</button>
-    <button class="modal-reunite" id="mReunite">🎉 Mark as Reunited!</button>
+    <button class="modal-reunite" id="mReunite">✅ Mark as Reunited</button>
+    <div id="mExtra"></div>
   </div>
 </div>
-<script>
-const URL='https://msuqflssqixsplcearxr.supabase.co';
-const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdXFmbHNzcWl4c3BsY2VhcnhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMzU3NDgsImV4cCI6MjA4OTcxMTc0OH0.BlrDiIu2YdDB7oHJ0fFiSEiBDQGvHCFAUaysR6O24zk';
-const H={'Content-Type':'application/json','apikey':KEY,'Authorization':'Bearer '+KEY};
 
-async function getPets(){try{const r=await fetch(URL+'/rest/v1/pets?select=*&order=created_at.desc',{headers:H});return await r.json()}catch(e){return[]}}
-async function uploadPhoto(base64Data, fileName){
-  try{
-    // Convert base64 to blob
-    const base64=base64Data.split(',')[1];
-    const mime=base64Data.split(',')[0].split(':')[1].split(';')[0];
-    const binary=atob(base64);
-    const arr=new Uint8Array(binary.length);
-    for(let i=0;i<binary.length;i++)arr[i]=binary.charCodeAt(i);
-    const blob=new Blob([arr],{type:mime});
-    
-    const path='pets/'+Date.now()+'-'+fileName;
-    const r=await fetch(URL+'/storage/v1/object/pet-photos/'+path,{
-      method:'POST',
-      headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':mime,'x-upsert':'true'},
-      body:blob
-    });
-    if(!r.ok)return null;
-    return URL+'/storage/v1/object/public/pet-photos/'+path;
-  }catch(e){console.error('Photo upload failed:',e);return null;}
-}
-
-async function addPet(pet){const r=await fetch(URL+'/rest/v1/pets',{method:'POST',headers:{...H,'Prefer':'return=representation'},body:JSON.stringify(pet)});if(!r.ok)throw new Error(await r.text());return r.json()}
-async function patchPet(id,data){await fetch(URL+'/rest/v1/pets?id=eq.'+id,{method:'PATCH',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify(data)})}
-
-function validPhone(p){return p.replace(/\D/g,'').length===10}
-function fmtPhone(p){const d=p.replace(/\D/g,'');return d.length===10?d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6):p}
-function showErr(id,show){const e=document.getElementById(id);if(e)e.style.display=show?'block':'none'}
-function timeAgo(d){const m=Math.floor((Date.now()-new Date(d))/60000);if(m<1)return'Just now';if(m<60)return m+'m ago';const h=Math.floor(m/60);if(h<24)return h+'h ago';return Math.floor(h/24)+'d ago'}
-function petEmoji(type){return type==='Cat'?'🐱':type==='Bird'?'🐦':type==='Rabbit'?'🐰':'🐕'}
-
-function switchTab(tab){
-  ['Lost','Found','See'].forEach(t=>document.getElementById('tab'+t).classList.remove('active'));
-  const tabEl = document.getElementById('tab'+tab.charAt(0).toUpperCase()+tab.slice(1));
-  if(tabEl) tabEl.classList.add('active');
-  document.getElementById('tabFound').classList.add('found-tab');
-  document.getElementById('formLost').classList.toggle('active',tab==='lost');
-  document.getElementById('formFound').classList.toggle('active',tab==='found');
-  document.getElementById('successPanel').style.display='none';
-  const ls=document.getElementById('listingsSection');
-  if(tab==='see'){
-    ls.style.display='block';
-    // Only re-render if container is empty or stale
-    const container = document.getElementById('listingsContainer');
-    if(!container.children.length || container.innerHTML.includes('Loading'))renderListings();
-  } else {
-    ls.style.display='none';
-  }
-}
-
-function prevPhoto(input,pid,hintId){
-  const f=input.files[0];if(!f)return;
-  const r=new FileReader();
-  r.onload=e=>{
-    const i=document.getElementById(pid);
-    i.src=e.target.result;i.style.display='block';
-    if(hintId){const h=document.getElementById(hintId);if(h)h.style.display='none';}
-  };
-  r.readAsDataURL(f);
-}
-
-function autoPhone(input){
-  let v=input.value.replace(/\D/g,'');
-  if(v.length>10)v=v.slice(0,10);
-  if(v.length>=7)input.value=v.slice(0,3)+'-'+v.slice(3,6)+'-'+v.slice(6);
-  else if(v.length>=4)input.value=v.slice(0,3)+'-'+v.slice(3);
-  else input.value=v;
-}
-
-function reportListing(id, name){
-  const reason = prompt('Briefly describe the issue with "' + (name||'this listing') + '":\n\n(Your report helps keep Tucson safe)');
-  if(!reason || !reason.trim()) return;
-  console.log('REPORT:', {id, name, reason, time: new Date().toISOString()});
-  alert('🚨 Thank you for reporting. Our team will review this listing within 24 hours.');
-}
-
-function expandPhoto(img){
-  document.getElementById('photoExpandImg').src = img.src;
-  document.getElementById('photoExpandOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeExpandPhoto(){
-  document.getElementById('photoExpandOverlay').classList.remove('open');
-  document.body.style.overflow='';
-}
-
-// ── VOICE ENGINE ──────────────────────────────────────────────────────────────
-// Single persistent SpeechRecognition instance — avoids iOS permission popup
-// on every tap by reusing the same object across all fields.
-const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-let _recog = null;
-let _activeField = null;
-let _silenceTimer = null;
-let _finalText = '';
-let _isListening = false;
-
-function _getRecog() {
-  if (!SR) return null;
-  if (!_recog) {
-    _recog = new SR();
-    _recog.lang = 'en-US';
-    _recog.maxAlternatives = 1;
-
-    _recog.onresult = e => {
-      if (!_activeField) return;
-      const el = document.getElementById(_activeField);
-      const isPhone = el && (el.type === 'tel' || _activeField.toLowerCase().includes('phone'));
-      _finalText = '';
-      let interim = '';
-      for (let i = 0; i < e.results.length; i++) {
-        if (e.results[i].isFinal) _finalText += e.results[i][0].transcript + ' ';
-        else interim += e.results[i][0].transcript;
-      }
-      if (isPhone) {
-        // Phone: only show digits as they come in
-        const raw = (_finalText + interim).replace(/\D/g, '').slice(0, 10);
-        if (raw.length >= 7) el.value = raw.slice(0,3)+'-'+raw.slice(3,6)+'-'+raw.slice(6);
-        else if (raw.length >= 4) el.value = raw.slice(0,3)+'-'+raw.slice(3);
-        else if (raw.length > 0) el.value = raw;
-      } else {
-        el.value = (_finalText + interim).trim();
-      }
-      _resetSilence();
-    };
-
-    _recog.onerror = e => {
-      if (e.error === 'no-speech') return;
-      _stopListening();
-    };
-
-    _recog.onend = () => {
-      _isListening = false;
-      clearTimeout(_silenceTimer);
-      if (_activeField) {
-        const el = document.getElementById(_activeField);
-        if (el) {
-          const isPhone = el.type === 'tel' || _activeField.toLowerCase().includes('phone');
-          if (isPhone && _finalText) {
-            const digits = _finalText.replace(/\D/g, '').slice(0, 10);
-            if (digits.length >= 7) el.value = digits.slice(0,3)+'-'+digits.slice(3,6)+'-'+digits.slice(6);
-            else if (digits.length >= 4) el.value = digits.slice(0,3)+'-'+digits.slice(3);
-            else if (digits.length > 0) el.value = digits;
-          } else if (_finalText.trim()) {
-            el.value = _finalText.trim();
-          }
-          el.style.borderColor = 'var(--border)';
-          el.placeholder = '';
-        }
-      }
-      _updateSpeakBtns(false);
-    };
-  }
-  return _recog;
-}
-
-function _resetSilence() {
-  clearTimeout(_silenceTimer);
-  const el = _activeField ? document.getElementById(_activeField) : null;
-  const isPhone = el && (el.type === 'tel' || (_activeField||'').toLowerCase().includes('phone'));
-  _silenceTimer = setTimeout(() => { if (_recog && _isListening) _recog.stop(); }, isPhone ? 8000 : 15000);
-}
-
-function _stopListening() {
-  clearTimeout(_silenceTimer);
-  _isListening = false;
-  try { if (_recog) _recog.stop(); } catch(e) {}
-  _updateSpeakBtns(false);
-}
-
-function _updateSpeakBtns(listening) {
-  document.querySelectorAll('.speak-btn-active').forEach(b => b.classList.remove('speak-btn-active'));
-  if (listening && _activeField) {
-    const btns = document.querySelectorAll('[data-voice="'+_activeField+'"]');
-    btns.forEach(b => b.classList.add('speak-btn-active'));
-  }
-}
-
-function startVoice(fieldId) {
-  if (!SR) { alert('Voice input not supported. Try Chrome on Android or Safari on iPhone.'); return; }
-  // Stop current session if any, then start new one immediately
-  // Do NOT use setTimeout — iOS Safari requires start() in direct gesture chain
-  if (_isListening) {
-    try { if (_recog) _recog.abort(); } catch(e) {}
-    _recog = null;
-    _isListening = false;
-    if (_activeField === fieldId) {
-      // Same field tapped again = toggle off
-      const el = document.getElementById(fieldId);
-      if (el) { el.style.borderColor='var(--border)'; el.placeholder=''; }
-      _updateSpeakBtns(false);
-      clearTimeout(_silenceTimer);
-      return;
-    }
-  }
-  _doStart(fieldId);
-}
-
-function _doStart(fieldId) {
-  const el = document.getElementById(fieldId);
-  if (!el) return;
-  const isPhone = el.type === 'tel' || fieldId.toLowerCase().includes('phone');
-
-  // Always create fresh instance for iOS Safari compatibility
-  // iOS loses user-gesture context if we reuse across calls
-  if (_recog) {
-    try { _recog.abort(); } catch(e) {}
-    _recog = null;
-  }
-
-  const recog = _getRecog();
-  if (!recog) return;
-
-  _activeField = fieldId;
-  _finalText = '';
-  _isListening = true;
-  recog.continuous = !isPhone;
-  recog.interimResults = !isPhone;
-
-  el.style.borderColor = 'var(--teal)';
-  el.placeholder = isPhone ? '🎤 Say your number...' : '🎤 Listening... (15s)';
-  _updateSpeakBtns(true);
-  _resetSilence();
-
-  try {
-    recog.start();
-  } catch(e) {
-    console.warn('recog.start error:', e);
-    _isListening = false;
-    el.placeholder = '';
-    el.style.borderColor = 'var(--border)';
-    _updateSpeakBtns(false);
-  }
-}
-
-async function submit(type){
-  let ok=true;
-  if(type==='lost'){
-    const name=document.getElementById('lostName').value.trim();
-    const pt=document.getElementById('lostType').value;
-    const loc=document.getElementById('lostLoc').value.trim();
-    const phone=document.getElementById('lostPhone').value.trim();
-    showErr('errLostName',!name);if(!name)ok=false;
-    showErr('errLostType',!pt);if(!pt)ok=false;
-    showErr('errLostLoc',!loc);if(!loc)ok=false;
-    showErr('errLostPhone',!validPhone(phone));if(!validPhone(phone))ok=false;
-    if(!ok)return;
-    const btn=document.getElementById('lostBtn');
-    btn.disabled=true;btn.textContent='POSTING...';
-    try{
-      const lostPhotoFile=document.getElementById('lostPhoto').files[0];
-      let lostPhotoUrl=null;
-      if(lostPhotoFile){const lostB64=document.getElementById('lostPrev').src;lostPhotoUrl=await uploadPhoto(lostB64,lostPhotoFile.name);}
-      await addPet({status:'lost',name,type:pt,breed:document.getElementById('lostBreed').value.trim()||pt,location:loc,description:document.getElementById('lostDesc').value.trim(),phone:fmtPhone(phone),photo_url:lostPhotoUrl||''});
-      showSuccess('lost',name);loadAlertBanner();
-showPetToast();
-
-// ── TOAST NOTIFICATION SYSTEM ─────────────────────────────────────────────────
-let _toastPet = null;
-async function showPetToast(){
-  // Wait 2s after load so page settles
-  await new Promise(r=>setTimeout(r,2000));
-  const pets = await getPets();
-  // Find lost/found pets older than 24h that are still active (watching tier)
-  const candidates = pets.filter(p=>
-    (p.status==='lost'||p.status==='found') &&
-    petAgeTier(p.created_at)==='watching'
-  );
-  if(!candidates.length) return;
-  // Pick the oldest one first
-  _toastPet = candidates.sort((a,b)=>new Date(a.created_at)-new Date(b.created_at))[0];
-  const hrs = Math.floor((Date.now()-new Date(_toastPet.created_at))/3600000);
-  const days = hrs >= 48 ? '2 days' : '1 day';
-
-  document.getElementById('toastTitle').textContent =
-    _toastPet.status==='lost' ? '👀 STILL MISSING — '+days+' ago' : '🐾 STILL WAITING FOR OWNER — '+days;
-  document.getElementById('toastName').textContent = _toastPet.name||'Unknown Pet';
-  document.getElementById('toastSub').textContent =
-    '📍 '+(_toastPet.location||'').slice(0,45)+(_toastPet.location?.length>45?'...':'');
-
-  const photoEl = document.getElementById('toastPhoto');
-  if(_toastPet.photo_url && !_toastPet.photo_url.startsWith('data:')){
-    photoEl.innerHTML=`<img src="${_toastPet.photo_url}" onerror="this.parentNode.innerHTML='${petEmoji(_toastPet.type)}'" style="width:100%;height:100%;object-fit:cover;border-radius:10px"/>`;
-  } else {
-    photoEl.textContent = petEmoji(_toastPet.type);
-  }
-
-  const toast = document.getElementById('petToast');
-  toast.classList.add('show');
-  // Auto-dismiss after 8 seconds
-  setTimeout(()=>dismissToast(false), 8000);
-}
-
-function dismissToast(goToAlert){
-  const toast = document.getElementById('petToast');
-  toast.classList.remove('show');
-  if(goToAlert && _toastPet){
-    switchTab('see');
-    setTimeout(()=>openModal(_toastPet), 400);
-  }
-}
-    }catch(e){alert('Error posting. Please try again.');console.error(e)}
-    finally{btn.disabled=false;btn.textContent='🚨 POST LOST PET ALERT'}
-  } else {
-    const pt=document.getElementById('foundType').value;
-    const loc=document.getElementById('foundLoc').value.trim();
-    const phone=document.getElementById('foundPhone').value.trim();
-    showErr('errFoundType',!pt);if(!pt)ok=false;
-    showErr('errFoundLoc',!loc);if(!loc)ok=false;
-    showErr('errFoundPhone',!validPhone(phone));if(!validPhone(phone))ok=false;
-    if(!ok)return;
-    const btn=document.getElementById('foundBtn');
-    btn.disabled=true;btn.textContent='POSTING...';
-    try{
-      const foundPhotoFile=document.getElementById('foundPhoto').files[0];
-      let foundPhotoUrl=null;
-      if(foundPhotoFile){const foundB64=document.getElementById('foundPrev').src;foundPhotoUrl=await uploadPhoto(foundB64,foundPhotoFile.name);}
-      const foundPetName=document.getElementById('foundName')?.value.trim();await addPet({status:'found',name:foundPetName?foundPetName:'Found '+pt,type:pt,breed:document.getElementById('foundBreed').value.trim()||pt,location:loc,description:document.getElementById('foundDesc').value.trim(),phone:fmtPhone(phone),photo_url:foundPhotoUrl||''});
-      showSuccess('found');
-    }catch(e){alert('Error posting. Please try again.');console.error(e)}
-    finally{btn.disabled=false;btn.textContent='🟢 POST FOUND PET ALERT'}
-  }
-}
-
-function showSuccess(type,name=''){
-  document.getElementById('formLost').classList.remove('active');
-  document.getElementById('formFound').classList.remove('active');
-  const sp=document.getElementById('successPanel');sp.style.display='block';
-  if(type==='lost'){
-    document.getElementById('successIcon').textContent='🚨';
-    document.getElementById('successTitle').textContent=name?""+name+"'s Alert Is Live!":'Alert Posted!';
-    document.getElementById('successTitle').style.color='var(--red)';
-    document.getElementById('successMsg').textContent=`Saved in our real database — every Tucson neighbor who opens this app will see it. Share this app to get more eyes looking! 💙`;
-    sp.style.background='rgba(255,68,102,0.06)';sp.style.borderColor='rgba(255,68,102,0.3)';
-  } else {
-    document.getElementById('successIcon').textContent='🟢';
-    document.getElementById('successTitle').textContent='Found Pet Posted!';
-    document.getElementById('successTitle').style.color='var(--green)';
-    document.getElementById('successMsg').textContent='Your report is live in our database. The owner can now find and contact you directly. Thank you! 💚';
-    sp.style.background='rgba(0,255,136,0.06)';sp.style.borderColor='rgba(0,255,136,0.3)';
-  }
-  sp.scrollIntoView({behavior:'smooth',block:'center'});
-}
-
-// ── AGE TIER HELPERS ─────────────────────────────────────────────────────────
-function petAgeTier(createdAt){
-  const hrs = (Date.now() - new Date(createdAt)) / 3600000;
-  if(hrs < 24) return 'hot';
-  if(hrs < 72) return 'watching';
-  return 'archived';
-}
-function petAgeLabel(createdAt){
-  const hrs = (Date.now() - new Date(createdAt)) / 3600000;
-  if(hrs < 1) return 'Just posted';
-  if(hrs < 24) return Math.floor(hrs)+'h ago · ACTIVE';
-  if(hrs < 48) return '1 day ago · WATCHING';
-  if(hrs < 72) return '2 days ago · WATCHING';
-  return Math.floor(hrs/24)+' days ago';
-}
-
-function buildCard(pet){
-  const tier = petAgeTier(pet.created_at);
-  const isNonPet = ['reunited','registered'].includes(pet.status);
-  let cls = 'listing-card';
-  if(pet.status==='found') cls += ' found-card';
-  if(pet.status==='stray') cls += ' stray-card';
-  if(pet.status==='reunited') cls += ' reunited';
-  if(tier==='watching' && !isNonPet) cls += ' watching';
-  if(tier==='archived' && !isNonPet) cls += ' archived';
-
-  const dotClass = tier==='hot'?'age-dot-hot':tier==='watching'?'age-dot-watching':'age-dot-archived';
-  const photoHtml = pet.photo_url&&!pet.photo_url.startsWith('data:')
-    ? `<img src="${pet.photo_url}" onerror="this.style.display='none';this.parentNode.innerHTML='${petEmoji(pet.type)}'"/>`
-    : petEmoji(pet.type);
-
-  const d = document.createElement('div');
-  d.className = cls;
-  d.onclick = ()=>openModal(pet);
-  d.innerHTML = `
-    <div class="listing-photo">${photoHtml}</div>
-    <div class="listing-info">
-      <div class="listing-top">
-        <span class="age-dot ${dotClass}"></span>
-        <span class="listing-type type-${pet.status}">${pet.status==='stray'?'STRAY':pet.status.toUpperCase()}</span>
-        <span class="listing-name">${pet.name||'Unknown'}</span>
-      </div>
-      <div class="listing-breed">${pet.breed||pet.type}</div>
-      <div class="listing-loc">📍 ${pet.location}</div>
-    </div>
-    <div class="listing-time">${petAgeLabel(pet.created_at)}</div>`;
-  return d;
-}
-
-function tierDivider(type){
-  const d = document.createElement('div');
-  d.className = 'tier-divider tier-'+type;
-  const labels = {hot:'🔴 ACTIVE — Last 24 Hours', watching:'👀 STILL OUT THERE — 1–3 Days', archived:'📁 Older Alerts'};
-  d.innerHTML = `<div class="tier-divider-line"></div><div class="tier-label">${labels[type]}</div><div class="tier-divider-line"></div>`;
-  return d;
-}
-
-async function renderListings(){
-  const c=document.getElementById('listingsContainer');
-  c.innerHTML='<div class="state-box">⟳ Loading alerts from Tucson database...</div>';
-  const pets=await getPets();
-
-  const skip = ['reunited','registered'];
-  const hot      = pets.filter(p=>!skip.includes(p.status) && petAgeTier(p.created_at)==='hot');
-  const watching = pets.filter(p=>!skip.includes(p.status) && petAgeTier(p.created_at)==='watching');
-  const archived = pets.filter(p=>!skip.includes(p.status) && petAgeTier(p.created_at)==='archived');
-  const reunited = pets.filter(p=>p.status==='reunited');
-  const activeCount = hot.length + watching.length;
-
-  document.getElementById('listingCount').textContent =
-    hot.length + ' hot · ' + watching.length + ' watching · ' + archived.length + ' older';
-
-  c.innerHTML='';
-  if(!pets.filter(p=>!skip.includes(p.status)).length){
-    c.innerHTML='<div class="state-box"><div class="empty-icon">🐾</div><div class="empty-title">No alerts yet</div><div class="empty-sub">Be the first to post a lost or found pet alert for Tucson!</div></div>';
-    return;
-  }
-
-  if(hot.length){
-    c.appendChild(tierDivider('hot'));
-    hot.forEach(p=>c.appendChild(buildCard(p)));
-  }
-  if(watching.length){
-    c.appendChild(tierDivider('watching'));
-    watching.forEach(p=>c.appendChild(buildCard(p)));
-  }
-  if(archived.length){
-    const showArchived = document.getElementById('showArchived');
-    const archiveWrap = document.createElement('div');
-    archiveWrap.id='archiveWrap';
-    const toggle = document.createElement('div');
-    toggle.style.cssText='text-align:center;padding:12px 0;cursor:pointer';
-    toggle.innerHTML=`<span style="font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--text-dim);border:1px solid var(--border);padding:6px 16px;border-radius:20px">📁 Show ${archived.length} older alert${archived.length!==1?'s':''}</span>`;
-    toggle.onclick=()=>{
-      archiveWrap.innerHTML='';
-      c.appendChild(tierDivider('archived'));
-      archived.forEach(p=>c.appendChild(buildCard(p)));
-      if(reunited.length) reunited.forEach(p=>c.appendChild(buildCard(p)));
-    };
-    archiveWrap.appendChild(toggle);
-    c.appendChild(archiveWrap);
-  }
-  // Reunited pets: hidden by default, shown only inside the archive toggle
-  // (already handled above in archived toggle click)
-}
-
-async function loadAlertBanner(){
-  const pets=await getPets();
-  const lost=pets.filter(p=>p.status==='lost').length;
-  const found=pets.filter(p=>p.status==='found').length;
-  const el=document.getElementById('alertText');
-  const strip=document.getElementById('alertStrip');
-  if(lost===0 && found===0){
-    el.textContent='No active alerts in Tucson right now. Post if you've lost or found a pet.';
-    strip.style.borderColor='rgba(0,255,212,0.2)';
-    document.querySelector('.alert-icon').textContent='✅';
-  } else {
-    const parts=[];
-    if(lost>0) parts.push(`<strong>${lost} pet${lost!==1?'s':''} missing</strong>`);
-    if(found>0) parts.push(`<strong>${found} found</strong> waiting for owner`);
-    el.innerHTML=parts.join(' · ')+` in Tucson. <span style='text-decoration:underline;opacity:0.7'>Tap to view →</span>`;
-  }
-}
-
-// Store current pet for claim/reunite functions
-let _currentPet = null;
-
-function openModal(pet){
-  _currentPet = pet;
-  const ph=document.getElementById('mPhoto');
-  ph.innerHTML=pet.photo_url&&!pet.photo_url.startsWith('data:')?`<img src="${pet.photo_url}" onerror="this.parentNode.innerHTML='${petEmoji(pet.type)}'"/>`:petEmoji(pet.type);
-  document.getElementById('mTitle').textContent=(pet.name||'Unknown')+(pet.status==='lost'?' — MISSING':pet.status==='found'?' — FOUND':pet.status==='reunited'?' — REUNITED 🎉':' — STRAY');
-  document.getElementById('mBreed').textContent=(pet.breed||pet.type)+' · '+pet.type;
-  document.getElementById('mDesc').textContent=pet.description||'No additional description.';
-  document.getElementById('mDetails').innerHTML=`<div class="modal-detail"><span class="modal-dlbl">STATUS</span><span class="modal-dval" style="color:${pet.status==='lost'?'var(--red)':pet.status==='found'?'var(--green)':'var(--text-dim)'}">${pet.status.toUpperCase()}</span></div><div class="modal-detail"><span class="modal-dlbl">LOCATION</span><span class="modal-dval" style="color:var(--text-dim);font-weight:400">${pet.location}</span></div><div class="modal-detail" style="border:none"><span class="modal-dlbl">POSTED</span><span class="modal-dval" style="color:var(--text-dim);font-weight:400">${timeAgo(pet.created_at)}</span></div>`;
-
-  const cb = document.getElementById('mCall');
-  const rb = document.getElementById('mReunite');
-  cb.style.display = 'none';
-  rb.style.display = 'none';
-
-  const existingExtra = document.getElementById('safetyBlock');
-  if(existingExtra) existingExtra.remove();
-  const extraDiv = document.createElement('div');
-  extraDiv.id = 'safetyBlock';
-
-  if(pet.status === 'lost'){
-    cb.textContent = '📞 Call Reporter: '+pet.phone;
-    cb.onclick = ()=>window.location.href='tel:'+pet.phone.replace(/\D/g,'');
-    cb.style.display = 'block';
-    extraDiv.innerHTML = `
-      <button class="modal-claim-lost" onclick="openClaimFlow('lost')">🐕 THIS IS MY PET — I'M THE OWNER</button>
-      <div class="photo-match-note" style="margin-top:10px"><span>🔒</span><span>Clicking above starts a <strong>verification checklist</strong> before contact info is shared.</span></div>
-      <div class="safety-banner"><strong>🤝 SAFE MEETUP SPOTS</strong> Always meet in a public place with cameras around.
-        <div class="safety-places"><span class="safety-place">🏪 Walgreens</span><span class="safety-place">🚔 Police Station</span><span class="safety-place">☕ Starbucks</span><span class="safety-place">🏥 Fire Station</span><span class="safety-place">🏬 Walmart</span></div>
-      </div>
-      <button class="report-btn" onclick="reportListing('${pet.id}','${(pet.name||'').replace(/'/g,'')}')">🚨 Report Suspicious Activity</button>`;
-
-  } else if(pet.status === 'found'){
-    cb.textContent = '📞 Contact Finder: '+pet.phone;
-    cb.onclick = ()=>window.location.href='tel:'+pet.phone.replace(/\D/g,'');
-    cb.style.display = 'block';
-    extraDiv.innerHTML = `
-      <button class="modal-claim-found" onclick="openClaimFlow('found')">🏠 THIS IS MY PET — REUNITE NOW</button>
-      <div class="photo-match-note" style="margin-top:10px"><span>🔒</span><span>Clicking above opens a <strong>quick verification</strong> before the finder's info is shared.</span></div>
-      <div class="safety-banner"><strong>🤝 SAFE MEETUP SPOTS</strong> Always meet in a public place with cameras around.
-        <div class="safety-places"><span class="safety-place">🏪 Walgreens</span><span class="safety-place">🚔 Police Station</span><span class="safety-place">☕ Starbucks</span><span class="safety-place">🏥 Fire Station</span><span class="safety-place">🏬 Walmart</span></div>
-      </div>
-      <button class="report-btn" onclick="reportListing('${pet.id}','${(pet.name||'').replace(/'/g,'')}')">🚨 Report Suspicious Activity</button>`;
-
-  } else if(pet.status === 'reunited'){
-    extraDiv.innerHTML = `<div style="text-align:center;padding:16px 0;font-size:0.88rem;color:var(--text-dim)">🎉 This pet has been reunited with their family!</div>`;
-  }
-
-  if(pet.status !== 'reunited'){
-    rb.style.display = 'block';
-    rb.textContent = '✅ Mark as Reunited';
-    rb.onclick = ()=>openClaimFlow('reunite');
-  }
-
-  document.getElementById('mReunite').after(extraDiv);
-  document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-
-// ── CLAIM / VERIFICATION FLOW ────────────────────────────────────────────────
-// petStatus: 'lost' | 'found' | 'reunite'
-function openClaimFlow(petStatus){
-  if(!_currentPet) return;
-  const pet = _currentPet;
-  const overlay = document.getElementById('verifyOverlay');
-  const vc = document.getElementById('verifyContent');
-
-  const isReunite = petStatus === 'reunite';
-  const titleText = isReunite ? '✅ CONFIRM REUNIFICATION' : (petStatus==='lost' ? '🐕 CLAIM YOUR PET' : '🏠 CLAIM YOUR PET');
-  const subText = isReunite
-    ? `Confirm that <strong style="color:#fff">${pet.name||'this pet'}</strong> has been safely returned to their owner.`
-    : `Before we connect you, confirm you are the owner of <strong style="color:#fff">${pet.name||'this pet'}</strong>.`;
-
-  vc.innerHTML = `
-    <div class="verify-title">${titleText}</div>
-    <div class="verify-sub">${subText}</div>
-    <div class="verify-checklist">
-      <div class="verify-checklist-title">✅ VERIFICATION CHECKLIST</div>
-      <div class="verify-check"><input type="checkbox" id="chk1" onchange="updateClaimBtn()"><label for="chk1">${isReunite ? 'The owner has been <strong>positively identified</strong> as the rightful owner' : 'I can describe a <strong>unique marking or feature</strong> on this pet'}</label></div>
-      <div class="verify-check"><input type="checkbox" id="chk2" onchange="updateClaimBtn()"><label for="chk2">${isReunite ? 'The pet and owner have <strong>already been reunited</strong> in person' : 'I have <strong>photos of me with this pet</strong> available if asked'}</label></div>
-      <div class="verify-check"><input type="checkbox" id="chk3" onchange="updateClaimBtn()"><label for="chk3">${isReunite ? 'I <strong>personally witnessed</strong> the reunion or I am the owner/finder' : 'I know my pet's <strong>vet name or clinic</strong>'}</label></div>
-      <div class="verify-check"><input type="checkbox" id="chk4" onchange="updateClaimBtn()"><label for="chk4">${isReunite ? 'I understand this will <strong>remove the alert</strong> from the active list permanently' : 'I will meet the finder in a <strong>public place</strong>'}</label></div>
-    </div>
-    ${!isReunite ? `
-    <div style="margin-bottom:12px">
-      <label style="font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px">DESCRIBE A UNIQUE FEATURE YOUR PET HAS *</label>
-      <input class="verify-input" id="claimMark" placeholder="e.g. white patch on left ear, missing front tooth..." oninput="updateClaimBtn()"/>
-    </div>
-    <div style="margin-bottom:12px">
-      <label style="font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px">YOUR PHONE NUMBER *</label>
-      <input class="verify-input" type="tel" id="claimPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this);updateClaimBtn()"/>
-    </div>` : ''}
-    <button class="verify-confirm-btn" id="claimConfirmBtn" onclick="confirmClaim('${isReunite}')">
-      ${isReunite ? '🎉 YES — MARK AS REUNITED' : '🔓 VERIFIED — CONNECT ME NOW'}
-    </button>
-    <p style="font-size:0.72rem;color:var(--text-dim);text-align:center;margin-top:10px;line-height:1.5">
-      ${isReunite ? 'This removes the alert permanently from the active list.' : 'By proceeding you confirm this is your pet. False claims violate our terms.'}
-    </p>`;
-
-  overlay.classList.add('open');
-  document.body.style.overflow='hidden';
-}
-
-function updateClaimBtn(){
-  const chks = ['chk1','chk2','chk3','chk4'].every(id => document.getElementById(id)?.checked);
-  const markEl = document.getElementById('claimMark');
-  const phoneEl = document.getElementById('claimPhone');
-  const mark = markEl ? markEl.value.trim().length > 3 : true;
-  const phone = phoneEl ? phoneEl.value.replace(/\D/g,'').length === 10 : true;
-  const btn = document.getElementById('claimConfirmBtn');
-  if(btn) btn.classList.toggle('ready', chks && mark && phone);
-}
-
-async function confirmClaim(isReunite){
-  if(!_currentPet) return;
-  const pet = _currentPet;
-  const vc = document.getElementById('verifyContent');
-
-  if(isReunite === 'true'){
-    // Mark as reunited — remove from active list completely
-    try{
-      await patchPet(pet.id, {status:'reunited'});
-      vc.innerHTML = `
-        <div style="text-align:center;padding:30px 0">
-          <div style="font-size:3.5rem;margin-bottom:14px">🎉</div>
-          <div style="font-family:'Orbitron',sans-serif;font-size:1rem;color:var(--green);margin-bottom:10px">REUNITED!</div>
-          <div style="font-size:0.9rem;color:var(--text-dim);line-height:1.6">
-            <strong style="color:#fff">${pet.name||'This pet'}</strong> has been marked as reunited and removed from the active list.<br><br>
-            The Tucson community is smiling right now. 💙
-          </div>
-        </div>`;
-      setTimeout(()=>{
-        closeVerify();
-        document.getElementById('modalOverlay').classList.remove('open');
-        document.body.style.overflow='';
-        renderListings();
-        loadAlertBanner();
-      }, 2500);
-    }catch(e){ alert('Error updating. Please try again.'); }
-    return;
-  }
-
-  // Owner claim — show contact info
-  const phone = document.getElementById('claimPhone')?.value.trim()||'';
-  const mark = document.getElementById('claimMark')?.value.trim()||'';
-  if(!phone || !mark) return;
-  const contactPhone = pet.phone||'';
-
-  vc.innerHTML = `
-    <div style="text-align:center;padding:30px 0">
-      <div style="font-size:3rem;margin-bottom:14px">🎉</div>
-      <div style="font-family:'Orbitron',sans-serif;font-size:1rem;color:var(--teal);margin-bottom:10px">YOU'RE VERIFIED!</div>
-      <div style="font-size:0.9rem;color:var(--text-dim);line-height:1.6;margin-bottom:20px">
-        Ownership confirmed for <strong style="color:#fff">${pet.name||'your pet'}</strong>.<br>Contact the ${pet.status==='found'?'finder':'reporter'} directly now:
-      </div>
-      ${contactPhone ? `<a href="tel:${contactPhone.replace(/\D/g,'')}" style="display:block;background:var(--teal);color:var(--bg);font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;padding:16px;border-radius:12px;text-decoration:none;text-align:center;margin-bottom:14px;box-shadow:0 4px 20px var(--teal-glow)">📞 CALL ${pet.status==='found'?'FINDER':'REPORTER'}: ${contactPhone}</a>` : '<p style="color:var(--text-dim);font-size:0.85rem">No phone number on file — use the app listing to contact.</p>'}
-      <div class="safety-banner" style="text-align:left">
-        <strong>🤝 SAFE MEETUP REMINDER</strong>
-        Meet in public — Walgreens, Starbucks, Fire Station, or Police Station.
-      </div>
-    </div>`;
-}
-
-function closeVerify(){
-  document.getElementById('verifyOverlay').classList.remove('open');
-  document.body.style.overflow='';
-}
-
-// ── PET REGISTRATION ────────────────────────────────────────────────────────
-// ════════════════════════════════════════════════════════════════════════════
-// PROFILE SYSTEM — localStorage for profile ID, Supabase for data
-// ════════════════════════════════════════════════════════════════════════════
-const PROFILE_KEY = 'tpf_profile_id';
-
-function getProfileId(){ return localStorage.getItem(PROFILE_KEY); }
-function setProfileId(id){ localStorage.setItem(PROFILE_KEY, id); }
-
-async function saveProfile(ownerName, ownerPhone){
-  const body = { owner_name: ownerName, owner_phone: fmtPhone(ownerPhone), pets: [] };
-  const r = await fetch(URL+'/rest/v1/profiles', {
-    method:'POST',
-    headers:{...H,'Prefer':'return=representation'},
-    body: JSON.stringify(body)
-  });
-  if(!r.ok) throw new Error(await r.text());
-  const data = await r.json();
-  return data[0].id;
-}
-
-async function getProfile(profileId){
-  const r = await fetch(URL+'/rest/v1/profiles?id=eq.'+profileId+'&select=*', { headers: H });
-  if(!r.ok) return null;
-  const data = await r.json();
-  return data[0] || null;
-}
-
-async function updateProfilePets(profileId, pets){
-  await fetch(URL+'/rest/v1/profiles?id=eq.'+profileId, {
-    method:'PATCH', headers:{...H,'Prefer':'return=minimal'},
-    body: JSON.stringify({ pets })
-  });
-}
-
-// ── PROFILE MODAL ─────────────────────────────────────────────────────────────
-async function openProfileModal(){
-  document.getElementById('regOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
-  const pc = document.getElementById('profileContent');
-  pc.innerHTML = `<div style="text-align:center;padding:30px;color:var(--text-dim);font-family:'Share Tech Mono',monospace;font-size:0.8rem">Loading profile...</div>`;
-
-  const pid = getProfileId();
-  if(pid){
-    const profile = await getProfile(pid);
-    if(profile){ renderProfileDashboard(profile); return; }
-  }
-  renderProfileCreate();
-}
-
-function closeProfileModal(){
-  document.getElementById('regOverlay').classList.remove('open');
-  document.body.style.overflow='';
-}
-
-function renderProfileCreate(){
-  const pc = document.getElementById('profileContent');
-  pc.innerHTML = `
-    <div class="verify-title">🐾 CREATE YOUR PROFILE</div>
-    <div class="verify-sub" style="margin-bottom:18px">No account needed — just your name and phone. Register up to 4 pets and get a one-tap 🆘 SOS emergency button if they ever go missing.</div>
-
-    <div style="background:rgba(0,255,212,0.06);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:18px">
-      <div style="font-family:'Orbitron',sans-serif;font-size:0.68rem;color:var(--teal);margin-bottom:10px;letter-spacing:0.1em">✅ WHAT YOU GET WITH A PROFILE</div>
-      <div style="font-size:0.82rem;color:var(--text-dim);line-height:1.8">
-        🆘 One-tap SOS emergency post — instant alert with all your pet's info<br>
-        ✅ Verified Owner badge when claiming your pet<br>
-        🐾 Up to 4 pets registered and ready<br>
-        📞 Your contact info pre-filled automatically
-      </div>
-    </div>
-
-    <div style="margin-bottom:12px">
-      <label style="font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px">YOUR NAME *</label>
-      <input class="verify-input" id="profName" placeholder="e.g. Lamar Myers"/>
-    </div>
-    <div style="margin-bottom:18px">
-      <label style="font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px">YOUR PHONE *</label>
-      <input class="verify-input" type="tel" id="profPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/>
-    </div>
-    <button class="verify-confirm-btn ready" onclick="createProfile()" style="background:linear-gradient(135deg,#4444ff,#8844ff);box-shadow:0 4px 20px rgba(100,100,255,0.4)">🐾 CREATE MY PROFILE →</button>
-    <p style="font-size:0.7rem;color:var(--text-dim);text-align:center;margin-top:10px">No password. No email. Just you and your pets. 🌵</p>`;
-}
-
-async function createProfile(){
-  const name = document.getElementById('profName').value.trim();
-  const phone = document.getElementById('profPhone').value.trim();
-  if(!name || phone.replace(/\D/g,'').length !== 10){
-    alert('Please enter your name and a valid 10-digit phone number.');
-    return;
-  }
-  const btn = document.querySelector('#profileContent .verify-confirm-btn');
-  btn.disabled = true; btn.textContent = 'CREATING...';
-  try {
-    const id = await saveProfile(name, phone);
-    setProfileId(id);
-    updateSOSButton(true);
-    const profile = await getProfile(id);
-    renderProfileDashboard(profile);
-  } catch(e) {
-    // If profiles table doesn't exist yet, store locally and show dashboard
-    const localProfile = { id: 'local_'+Date.now(), owner_name: name, owner_phone: fmtPhone(phone), pets: [] };
-    localStorage.setItem('tpf_profile_local', JSON.stringify(localProfile));
-    setProfileId(localProfile.id);
-    updateSOSButton(true);
-    renderProfileDashboard(localProfile);
-  }
-}
-
-function renderProfileDashboard(profile){
-  const pc = document.getElementById('profileContent');
-  const pets = profile.pets || [];
-  const petSlots = [0,1,2,3].map(i => {
-    const p = pets[i];
-    if(p) return `
-      <div class="pet-slot filled" onclick="editPetSlot(${i})">
-        <div class="pet-slot-top">
-          <span class="pet-slot-emoji">${p.type==='Cat'?'🐱':p.type==='Bird'?'🐦':p.type==='Rabbit'?'🐰':'🐕'}</span>
-          <div><div class="pet-slot-name">${p.name}</div><div class="pet-slot-detail">${p.breed||p.type} ${p.marking?'· '+p.marking:''}</div></div>
-          <span style="margin-left:auto;font-size:0.7rem;color:var(--green)">✅ REGISTERED</span>
-        </div>
-      </div>`;
-    return `
-      <div class="pet-slot" onclick="addPetToProfile(${i})">
-        <div class="pet-slot-add">＋ ADD PET ${i+1}</div>
-      </div>`;
-  }).join('');
-
-  pc.innerHTML = `
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
-      <div style="font-size:2rem">🐾</div>
-      <div>
-        <div style="font-family:'Orbitron',sans-serif;font-size:0.9rem;font-weight:700;color:#fff">${profile.owner_name}</div>
-        <div style="font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--teal)">${profile.owner_phone} · ✅ VERIFIED OWNER</div>
-      </div>
-    </div>
-
-    <div style="font-family:'Orbitron',sans-serif;font-size:0.68rem;color:var(--text-dim);letter-spacing:0.1em;margin-bottom:10px">MY PETS (${pets.length}/4 registered)</div>
-    ${petSlots}
-
-    ${pets.length > 0 ? `
-    <div style="background:rgba(200,0,0,0.08);border:1px solid rgba(200,0,0,0.3);border-radius:12px;padding:14px 16px;margin-top:16px">
-      <div style="font-family:'Orbitron',sans-serif;font-size:0.68rem;color:#ff4444;letter-spacing:0.1em;margin-bottom:6px">🆘 SOS EMERGENCY BUTTON</div>
-      <div style="font-size:0.82rem;color:var(--text-dim);line-height:1.5">Your red SOS button is active. If a pet goes missing — tap it, pick which pet, and an emergency alert posts <strong style="color:#fff">instantly</strong> with all their info.</div>
-    </div>` : `
-    <div style="background:rgba(0,255,212,0.05);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-top:16px;text-align:center">
-      <div style="font-size:0.85rem;color:var(--text-dim)">Add at least one pet above to activate your 🆘 SOS emergency button.</div>
-    </div>`}
-
-    <button class="verify-confirm-btn ready" onclick="closeProfileModal()" style="margin-top:16px;background:rgba(0,255,212,0.1);border:1px solid var(--border-bright);color:var(--teal);box-shadow:none">✓ Done</button>`;
-}
-
-let _editingSlot = -1;
-function addPetToProfile(slot){ _editingSlot = slot; renderAddPetForm(); }
-function editPetSlot(slot){ _editingSlot = slot; renderAddPetForm(); }
-
-function renderAddPetForm(){
-  const pc = document.getElementById('profileContent');
-  pc.innerHTML = `
-    <button onclick="reopenDashboard()" style="background:none;border:none;color:var(--teal);font-family:'Share Tech Mono',monospace;font-size:0.72rem;cursor:pointer;margin-bottom:14px">← BACK TO PROFILE</button>
-    <div class="verify-title">🐾 ADD PET ${_editingSlot+1}</div>
-    <div class="verify-sub">This info will be used for instant SOS posts and verified ownership.</div>
-
-    <div style="margin-bottom:12px"><label style="font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px">PET NAME *</label><input class="verify-input" id="addPetName" placeholder="e.g. Mojo"/></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
-      <div><label style="font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px">TYPE *</label>
-        <select class="verify-input" id="addPetType"><option value="">Select...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select></div>
-      <div><label style="font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px">BREED / COLOR</label><input class="verify-input" id="addPetBreed" placeholder="e.g. Black lab mix"/></div>
-    </div>
-    <div style="margin-bottom:12px"><label style="font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px">UNIQUE MARKING</label><input class="verify-input" id="addPetMark" placeholder="e.g. white spot on left ear"/></div>
-    <div style="margin-bottom:12px"><label style="font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px">LAST KNOWN LOCATION / NEIGHBORHOOD</label><input class="verify-input" id="addPetArea" placeholder="e.g. Midtown Tucson, near Speedway"/></div>
-    <div style="margin-bottom:18px"><label style="font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px">VET NAME & PHONE (optional)</label><input class="verify-input" id="addPetVet" placeholder="e.g. Dr. Smith — 520-555-1234"/></div>
-    <button class="verify-confirm-btn ready" onclick="savePetToProfile()" style="background:linear-gradient(135deg,#00aa44,#00ff88);color:#000;box-shadow:0 4px 20px rgba(0,255,136,0.3)">✅ SAVE THIS PET</button>`;
-}
-
-async function reopenDashboard(){
-  const pid = getProfileId();
-  if(!pid) return renderProfileCreate();
-  const local = localStorage.getItem('tpf_profile_local');
-  if(local){ renderProfileDashboard(JSON.parse(local)); return; }
-  const profile = await getProfile(pid);
-  if(profile) renderProfileDashboard(profile);
-}
-
-async function savePetToProfile(){
-  const name = document.getElementById('addPetName').value.trim();
-  const type = document.getElementById('addPetType').value;
-  const breed = document.getElementById('addPetBreed').value.trim();
-  const marking = document.getElementById('addPetMark').value.trim();
-  const area = document.getElementById('addPetArea').value.trim();
-  const vet = document.getElementById('addPetVet').value.trim();
-  if(!name || !type){ alert('Pet name and type are required.'); return; }
-
-  const pid = getProfileId();
-  let profile = null;
-  const localStr = localStorage.getItem('tpf_profile_local');
-  if(localStr) profile = JSON.parse(localStr);
-  else if(pid) profile = await getProfile(pid);
-  if(!profile) return;
-
-  const pets = profile.pets || [];
-  pets[_editingSlot] = { name, type, breed: breed||type, marking, area, vet };
-  profile.pets = pets;
-
-  if(localStr){
-    localStorage.setItem('tpf_profile_local', JSON.stringify(profile));
-  } else {
-    await updateProfilePets(pid, pets);
-  }
-  updateSOSButton(pets.filter(Boolean).length > 0);
-  renderProfileDashboard(profile);
-}
-
-function updateSOSButton(hasProfile){
-  const fab = document.getElementById('sosFab');
-  if(!fab) return;
-  if(hasProfile){ fab.classList.remove('no-profile'); fab.classList.add('has-profile'); }
-  else { fab.classList.remove('has-profile'); fab.classList.add('no-profile'); }
-  // Update register button label
-  const lbl = document.getElementById('regFabLabel');
-  if(lbl) lbl.textContent = hasProfile ? '🐾 MY PROFILE' : '🐾 MY PROFILE';
-}
-
-// ── SOS EMERGENCY FLOW ────────────────────────────────────────────────────────
-function openSOS(){
-  const pid = getProfileId();
-  if(!pid){ openProfileModal(); return; }
-  const sosEl = document.getElementById('sosOverlay');
-  const sc = document.getElementById('sosContent');
-  sosEl.classList.add('open');
-  document.body.style.overflow='hidden';
-
-  // Get pets from local or remote
-  const localStr = localStorage.getItem('tpf_profile_local');
-  let profile = localStr ? JSON.parse(localStr) : null;
-  if(profile){ renderSOSPick(profile); return; }
-
-  sc.innerHTML=`<div style="text-align:center;padding:24px;color:var(--text-dim);font-size:0.85rem">Loading your pets...</div>`;
-  getProfile(pid).then(p=>{ if(p) renderSOSPick(p); });
-}
-
-function renderSOSPick(profile){
-  const sc = document.getElementById('sosContent');
-  const pets = (profile.pets||[]).filter(Boolean);
-  if(!pets.length){
-    sc.innerHTML=`
-      <div class="verify-title" style="color:#ff4444">🆘 SOS EMERGENCY</div>
-      <div class="verify-sub">You don't have any pets registered yet. Add pets to your profile first.</div>
-      <button class="verify-confirm-btn ready" onclick="closeSOS();openProfileModal()" style="background:linear-gradient(135deg,#4444ff,#8844ff)">🐾 GO TO MY PROFILE</button>`;
-    return;
-  }
-  const buttons = pets.map((p,i)=>`
-    <button class="sos-pick-btn" onclick="triggerSOS(${i})">
-      <span class="sos-pick-emoji">${p.type==='Cat'?'🐱':p.type==='Bird'?'🐦':p.type==='Rabbit'?'🐰':'🐕'}</span>
-      <div><div class="sos-pick-name">${p.name}</div><div class="sos-pick-detail">${p.breed||p.type}${p.marking?' · '+p.marking:''}</div></div>
-      <span style="margin-left:auto;color:#ff4444;font-size:1.2rem">🆘</span>
-    </button>`).join('');
-
-  sc.innerHTML=`
-    <div class="verify-title" style="color:#ff4444">🆘 EMERGENCY SOS</div>
-    <div class="verify-sub">Which pet is missing? We'll post an emergency alert <strong style="color:#fff">instantly</strong> with all their info.</div>
-    ${buttons}
-    <button onclick="closeSOS()" style="width:100%;background:none;border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--text-dim);font-family:'Share Tech Mono',monospace;font-size:0.72rem;cursor:pointer;margin-top:4px">CANCEL</button>`;
-  
-  // Store profile for triggerSOS
-  window._sosProfile = profile;
-}
-
-async function triggerSOS(petIndex){
-  const profile = window._sosProfile;
-  if(!profile) return;
-  const pet = profile.pets[petIndex];
-  const sc = document.getElementById('sosContent');
-  sc.innerHTML=`<div class="sos-posting"><div class="sos-posting-icon">🆘</div><div style="font-family:'Orbitron',sans-serif;font-size:0.88rem;color:#ff4444;margin-bottom:8px">POSTING EMERGENCY ALERT...</div><div style="font-size:0.82rem;color:var(--text-dim)">Alerting all Tucson neighbors now</div></div>`;
-
-  try{
-    await addPet({
-      status: 'lost',
-      name: pet.name,
-      type: pet.type,
-      breed: pet.breed || pet.type,
-      location: pet.area || 'Tucson, AZ — exact location unknown',
-      description: `🆘 SOS EMERGENCY POST — Owner: ${profile.owner_name}. Unique marking: ${pet.marking||'Not provided'}. Vet: ${pet.vet||'Not provided'}.`,
-      phone: profile.owner_phone,
-      photo_url: ''
-    });
-    sc.innerHTML=`
-      <div class="sos-posted">
-        <div style="font-size:3.5rem;margin-bottom:14px">🆘</div>
-        <div style="font-family:'Orbitron',sans-serif;font-size:1rem;color:#ff4444;margin-bottom:10px">ALERT POSTED!</div>
-        <div style="font-size:0.9rem;color:var(--text-dim);line-height:1.6;margin-bottom:20px">
-          Emergency alert for <strong style="color:#fff">${pet.name}</strong> is now live.<br>
-          Every Tucson neighbor who opens this app will see it immediately.
-        </div>
-        <button class="verify-confirm-btn ready" onclick="closeSOS();switchTab('see')" style="background:var(--red);box-shadow:0 4px 20px rgba(255,34,68,0.4)">👁 VIEW LIVE ALERT</button>
-      </div>`;
-    loadAlertBanner();
-  }catch(e){
-    sc.innerHTML=`<div style="text-align:center;padding:20px"><div style="color:#ff4444;margin-bottom:10px">Error posting alert.</div><button class="verify-confirm-btn ready" onclick="triggerSOS(${petIndex})">TRY AGAIN</button></div>`;
-  }
-}
-
-function closeSOS(){
-  document.getElementById('sosOverlay').classList.remove('open');
-  document.body.style.overflow='';
-}
-
-// ── INIT: check if profile exists on load ─────────────────────────────────────
-(function initProfile(){
-  const pid = getProfileId();
-  const local = localStorage.getItem('tpf_profile_local');
-  if(pid || local){
-    const profile = local ? JSON.parse(local) : null;
-    const hasPets = profile ? (profile.pets||[]).filter(Boolean).length > 0 : true;
-    updateSOSButton(hasPets);
-  }
-})();
-
-function closeModal(e){
-  if(e&&e.target!==document.getElementById('modalOverlay')&&!e.target.classList.contains('modal-close'))return;
-  document.getElementById('modalOverlay').classList.remove('open');
-  document.body.style.overflow='';
-}
-
-async function markReunited(id,name){
-  try{
-    await patchPet(id,{status:'reunited'});
-    closeModal({target:document.getElementById('modalOverlay')});
-    renderListings();loadAlertBanner();
-    alert('🎉 So glad '+(name||'your pet')+' is home safe! The Tucson community is smiling right now. 💙');
-  }catch(e){alert('Error updating. Please try again.')}
-}
-
-function shareApp(){
-  const text='🐾 FREE app for Tucson pet owners! Post lost/found pets and neighbors nearby get alerted instantly. Real database — every neighbor sees the same listings. No sign-up, no cost. Try it: tucson-connect.vercel.app/tucson-pet-finder.html';
-  if(navigator.share)navigator.share({title:'Tucson Pet Finder',text,url:window.location.href});
-  else navigator.clipboard.writeText(text).then(()=>alert('📋 Copied! Paste in your Nextdoor group or text to a friend!'));
-}
-
-loadAlertBanner();
-
-let strayLatLng = null;
-let strayPhotoData = null;
-
-function openStrayModal(){
-  document.getElementById('strayModal').classList.add('open');
-  document.getElementById('strayFormView').style.display='block';
-  document.getElementById('straySuccessView').style.display='none';
-  document.body.style.overflow='hidden';
-}
-
-function closeStrayModal(e){
-  if(e && e.target !== document.getElementById('strayModal') && !e.target.classList.contains('stray-close')) return;
-  document.getElementById('strayModal').classList.remove('open');
-  document.body.style.overflow='';
-  // reset
-  strayLatLng=null; strayPhotoData=null;
-  document.getElementById('strayPhotoPreview').style.display='none';
-  document.getElementById('strayPhotoHint').style.display='flex';
-  document.getElementById('strayLocText').textContent='Tap to capture your GPS location';
-  document.getElementById('strayLocText').className='stray-loc-text';
-  document.getElementById('strayNote').value='';
-  document.getElementById('strayPhone').value='';
-  document.getElementById('strayPhotoInput').value='';
-}
-
-function loadStrayPhoto(input){
-  const f=input.files[0]; if(!f)return;
-  const r=new FileReader();
-  r.onload=e=>{
-    strayPhotoData=e.target.result;
-    const img=document.getElementById('strayPhotoPreview');
-    img.src=strayPhotoData; img.style.display='block';
-    document.getElementById('strayPhotoHint').style.display='none';
-  };
-  r.readAsDataURL(f);
-}
-
-function getStrayLocation(){
-  const el=document.getElementById('strayLocText');
-  el.textContent='📡 Getting your location...';
-  if(!navigator.geolocation){el.textContent='GPS not available on this device';return;}
-  navigator.geolocation.getCurrentPosition(
-    pos=>{
-      strayLatLng={lat:pos.coords.latitude,lng:pos.coords.longitude};
-      el.textContent='✅ Location captured ('+strayLatLng.lat.toFixed(4)+', '+strayLatLng.lng.toFixed(4)+')';
-      el.className='stray-loc-text got';
-    },
-    ()=>{el.textContent='Could not get location — tap to try again';el.className='stray-loc-text';}
-  );
-}
-
-async function submitStray(){
-  if(!strayPhotoData){alert('Please take or upload a photo first!');return;}
-  const btn=document.getElementById('straySubmitBtn');
-  btn.disabled=true; btn.textContent='POSTING...';
-  const note=document.getElementById('strayNote').value.trim();
-  const phone=document.getElementById('strayPhone').value.trim();
-  const locStr=strayLatLng
-    ?'GPS: '+strayLatLng.lat.toFixed(5)+', '+strayLatLng.lng.toFixed(5)
-    :'Location not captured';
-  try{
-    await addPet({
-      status:'stray',
-      name:'Stray Sighting',
-      type:'Unknown',
-      breed:'Unknown',
-      location:locStr,
-      description:note||'No additional notes.',
-      phone:phone?fmtPhone(phone):'',
-      photo_url:strayPhotoData
-    });
-    document.getElementById('strayFormView').style.display='none';
-    document.getElementById('straySuccessView').style.display='block';
-    loadAlertBanner();
-  }catch(e){alert('Error posting. Please try again.');console.error(e);}
-  finally{btn.disabled=false;btn.textContent='📸 POST STRAY SIGHTING';}
-}
-
-</script>
-
-<div class="photo-expand-overlay" id="photoExpandOverlay" onclick="closeExpandPhoto()">
-  <div class="photo-expand-close" onclick="closeExpandPhoto()">✕</div>
-  <img id="photoExpandImg" src="" alt="Pet photo"/>
-</div>
-
-<!-- VERIFY / CLAIM MODAL -->
+<!-- VERIFY MODAL -->
 <div class="verify-overlay" id="verifyOverlay">
   <div class="verify-sheet">
     <div class="verify-close" onclick="closeVerify()">✕</div>
@@ -1504,7 +444,7 @@ async function submitStray(){
 
 <!-- PROFILE MODAL -->
 <div class="verify-overlay" id="regOverlay">
-  <div class="profile-sheet">
+  <div class="verify-sheet">
     <div class="verify-close" onclick="closeProfileModal()">✕</div>
     <div id="profileContent"></div>
   </div>
@@ -1518,5 +458,947 @@ async function submitStray(){
   </div>
 </div>
 
+<!-- STRAY MODAL -->
+<div class="stray-modal" id="strayModal" onclick="closeStrayModal(event)">
+  <div class="stray-sheet">
+    <div class="stray-close" onclick="closeStrayModal()">✕</div>
+    <div class="stray-handle"></div>
+    <div id="strayFormView">
+      <div class="stray-title">📸 SPOT A STRAY</div>
+      <div class="stray-sub">Saw a stray nearby? Post a photo — neighbors will see it instantly.</div>
+      <div class="stray-photo-zone" id="strayPhotoZone" onclick="document.getElementById('strayPhotoInput').click()">
+        <input type="file" id="strayPhotoInput" accept="image/*" capture="environment" style="display:none" onchange="loadStrayPhoto(this)"/>
+        <div class="stray-photo-hint" id="strayPhotoHint"><div class="stray-photo-icon">📷</div><div class="stray-photo-txt">TAP TO TAKE PHOTO</div></div>
+        <img id="strayPhotoPreview" style="display:none"/>
+      </div>
+      <div class="stray-loc-row" onclick="getStrayLocation()">
+        <div class="stray-loc-icon">📍</div>
+        <div class="stray-loc-text" id="strayLocText">Tap to capture your GPS location</div>
+      </div>
+      <div class="stray-row"><input class="stray-input" type="text" id="strayNote" placeholder="Quick note — e.g. limping, near park entrance" maxlength="120"/></div>
+      <div class="stray-row"><input class="stray-input" type="tel" id="strayPhone" placeholder="Your phone (optional) 520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/></div>
+      <button class="stray-submit" id="straySubmitBtn" onclick="submitStray()">📸 POST STRAY SIGHTING</button>
+    </div>
+    <div id="straySuccessView" style="display:none">
+      <div class="stray-success">
+        <div style="font-size:2.5rem;margin-bottom:10px">🙌</div>
+        <div style="font-family:'Orbitron',sans-serif;font-size:0.95rem;color:var(--gold);margin-bottom:8px">SIGHTING POSTED!</div>
+        <div style="font-size:0.85rem;color:var(--text-dim);line-height:1.6">Your photo is now live. Every Tucson neighbor who opens this app will see it. Thank you! 🐾</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PHOTO EXPAND -->
+<div class="photo-expand-overlay" id="photoExpandOverlay" onclick="closeExpandPhoto()">
+  <div class="photo-expand-close" onclick="closeExpandPhoto()">✕</div>
+  <img id="photoExpandImg" src="" alt="Pet photo"/>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── SUPABASE CONFIG ────────────────────────────────────────────────────────
+var SURL = "https://msuqflssqixsplcearxr.supabase.co";
+var SKEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdXFmbHNzcWl4c3BsY2VhcnhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMzU3NDgsImV4cCI6MjA4OTcxMTc0OH0.BlrDiIu2YdDB7oHJ0fFiSEiBDQGvHCFAUaysR6O24zk";
+var SH = {"Content-Type":"application/json","apikey":SKEY,"Authorization":"Bearer "+SKEY};
+
+// ── DB HELPERS ─────────────────────────────────────────────────────────────
+async function getPets() {
+  try {
+    var r = await fetch(SURL+"/rest/v1/pets?select=*&order=created_at.desc", {headers:SH});
+    return await r.json();
+  } catch(e) { return []; }
+}
+
+async function addPet(pet) {
+  var r = await fetch(SURL+"/rest/v1/pets", {
+    method:"POST",
+    headers:Object.assign({},SH,{"Prefer":"return=representation"}),
+    body:JSON.stringify(pet)
+  });
+  if(!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+
+async function patchPet(id, data) {
+  await fetch(SURL+"/rest/v1/pets?id=eq."+id, {
+    method:"PATCH",
+    headers:Object.assign({},SH,{"Prefer":"return=minimal"}),
+    body:JSON.stringify(data)
+  });
+}
+
+async function uploadPhoto(b64, fileName) {
+  try {
+    var base64 = b64.split(",")[1];
+    var mime = b64.split(",")[0].split(":")[1].split(";")[0];
+    var binary = atob(base64);
+    var arr = new Uint8Array(binary.length);
+    for(var i=0;i<binary.length;i++) arr[i] = binary.charCodeAt(i);
+    var blob = new Blob([arr], {type:mime});
+    var path = "pets/"+Date.now()+"-"+fileName;
+    var r = await fetch(SURL+"/storage/v1/object/pet-photos/"+path, {
+      method:"POST",
+      headers:{"apikey":SKEY,"Authorization":"Bearer "+SKEY,"Content-Type":mime,"x-upsert":"true"},
+      body:blob
+    });
+    if(!r.ok) return null;
+    return SURL+"/storage/v1/object/public/pet-photos/"+path;
+  } catch(e) { return null; }
+}
+
+// ── PROFILE DB ─────────────────────────────────────────────────────────────
+async function saveProfile(ownerName, ownerPhone) {
+  var r = await fetch(SURL+"/rest/v1/profiles", {
+    method:"POST",
+    headers:Object.assign({},SH,{"Prefer":"return=representation"}),
+    body:JSON.stringify({owner_name:ownerName, owner_phone:fmtPhone(ownerPhone), pets:[]})
+  });
+  if(!r.ok) throw new Error(await r.text());
+  var data = await r.json();
+  return data[0].id;
+}
+
+async function getProfile(profileId) {
+  var r = await fetch(SURL+"/rest/v1/profiles?id=eq."+profileId+"&select=*", {headers:SH});
+  if(!r.ok) return null;
+  var data = await r.json();
+  return data[0] || null;
+}
+
+async function updateProfilePets(profileId, pets) {
+  await fetch(SURL+"/rest/v1/profiles?id=eq."+profileId, {
+    method:"PATCH",
+    headers:Object.assign({},SH,{"Prefer":"return=minimal"}),
+    body:JSON.stringify({pets:pets})
+  });
+}
+
+// ── UTILS ──────────────────────────────────────────────────────────────────
+function validPhone(p) { return p.replace(/\D/g,"").length === 10; }
+function fmtPhone(p) {
+  var d = p.replace(/\D/g,"");
+  return d.length===10 ? d.slice(0,3)+"-"+d.slice(3,6)+"-"+d.slice(6) : p;
+}
+function showErr(id, show) {
+  var e = document.getElementById(id);
+  if(e) e.style.display = show ? "block" : "none";
+}
+function timeAgo(d) {
+  var m = Math.floor((Date.now()-new Date(d))/60000);
+  if(m<1) return "Just now";
+  if(m<60) return m+"m ago";
+  var h = Math.floor(m/60);
+  if(h<24) return h+"h ago";
+  return Math.floor(h/24)+"d ago";
+}
+function petEmoji(type) {
+  if(type==="Cat") return "🐱";
+  if(type==="Bird") return "🐦";
+  if(type==="Rabbit") return "🐰";
+  return "🐕";
+}
+function petAgeTier(createdAt) {
+  var hrs = (Date.now()-new Date(createdAt))/3600000;
+  if(hrs<24) return "hot";
+  if(hrs<72) return "watching";
+  return "archived";
+}
+function petAgeLabel(createdAt) {
+  var hrs = (Date.now()-new Date(createdAt))/3600000;
+  if(hrs<1) return "Just posted";
+  if(hrs<24) return Math.floor(hrs)+"h ago · ACTIVE";
+  if(hrs<48) return "1 day ago · WATCHING";
+  if(hrs<72) return "2 days ago · WATCHING";
+  return Math.floor(hrs/24)+"d ago";
+}
+
+// ── AUTO PHONE FORMAT ──────────────────────────────────────────────────────
+function autoPhone(input) {
+  var v = input.value.replace(/\D/g,"");
+  if(v.length>10) v = v.slice(0,10);
+  if(v.length>=7) input.value = v.slice(0,3)+"-"+v.slice(3,6)+"-"+v.slice(6);
+  else if(v.length>=4) input.value = v.slice(0,3)+"-"+v.slice(3);
+  else input.value = v;
+}
+
+// ── TAB SWITCHING ──────────────────────────────────────────────────────────
+function switchTab(tab) {
+  ["Lost","Found","See"].forEach(function(t) {
+    document.getElementById("tab"+t).classList.remove("active");
+  });
+  var tabEl = document.getElementById("tab"+tab.charAt(0).toUpperCase()+tab.slice(1));
+  if(tabEl) tabEl.classList.add("active");
+  document.getElementById("tabFound").classList.add("found-tab");
+  document.getElementById("formLost").classList.toggle("active", tab==="lost");
+  document.getElementById("formFound").classList.toggle("active", tab==="found");
+  document.getElementById("successPanel").style.display = "none";
+  var ls = document.getElementById("listingsSection");
+  if(tab==="see") {
+    ls.style.display = "block";
+    var c = document.getElementById("listingsContainer");
+    if(!c.children.length || c.innerHTML.indexOf("Loading")>=0) renderListings();
+  } else {
+    ls.style.display = "none";
+  }
+}
+
+// ── PHOTO PREVIEW ──────────────────────────────────────────────────────────
+function prevPhoto(input, pid, hintId) {
+  var f = input.files[0];
+  if(!f) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var img = document.getElementById(pid);
+    img.src = e.target.result;
+    img.style.display = "block";
+    var h = document.getElementById(hintId);
+    if(h) h.style.display = "none";
+  };
+  reader.readAsDataURL(f);
+}
+
+function expandPhoto(img) {
+  document.getElementById("photoExpandImg").src = img.src;
+  document.getElementById("photoExpandOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeExpandPhoto() {
+  document.getElementById("photoExpandOverlay").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+// ── VOICE ENGINE ───────────────────────────────────────────────────────────
+var _SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+var _recog = null;
+var _activeField = null;
+var _activeBtn = null;
+var _silenceTimer = null;
+var _finalText = "";
+var _isListening = false;
+
+function _setBtn(btn, listening) {
+  if(!btn) return;
+  if(listening) {
+    btn.setAttribute("data-orig", btn.textContent);
+    btn.textContent = "🔴 Listening...";
+    btn.classList.add("listening");
+    btn.style.color = "var(--red)";
+    btn.style.borderColor = "var(--red)";
+  } else {
+    var orig = btn.getAttribute("data-orig");
+    if(orig) btn.textContent = orig;
+    btn.classList.remove("listening");
+    btn.style.color = "";
+    btn.style.borderColor = "";
+  }
+}
+
+function startVoice(fieldId, btn) {
+  // btn param is optional — find it from the event if not passed
+  if(!btn && window.event) btn = window.event.currentTarget || window.event.target;
+  if(!_SR) {
+    alert("Voice input not supported on this browser.\n\niPhone: use Safari\nAndroid: use Chrome\n\nMake sure microphone permission is allowed for this site.");
+    return;
+  }
+  // Toggle off if same field tapped again
+  if(_isListening) {
+    if(_recog) { try { _recog.abort(); } catch(e) {} }
+    _recog = null;
+    _isListening = false;
+    _setBtn(_activeBtn, false);
+    if(_activeField === fieldId) {
+      var el = document.getElementById(fieldId);
+      if(el) { el.style.borderColor=""; el.placeholder=""; }
+      clearTimeout(_silenceTimer);
+      _activeField = null;
+      _activeBtn = null;
+      return;
+    }
+  }
+  _activeBtn = btn || null;
+  doVoiceStart(fieldId);
+}
+
+function doVoiceStart(fieldId) {
+  var el = document.getElementById(fieldId);
+  if(!el) return;
+  var isPhone = el.type==="tel" || fieldId.toLowerCase().indexOf("phone")>=0;
+  if(_recog) { try { _recog.abort(); } catch(e) {} _recog = null; }
+  _recog = new _SR();
+  _recog.lang = "en-US";
+  _recog.maxAlternatives = 1;
+  _recog.continuous = !isPhone;
+  _recog.interimResults = !isPhone;
+  _activeField = fieldId;
+  _finalText = "";
+  _isListening = true;
+
+  // Visual feedback — input border + placeholder
+  el.style.borderColor = "var(--teal)";
+  el.placeholder = isPhone ? "🎤 Say your number..." : "🎤 Listening... speak now!";
+  el.focus();
+
+  // Visual feedback — button
+  _setBtn(_activeBtn, true);
+
+  clearTimeout(_silenceTimer);
+  _silenceTimer = setTimeout(function() { if(_recog && _isListening) _recog.stop(); }, isPhone ? 8000 : 15000);
+
+  _recog.onresult = function(e) {
+    _finalText = "";
+    var interim = "";
+    for(var i=0;i<e.results.length;i++) {
+      if(e.results[i].isFinal) _finalText += e.results[i][0].transcript+" ";
+      else interim += e.results[i][0].transcript;
+    }
+    var val = (_finalText+interim).trim();
+    if(isPhone) {
+      var raw = val.replace(/\D/g,"").slice(0,10);
+      if(raw.length>=7) val = raw.slice(0,3)+"-"+raw.slice(3,6)+"-"+raw.slice(6);
+      else if(raw.length>=4) val = raw.slice(0,3)+"-"+raw.slice(3);
+      else val = raw;
+    }
+    el.value = val;
+    clearTimeout(_silenceTimer);
+    _silenceTimer = setTimeout(function() { if(_recog && _isListening) _recog.stop(); }, isPhone ? 8000 : 15000);
+  };
+
+  _recog.onerror = function(e) {
+    if(e.error === "no-speech") return; // silence timeout — let onend handle it
+    _isListening = false;
+    _setBtn(_activeBtn, false);
+    el.style.borderColor = "";
+    el.placeholder = "";
+    clearTimeout(_silenceTimer);
+    if(e.error === "not-allowed" || e.error === "service-not-allowed") {
+      alert("Microphone access was denied.\n\nTo fix this:\n• iPhone Safari: Settings → Safari → Microphone → Allow\n• Android Chrome: tap the 🔒 lock icon in the address bar → Microphone → Allow\n\nThen reload the page and try again.");
+    } else if(e.error === "network") {
+      alert("Voice recognition needs an internet connection. Please check your connection and try again.");
+    }
+  };
+
+  _recog.onend = function() {
+    _isListening = false;
+    clearTimeout(_silenceTimer);
+    if(_finalText.trim()) el.value = _finalText.trim();
+    el.style.borderColor = "";
+    el.placeholder = "";
+    _setBtn(_activeBtn, false);
+    _activeField = null;
+    _activeBtn = null;
+  };
+
+  try {
+    _recog.start();
+  } catch(e) {
+    _isListening = false;
+    el.style.borderColor = "";
+    el.placeholder = "";
+    _setBtn(_activeBtn, false);
+    console.warn("Voice start error:", e);
+  }
+}
+
+// ── SUBMIT FORMS ───────────────────────────────────────────────────────────
+async function doSubmit(type) {
+  var ok = true;
+  if(type==="lost") {
+    var name  = document.getElementById("lostName").value.trim();
+    var pt    = document.getElementById("lostType").value;
+    var loc   = document.getElementById("lostLoc").value.trim();
+    var phone = document.getElementById("lostPhone").value.trim();
+    showErr("errLostName",!name); if(!name) ok=false;
+    showErr("errLostType",!pt);   if(!pt)   ok=false;
+    showErr("errLostLoc",!loc);   if(!loc)  ok=false;
+    showErr("errLostPhone",!validPhone(phone)); if(!validPhone(phone)) ok=false;
+    if(!ok) return;
+    var btn = document.getElementById("lostBtn");
+    btn.disabled=true; btn.textContent="POSTING...";
+    try {
+      var photoFile = document.getElementById("lostPhoto").files[0];
+      var photoUrl = null;
+      if(photoFile) photoUrl = await uploadPhoto(document.getElementById("lostPrev").src, photoFile.name);
+      await addPet({status:"lost",name:name,type:pt,breed:document.getElementById("lostBreed").value.trim()||pt,location:loc,description:document.getElementById("lostDesc").value.trim(),phone:fmtPhone(phone),photo_url:photoUrl||""});
+      showSuccess("lost", name);
+      loadAlertBanner();
+    } catch(e) { alert("Error posting. Please try again."); console.error(e); }
+    finally { btn.disabled=false; btn.textContent="🚨 POST LOST PET ALERT"; }
+  } else {
+    var pt2   = document.getElementById("foundType").value;
+    var loc2  = document.getElementById("foundLoc").value.trim();
+    var phone2= document.getElementById("foundPhone").value.trim();
+    showErr("errFoundType",!pt2); if(!pt2)  ok=false;
+    showErr("errFoundLoc",!loc2); if(!loc2) ok=false;
+    showErr("errFoundPhone",!validPhone(phone2)); if(!validPhone(phone2)) ok=false;
+    if(!ok) return;
+    var btn2 = document.getElementById("foundBtn");
+    btn2.disabled=true; btn2.textContent="POSTING...";
+    try {
+      var photoFile2 = document.getElementById("foundPhoto").files[0];
+      var photoUrl2 = null;
+      if(photoFile2) photoUrl2 = await uploadPhoto(document.getElementById("foundPrev").src, photoFile2.name);
+      var foundName2 = document.getElementById("foundName").value.trim();
+      await addPet({status:"found",name:foundName2||"Found "+pt2,type:pt2,breed:document.getElementById("foundBreed").value.trim()||pt2,location:loc2,description:document.getElementById("foundDesc").value.trim(),phone:fmtPhone(phone2),photo_url:photoUrl2||""});
+      showSuccess("found");
+      loadAlertBanner();
+    } catch(e) { alert("Error posting. Please try again."); console.error(e); }
+    finally { btn2.disabled=false; btn2.textContent="🟢 POST FOUND PET ALERT"; }
+  }
+}
+
+function showSuccess(type, name) {
+  document.getElementById("formLost").classList.remove("active");
+  document.getElementById("formFound").classList.remove("active");
+  var sp = document.getElementById("successPanel");
+  sp.style.display = "block";
+  if(type==="lost") {
+    document.getElementById("successIcon").textContent = "🚨";
+    document.getElementById("successTitle").textContent = name ? name+"s Alert Is Live!" : "Alert Posted!";
+    document.getElementById("successTitle").style.color = "var(--red)";
+    document.getElementById("successMsg").textContent = "Saved in our database — every Tucson neighbor who opens this app will see it. Share to get more eyes looking!";
+    sp.style.background = "rgba(255,68,102,0.06)";
+    sp.style.borderColor = "rgba(255,68,102,0.3)";
+  } else {
+    document.getElementById("successIcon").textContent = "🟢";
+    document.getElementById("successTitle").textContent = "Found Pet Posted!";
+    document.getElementById("successTitle").style.color = "var(--green)";
+    document.getElementById("successMsg").textContent = "Your report is live. The owner can now find and contact you directly. Thank you!";
+    sp.style.background = "rgba(0,255,136,0.06)";
+    sp.style.borderColor = "rgba(0,255,136,0.3)";
+  }
+  sp.scrollIntoView({behavior:"smooth",block:"center"});
+}
+
+// ── RENDER LISTINGS ────────────────────────────────────────────────────────
+function buildCard(pet) {
+  var tier = petAgeTier(pet.created_at);
+  var cls = "listing-card";
+  if(pet.status==="found") cls += " found-card";
+  if(tier==="watching" && pet.status!=="reunited") cls += " watching";
+  var dotCls = tier==="hot" ? "dot-hot" : tier==="watching" ? "dot-watching" : "dot-archived";
+  var photoHtml = (pet.photo_url && pet.photo_url.indexOf("data:")<0)
+    ? "<img src=\""+pet.photo_url+"\" onerror=\"this.style.display='none'\"/>"
+    : petEmoji(pet.type);
+  var typeCls = "type-"+(pet.status==="stray"?"stray":pet.status==="reunited"?"reunited":pet.status==="found"?"found":"lost");
+  var typeLabel = pet.status==="stray"?"STRAY":pet.status.toUpperCase();
+  var d = document.createElement("div");
+  d.className = cls;
+  d.onclick = function() { openModal(pet); };
+  d.innerHTML = "<div class=\"listing-photo\">"+photoHtml+"</div>"
+    +"<div class=\"listing-info\">"
+    +"<div class=\"listing-top\"><span class=\"age-dot "+dotCls+"\"></span><span class=\"listing-type "+typeCls+"\">"+typeLabel+"</span><span class=\"listing-name\">"+(pet.name||"Unknown")+"</span></div>"
+    +"<div class=\"listing-breed\">"+(pet.breed||pet.type)+"</div>"
+    +"<div class=\"listing-loc\">📍 "+pet.location+"</div>"
+    +"</div>"
+    +"<div class=\"listing-time\">"+petAgeLabel(pet.created_at)+"</div>";
+  return d;
+}
+
+function tierDivider(type) {
+  var labels = {hot:"🔴 ACTIVE — Last 24 Hours", watching:"👀 STILL OUT THERE — 1-3 Days", archived:"📁 Older Alerts"};
+  var d = document.createElement("div");
+  d.className = "tier-div tier-"+type;
+  d.innerHTML = "<div class=\"tier-div-line\"></div><div class=\"tier-lbl\">"+labels[type]+"</div><div class=\"tier-div-line\"></div>";
+  return d;
+}
+
+async function renderListings() {
+  var c = document.getElementById("listingsContainer");
+  c.innerHTML = "<div class=\"state-box\">Loading alerts from Tucson database...</div>";
+  var pets = await getPets();
+  var skip = ["reunited","registered"];
+  var hot = pets.filter(function(p) { return skip.indexOf(p.status)<0 && petAgeTier(p.created_at)==="hot"; });
+  var watching = pets.filter(function(p) { return skip.indexOf(p.status)<0 && petAgeTier(p.created_at)==="watching"; });
+  var archived = pets.filter(function(p) { return skip.indexOf(p.status)<0 && petAgeTier(p.created_at)==="archived"; });
+  var activeCount = hot.length + watching.length;
+  document.getElementById("listingCount").textContent = hot.length+" hot · "+watching.length+" watching";
+  c.innerHTML = "";
+  if(!pets.filter(function(p){return skip.indexOf(p.status)<0;}).length) {
+    c.innerHTML = "<div class=\"state-box\">🐾<br><br>No alerts yet in Tucson.<br>Be the first to post!</div>";
+    return;
+  }
+  if(hot.length) { c.appendChild(tierDivider("hot")); hot.forEach(function(p){c.appendChild(buildCard(p));}); }
+  if(watching.length) { c.appendChild(tierDivider("watching")); watching.forEach(function(p){c.appendChild(buildCard(p));}); }
+  if(archived.length) {
+    var wrap = document.createElement("div");
+    var toggle = document.createElement("div");
+    toggle.style.cssText = "text-align:center;padding:12px 0;cursor:pointer";
+    toggle.innerHTML = "<span style=\"font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--text-dim);border:1px solid var(--border);padding:6px 16px;border-radius:20px\">📁 Show "+archived.length+" older alert"+(archived.length!==1?"s":"")+"</span>";
+    toggle.onclick = function() {
+      wrap.innerHTML = "";
+      c.appendChild(tierDivider("archived"));
+      archived.forEach(function(p){c.appendChild(buildCard(p));});
+    };
+    wrap.appendChild(toggle);
+    c.appendChild(wrap);
+  }
+}
+
+// ── ALERT BANNER ───────────────────────────────────────────────────────────
+async function loadAlertBanner() {
+  var pets = await getPets();
+  var lost = pets.filter(function(p){return p.status==="lost";}).length;
+  var found = pets.filter(function(p){return p.status==="found";}).length;
+  var el = document.getElementById("alertText");
+  var strip = document.getElementById("alertStrip");
+  if(lost===0 && found===0) {
+    el.textContent = "No active alerts in Tucson right now. Post below if you lost or found a pet.";
+    strip.style.borderColor = "rgba(0,255,212,0.2)";
+    document.querySelector(".alert-icon").textContent = "✅";
+  } else {
+    var parts = [];
+    if(lost>0) parts.push("<strong>"+lost+" pet"+(lost!==1?"s":"")+" missing</strong>");
+    if(found>0) parts.push("<strong>"+found+" found</strong> waiting for owner");
+    el.innerHTML = parts.join(" · ")+" in Tucson. <span style='text-decoration:underline;opacity:0.7'>Tap to view →</span>";
+  }
+}
+
+// ── MODAL ──────────────────────────────────────────────────────────────────
+var _currentPet = null;
+
+function openModal(pet) {
+  _currentPet = pet;
+  var ph = document.getElementById("mPhoto");
+  if(pet.photo_url && pet.photo_url.indexOf("data:")<0) {
+    ph.innerHTML = "<img src=\""+pet.photo_url+"\" onerror=\"this.parentNode.innerHTML='"+petEmoji(pet.type)+"'\"/>";
+  } else {
+    ph.innerHTML = petEmoji(pet.type);
+  }
+  var statusLabel = pet.status==="lost"?" — MISSING":pet.status==="found"?" — FOUND":pet.status==="reunited"?" — REUNITED 🎉":" — STRAY";
+  document.getElementById("mTitle").textContent = (pet.name||"Unknown")+statusLabel;
+  document.getElementById("mBreed").textContent = (pet.breed||pet.type)+" · "+pet.type;
+  document.getElementById("mDesc").textContent = pet.description||"No additional description.";
+  var statusColor = pet.status==="lost"?"var(--red)":pet.status==="found"?"var(--green)":"var(--text-dim)";
+  document.getElementById("mDetails").innerHTML =
+    "<div class=\"modal-detail\"><span class=\"modal-dlbl\">STATUS</span><span class=\"modal-dval\" style=\"color:"+statusColor+";font-weight:700\">"+pet.status.toUpperCase()+"</span></div>"
+    +"<div class=\"modal-detail\"><span class=\"modal-dlbl\">LOCATION</span><span class=\"modal-dval\">"+pet.location+"</span></div>"
+    +"<div class=\"modal-detail\" style=\"border:none\"><span class=\"modal-dlbl\">POSTED</span><span class=\"modal-dval\">"+timeAgo(pet.created_at)+"</span></div>";
+  var cb = document.getElementById("mCall");
+  var rb = document.getElementById("mReunite");
+  var extra = document.getElementById("mExtra");
+  extra.innerHTML = "";
+  cb.style.display = "none";
+  rb.style.display = "none";
+  if(pet.status==="lost") {
+    cb.textContent = "📞 Call Reporter: "+pet.phone;
+    cb.onclick = function(){window.location.href="tel:"+pet.phone.replace(/\D/g,"");};
+    cb.style.display = "block";
+    rb.style.display = "block";
+    rb.onclick = function(){openClaimFlow("reunite");};
+    extra.innerHTML = "<button class=\"claim-lost-btn\" onclick=\"openClaimFlow('lost')\">🐕 THIS IS MY PET — I AM THE OWNER</button>"
+      +"<div class=\"safety-note\"><span>🔒</span><span>Clicking above starts a <strong>verification checklist</strong> before contact info is shared.</span></div>"
+      +"<div class=\"safety-banner\"><strong>🤝 SAFE MEETUP SPOTS</strong>Always meet in a public place with cameras around.<div class=\"safety-places\"><span class=\"safety-place\">🏪 Walgreens</span><span class=\"safety-place\">🚔 Police Station</span><span class=\"safety-place\">☕ Starbucks</span><span class=\"safety-place\">🏥 Fire Station</span><span class=\"safety-place\">🏬 Walmart</span></div></div>"
+      +"<button class=\"report-btn\" onclick=\"reportListing()\">🚨 Report Suspicious Activity</button>";
+  } else if(pet.status==="found") {
+    cb.textContent = "📞 Contact Finder: "+pet.phone;
+    cb.onclick = function(){window.location.href="tel:"+pet.phone.replace(/\D/g,"");};
+    cb.style.display = "block";
+    rb.style.display = "block";
+    rb.onclick = function(){openClaimFlow("reunite");};
+    extra.innerHTML = "<button class=\"claim-found-btn\" onclick=\"openClaimFlow('found')\">🏠 THIS IS MY PET — REUNITE NOW</button>"
+      +"<div class=\"safety-note\"><span>🔒</span><span>Clicking above opens a <strong>quick verification</strong> before the finder's info is shared.</span></div>"
+      +"<div class=\"safety-banner\"><strong>🤝 SAFE MEETUP SPOTS</strong>Always meet in a public place with cameras around.<div class=\"safety-places\"><span class=\"safety-place\">🏪 Walgreens</span><span class=\"safety-place\">🚔 Police Station</span><span class=\"safety-place\">☕ Starbucks</span><span class=\"safety-place\">🏥 Fire Station</span><span class=\"safety-place\">🏬 Walmart</span></div></div>"
+      +"<button class=\"report-btn\" onclick=\"reportListing()\">🚨 Report Suspicious Activity</button>";
+  } else if(pet.status==="reunited") {
+    extra.innerHTML = "<div style=\"text-align:center;padding:16px 0;font-size:0.88rem;color:var(--text-dim)\">🎉 This pet has been reunited with their family!</div>";
+  }
+  document.getElementById("modalOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function closeModalOverlay(e) {
+  if(e && e.target !== document.getElementById("modalOverlay") && !e.target.classList.contains("modal-close")) return;
+  document.getElementById("modalOverlay").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+function reportListing() {
+  var reason = prompt("Briefly describe the issue with this listing:");
+  if(!reason || !reason.trim()) return;
+  alert("Thank you for reporting. Our team will review within 24 hours.");
+}
+
+// ── CLAIM / VERIFY FLOW ────────────────────────────────────────────────────
+function openClaimFlow(petStatus) {
+  if(!_currentPet) return;
+  var pet = _currentPet;
+  var isReunite = petStatus==="reunite";
+  var vc = document.getElementById("verifyContent");
+  var titleText = isReunite ? "✅ CONFIRM REUNIFICATION" : (petStatus==="lost" ? "🐕 CLAIM YOUR PET" : "🏠 CLAIM YOUR PET");
+  var subText = isReunite
+    ? "Confirm that "+pet.name+" has been safely returned to their owner."
+    : "Before we connect you, confirm you are the owner of "+pet.name+".";
+  var chk1 = isReunite ? "The owner has been positively identified" : "I can describe a unique marking on this pet";
+  var chk2 = isReunite ? "The pet and owner have already reunited in person" : "I have photos of me with this pet available";
+  var chk3 = isReunite ? "I personally witnessed the reunion" : "I know my pets vet name or clinic";
+  var chk4 = isReunite ? "I understand this will permanently remove the alert" : "I will meet the finder in a public place";
+  var extraFields = isReunite ? "" :
+    "<div style=\"margin-bottom:12px\"><label style=\"font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px\">DESCRIBE A UNIQUE FEATURE YOUR PET HAS *</label><input class=\"verify-input\" id=\"claimMark\" placeholder=\"e.g. white patch on left ear, missing tooth...\"/></div>"
+    +"<div style=\"margin-bottom:12px\"><label style=\"font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px\">YOUR PHONE NUMBER *</label><input class=\"verify-input\" type=\"tel\" id=\"claimPhone\" placeholder=\"520-XXX-XXXX\" inputmode=\"numeric\" oninput=\"autoPhone(this)\"/></div>";
+  var btnText = isReunite ? "🎉 YES — MARK AS REUNITED" : "🔓 VERIFIED — CONNECT ME NOW";
+  vc.innerHTML =
+    "<div class=\"verify-title\">"+titleText+"</div>"
+    +"<div class=\"verify-sub\">"+subText+"</div>"
+    +"<div class=\"verify-checklist\">"
+    +"<div class=\"verify-checklist-title\">✅ VERIFICATION CHECKLIST</div>"
+    +"<div class=\"verify-check\"><input type=\"checkbox\" id=\"chk1\" onchange=\"checkClaimBtn()\"><label for=\"chk1\">"+chk1+"</label></div>"
+    +"<div class=\"verify-check\"><input type=\"checkbox\" id=\"chk2\" onchange=\"checkClaimBtn()\"><label for=\"chk2\">"+chk2+"</label></div>"
+    +"<div class=\"verify-check\"><input type=\"checkbox\" id=\"chk3\" onchange=\"checkClaimBtn()\"><label for=\"chk3\">"+chk3+"</label></div>"
+    +"<div class=\"verify-check\"><input type=\"checkbox\" id=\"chk4\" onchange=\"checkClaimBtn()\"><label for=\"chk4\">"+chk4+"</label></div>"
+    +"</div>"
+    +extraFields
+    +"<button class=\"verify-confirm-btn\" id=\"claimConfirmBtn\" onclick=\"doConfirmClaim('"+isReunite+"')\">"+btnText+"</button>"
+    +"<p style=\"font-size:0.72rem;color:var(--text-dim);text-align:center;margin-top:10px;line-height:1.5\">"+(isReunite?"This removes the alert permanently.":"By proceeding you confirm this is your pet.")+"</p>";
+  document.getElementById("verifyOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function checkClaimBtn() {
+  var allChecked = ["chk1","chk2","chk3","chk4"].every(function(id){
+    var el = document.getElementById(id);
+    return el && el.checked;
+  });
+  var markEl = document.getElementById("claimMark");
+  var phoneEl = document.getElementById("claimPhone");
+  var markOk = markEl ? markEl.value.trim().length>3 : true;
+  var phoneOk = phoneEl ? phoneEl.value.replace(/\D/g,"").length===10 : true;
+  var btn = document.getElementById("claimConfirmBtn");
+  if(btn) {
+    if(allChecked && markOk && phoneOk) { btn.classList.add("ready"); }
+    else { btn.classList.remove("ready"); }
+  }
+}
+
+async function doConfirmClaim(isReuniteStr) {
+  if(!_currentPet) return;
+  var pet = _currentPet;
+  var vc = document.getElementById("verifyContent");
+  if(isReuniteStr==="true") {
+    try {
+      await patchPet(pet.id, {status:"reunited"});
+      vc.innerHTML = "<div style=\"text-align:center;padding:30px 0\"><div style=\"font-size:3.5rem;margin-bottom:14px\">🎉</div><div style=\"font-family:'Orbitron',sans-serif;font-size:1rem;color:var(--green);margin-bottom:10px\">REUNITED!</div><div style=\"font-size:0.9rem;color:var(--text-dim);line-height:1.6\">"+(pet.name||"This pet")+" is home safe and removed from the active list.<br><br>Tucson is smiling right now. 💙</div></div>";
+      setTimeout(function() {
+        closeVerify();
+        document.getElementById("modalOverlay").classList.remove("open");
+        document.body.style.overflow = "";
+        renderListings();
+        loadAlertBanner();
+      }, 2500);
+    } catch(e) { alert("Error updating. Please try again."); }
+  } else {
+    var phone = document.getElementById("claimPhone") ? document.getElementById("claimPhone").value.trim() : "";
+    var mark = document.getElementById("claimMark") ? document.getElementById("claimMark").value.trim() : "";
+    if(!phone || !mark) return;
+    var contactPhone = pet.phone||"";
+    var callLink = contactPhone ? "<a href=\"tel:"+contactPhone.replace(/\D/g,"")+"\" style=\"display:block;background:var(--teal);color:var(--bg);font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;padding:16px;border-radius:12px;text-decoration:none;text-align:center;margin-bottom:12px;box-shadow:0 4px 20px var(--teal-glow)\">📞 CALL "+(pet.status==="found"?"FINDER":"REPORTER")+": "+contactPhone+"</a>" : "";
+    vc.innerHTML = "<div style=\"text-align:center;padding:30px 0\"><div style=\"font-size:3rem;margin-bottom:14px\">🎉</div><div style=\"font-family:'Orbitron',sans-serif;font-size:1rem;color:var(--teal);margin-bottom:10px\">YOU ARE VERIFIED!</div><div style=\"font-size:0.9rem;color:var(--text-dim);line-height:1.6;margin-bottom:20px\">Ownership confirmed for <strong style=\"color:#fff\">"+(pet.name||"your pet")+"</strong>. Contact the "+(pet.status==="found"?"finder":"reporter")+" directly now:</div>"+callLink+"<div class=\"safety-banner\" style=\"text-align:left\"><strong>🤝 SAFE MEETUP REMINDER</strong>Meet in public — Walgreens, Starbucks, Fire Station, or Police Station.</div></div>";
+  }
+}
+
+function closeVerify() {
+  document.getElementById("verifyOverlay").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+// ── TOAST ──────────────────────────────────────────────────────────────────
+var _toastPet = null;
+
+async function showPetToast() {
+  await new Promise(function(r){setTimeout(r,2000);});
+  var pets = await getPets();
+  var candidates = pets.filter(function(p) {
+    return (p.status==="lost"||p.status==="found") && petAgeTier(p.created_at)==="watching";
+  });
+  if(!candidates.length) return;
+  _toastPet = candidates.sort(function(a,b){return new Date(a.created_at)-new Date(b.created_at);})[0];
+  var hrs = Math.floor((Date.now()-new Date(_toastPet.created_at))/3600000);
+  var days = hrs>=48 ? "2 days" : "1 day";
+  document.getElementById("toastTitle").textContent = _toastPet.status==="lost" ? "👀 STILL MISSING — "+days+" ago" : "🐾 STILL WAITING FOR OWNER — "+days;
+  document.getElementById("toastName").textContent = _toastPet.name||"Unknown Pet";
+  document.getElementById("toastSub").textContent = "📍 "+(_toastPet.location||"").slice(0,45);
+  var photoEl = document.getElementById("toastPhoto");
+  if(_toastPet.photo_url && _toastPet.photo_url.indexOf("data:")<0) {
+    photoEl.innerHTML = "<img src=\""+_toastPet.photo_url+"\" style=\"width:100%;height:100%;object-fit:cover;border-radius:10px\" onerror=\"this.parentNode.textContent='"+petEmoji(_toastPet.type)+"'\"/>";
+  } else {
+    photoEl.textContent = petEmoji(_toastPet.type);
+  }
+  document.getElementById("petToast").classList.add("show");
+  setTimeout(function(){dismissToast(false);}, 8000);
+}
+
+function dismissToast(goToAlert) {
+  document.getElementById("petToast").classList.remove("show");
+  if(goToAlert && _toastPet) {
+    switchTab("see");
+    setTimeout(function(){openModal(_toastPet);}, 400);
+  }
+}
+
+// ── PROFILE SYSTEM ─────────────────────────────────────────────────────────
+var PROFILE_KEY = "tpf_profile_id";
+function getProfileId() { return localStorage.getItem(PROFILE_KEY); }
+function setProfileId(id) { localStorage.setItem(PROFILE_KEY, id); }
+
+async function openProfileModal() {
+  document.getElementById("regOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+  var pc = document.getElementById("profileContent");
+  pc.innerHTML = "<div style=\"text-align:center;padding:30px;color:var(--text-dim);font-size:0.8rem\">Loading...</div>";
+  var pid = getProfileId();
+  if(pid) {
+    var localStr = localStorage.getItem("tpf_profile_local");
+    if(localStr) { renderProfileDashboard(JSON.parse(localStr)); return; }
+    var profile = await getProfile(pid);
+    if(profile) { renderProfileDashboard(profile); return; }
+  }
+  renderProfileCreate();
+}
+
+function closeProfileModal() {
+  document.getElementById("regOverlay").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+function renderProfileCreate() {
+  var pc = document.getElementById("profileContent");
+  pc.innerHTML =
+    "<div class=\"verify-title\">🐾 CREATE YOUR PROFILE</div>"
+    +"<div class=\"verify-sub\">No account needed — just your name and phone. Register up to 4 pets and get a one-tap SOS emergency button.</div>"
+    +"<div style=\"background:rgba(0,255,212,0.06);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:0.82rem;color:var(--text-dim);line-height:1.8\">🆘 One-tap SOS emergency post<br>✅ Verified Owner badge when claiming<br>🐾 Up to 4 pets registered<br>📞 Your info pre-filled automatically</div>"
+    +"<div style=\"margin-bottom:12px\"><label style=\"font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px\">YOUR NAME *</label><input class=\"verify-input\" id=\"profName\" placeholder=\"e.g. Lamar Myers\"/></div>"
+    +"<div style=\"margin-bottom:18px\"><label style=\"font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px\">YOUR PHONE *</label><input class=\"verify-input\" type=\"tel\" id=\"profPhone\" placeholder=\"520-XXX-XXXX\" inputmode=\"numeric\" oninput=\"autoPhone(this)\"/></div>"
+    +"<button class=\"verify-confirm-btn ready\" onclick=\"createProfile()\" style=\"background:linear-gradient(135deg,#4444ff,#8844ff);box-shadow:0 4px 20px rgba(100,100,255,0.4)\">🐾 CREATE MY PROFILE</button>"
+    +"<p style=\"font-size:0.7rem;color:var(--text-dim);text-align:center;margin-top:10px\">No password. No email. Just you and your pets. 🌵</p>";
+}
+
+async function createProfile() {
+  var name = document.getElementById("profName").value.trim();
+  var phone = document.getElementById("profPhone").value.trim();
+  if(!name || !validPhone(phone)) { alert("Please enter your name and a valid phone number."); return; }
+  try {
+    var id = await saveProfile(name, phone);
+    setProfileId(id);
+    updateSOSButton(true);
+    var profile = await getProfile(id);
+    renderProfileDashboard(profile);
+  } catch(e) {
+    var p = {id:"local_"+Date.now(), owner_name:name, owner_phone:fmtPhone(phone), pets:[]};
+    localStorage.setItem("tpf_profile_local", JSON.stringify(p));
+    setProfileId(p.id);
+    updateSOSButton(true);
+    renderProfileDashboard(p);
+  }
+}
+
+function renderProfileDashboard(profile) {
+  var pc = document.getElementById("profileContent");
+  var pets = profile.pets||[];
+  var slots = [0,1,2,3].map(function(i) {
+    var p = pets[i];
+    if(p) return "<div class=\"pet-slot filled\" onclick=\"editPetSlot("+i+")\"><div class=\"pet-slot-top\"><span class=\"pet-slot-emoji\">"+petEmoji(p.type)+"</span><div><div class=\"pet-slot-name\">"+p.name+"</div><div class=\"pet-slot-detail\">"+(p.breed||p.type)+(p.marking?" · "+p.marking:"")+"</div></div><span style=\"margin-left:auto;font-size:0.7rem;color:var(--green)\">✅ REGISTERED</span></div></div>";
+    return "<div class=\"pet-slot\" onclick=\"addPetToProfile("+i+")\"><div class=\"pet-slot-add\">+ ADD PET "+(i+1)+"</div></div>";
+  }).join("");
+  var sosTip = pets.filter(Boolean).length>0
+    ? "<div style=\"background:rgba(200,0,0,0.08);border:1px solid rgba(200,0,0,0.3);border-radius:12px;padding:14px 16px;margin-top:16px\"><div style=\"font-family:'Orbitron',sans-serif;font-size:0.68rem;color:#ff4444;letter-spacing:0.1em;margin-bottom:6px\">🆘 SOS EMERGENCY BUTTON ACTIVE</div><div style=\"font-size:0.82rem;color:var(--text-dim);line-height:1.5\">Your red SOS button is live. One tap posts an emergency alert instantly with all your pet's info.</div></div>"
+    : "<div style=\"background:rgba(0,255,212,0.05);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-top:16px;text-align:center;font-size:0.85rem;color:var(--text-dim)\">Add at least one pet above to activate your SOS button.</div>";
+  pc.innerHTML =
+    "<div style=\"display:flex;align-items:center;gap:10px;margin-bottom:18px\"><div style=\"font-size:2rem\">🐾</div><div><div style=\"font-family:'Orbitron',sans-serif;font-size:0.9rem;font-weight:700;color:#fff\">"+profile.owner_name+"</div><div style=\"font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--teal)\">"+profile.owner_phone+" · ✅ VERIFIED OWNER</div></div></div>"
+    +"<div style=\"font-family:'Orbitron',sans-serif;font-size:0.68rem;color:var(--text-dim);letter-spacing:0.1em;margin-bottom:10px\">MY PETS ("+pets.filter(Boolean).length+"/4 registered)</div>"
+    +slots+sosTip
+    +"<button class=\"verify-confirm-btn ready\" onclick=\"closeProfileModal()\" style=\"margin-top:16px;background:rgba(0,255,212,0.1);border:1px solid var(--border-bright);color:var(--teal);box-shadow:none\">✓ Done</button>";
+}
+
+var _editingSlot = -1;
+function addPetToProfile(slot) { _editingSlot = slot; renderAddPetForm(); }
+function editPetSlot(slot) { _editingSlot = slot; renderAddPetForm(); }
+
+function renderAddPetForm() {
+  var pc = document.getElementById("profileContent");
+  pc.innerHTML =
+    "<button onclick=\"reopenDashboard()\" style=\"background:none;border:none;color:var(--teal);font-family:'Share Tech Mono',monospace;font-size:0.72rem;cursor:pointer;margin-bottom:14px\">← BACK TO PROFILE</button>"
+    +"<div class=\"verify-title\">🐾 ADD PET "+(_editingSlot+1)+"</div>"
+    +"<div class=\"verify-sub\">Used for instant SOS posts and verified ownership.</div>"
+    +"<div style=\"margin-bottom:12px\"><label style=\"font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px\">PET NAME *</label><input class=\"verify-input\" id=\"addPetName\" placeholder=\"e.g. Mojo\"/></div>"
+    +"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px\"><div><label style=\"font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px\">TYPE *</label><select class=\"verify-input\" id=\"addPetType\" style=\"color:var(--text)\"><option value=\"\">Select...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select></div><div><label style=\"font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px\">BREED / COLOR</label><input class=\"verify-input\" id=\"addPetBreed\" placeholder=\"e.g. Black lab mix\"/></div></div>"
+    +"<div style=\"margin-bottom:12px\"><label style=\"font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px\">UNIQUE MARKING</label><input class=\"verify-input\" id=\"addPetMark\" placeholder=\"e.g. white spot on left ear\"/></div>"
+    +"<div style=\"margin-bottom:12px\"><label style=\"font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px\">NEIGHBORHOOD / AREA</label><input class=\"verify-input\" id=\"addPetArea\" placeholder=\"e.g. Midtown Tucson near Speedway\"/></div>"
+    +"<div style=\"margin-bottom:18px\"><label style=\"font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px\">VET NAME AND PHONE (optional)</label><input class=\"verify-input\" id=\"addPetVet\" placeholder=\"e.g. Dr. Smith 520-555-1234\"/></div>"
+    +"<button class=\"verify-confirm-btn ready\" onclick=\"savePetToProfile()\" style=\"background:linear-gradient(135deg,#00aa44,#00ff88);color:#000\">✅ SAVE THIS PET</button>";
+}
+
+async function reopenDashboard() {
+  var pid = getProfileId();
+  var local = localStorage.getItem("tpf_profile_local");
+  if(local) { renderProfileDashboard(JSON.parse(local)); return; }
+  if(pid) { var p = await getProfile(pid); if(p) renderProfileDashboard(p); }
+}
+
+async function savePetToProfile() {
+  var name = document.getElementById("addPetName").value.trim();
+  var type = document.getElementById("addPetType").value;
+  if(!name||!type) { alert("Pet name and type are required."); return; }
+  var pet = {
+    name:name, type:type,
+    breed:document.getElementById("addPetBreed").value.trim()||type,
+    marking:document.getElementById("addPetMark").value.trim(),
+    area:document.getElementById("addPetArea").value.trim(),
+    vet:document.getElementById("addPetVet").value.trim()
+  };
+  var pid = getProfileId();
+  var profile = null;
+  var localStr = localStorage.getItem("tpf_profile_local");
+  if(localStr) profile = JSON.parse(localStr);
+  else if(pid) profile = await getProfile(pid);
+  if(!profile) return;
+  var pets = profile.pets||[];
+  pets[_editingSlot] = pet;
+  profile.pets = pets;
+  if(localStr) localStorage.setItem("tpf_profile_local", JSON.stringify(profile));
+  else await updateProfilePets(pid, pets);
+  updateSOSButton(pets.filter(Boolean).length>0);
+  renderProfileDashboard(profile);
+}
+
+function updateSOSButton(hasPets) {
+  var fab = document.getElementById("sosFab");
+  if(!fab) return;
+  if(hasPets) fab.classList.add("visible");
+  else fab.classList.remove("visible");
+}
+
+// ── SOS SYSTEM ─────────────────────────────────────────────────────────────
+function openSOS() {
+  var pid = getProfileId();
+  if(!pid) { openProfileModal(); return; }
+  document.getElementById("sosOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+  var local = localStorage.getItem("tpf_profile_local");
+  if(local) { renderSOSPick(JSON.parse(local)); return; }
+  document.getElementById("sosContent").innerHTML = "<div style=\"text-align:center;padding:24px;color:var(--text-dim)\">Loading your pets...</div>";
+  getProfile(pid).then(function(p){ if(p) renderSOSPick(p); });
+}
+
+function renderSOSPick(profile) {
+  window._sosProfile = profile;
+  var sc = document.getElementById("sosContent");
+  var pets = (profile.pets||[]).filter(Boolean);
+  if(!pets.length) {
+    sc.innerHTML = "<div class=\"verify-title\" style=\"color:#ff4444\">🆘 SOS EMERGENCY</div><div class=\"verify-sub\">Add pets to your profile first.</div><button class=\"verify-confirm-btn ready\" onclick=\"closeSOS();openProfileModal()\" style=\"background:linear-gradient(135deg,#4444ff,#8844ff)\">🐾 GO TO MY PROFILE</button>";
+    return;
+  }
+  var buttons = pets.map(function(p,i) {
+    return "<button class=\"sos-pick-btn\" onclick=\"triggerSOS("+i+")\"><span class=\"sos-pick-emoji\">"+petEmoji(p.type)+"</span><div><div class=\"sos-pick-name\">"+p.name+"</div><div class=\"sos-pick-detail\">"+(p.breed||p.type)+(p.marking?" · "+p.marking:"")+"</div></div><span style=\"margin-left:auto;color:#ff4444;font-size:1.2rem\">🆘</span></button>";
+  }).join("");
+  sc.innerHTML = "<div class=\"verify-title\" style=\"color:#ff4444\">🆘 EMERGENCY SOS</div><div class=\"verify-sub\">Which pet is missing? We will post an emergency alert instantly.</div>"+buttons+"<button onclick=\"closeSOS()\" style=\"width:100%;background:none;border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--text-dim);font-family:'Share Tech Mono',monospace;font-size:0.72rem;cursor:pointer;margin-top:4px\">CANCEL</button>";
+}
+
+async function triggerSOS(petIndex) {
+  var profile = window._sosProfile;
+  if(!profile) return;
+  var pet = profile.pets[petIndex];
+  var sc = document.getElementById("sosContent");
+  sc.innerHTML = "<div style=\"text-align:center;padding:30px\"><div style=\"font-size:3rem;margin-bottom:14px;animation:sosSpin 0.8s linear infinite\">🆘</div><div style=\"font-family:'Orbitron',sans-serif;font-size:0.88rem;color:#ff4444;margin-bottom:8px\">POSTING EMERGENCY ALERT...</div><div style=\"font-size:0.82rem;color:var(--text-dim)\">Alerting all Tucson neighbors now</div></div>";
+  try {
+    await addPet({status:"lost",name:pet.name,type:pet.type,breed:pet.breed||pet.type,location:pet.area||"Tucson, AZ",description:"SOS EMERGENCY POST — Owner: "+profile.owner_name+". Unique marking: "+(pet.marking||"Not provided")+". Vet: "+(pet.vet||"Not provided")+".",phone:profile.owner_phone,photo_url:""});
+    sc.innerHTML = "<div style=\"text-align:center;padding:30px\"><div style=\"font-size:3.5rem;margin-bottom:14px\">🆘</div><div style=\"font-family:'Orbitron',sans-serif;font-size:1rem;color:#ff4444;margin-bottom:10px\">ALERT POSTED!</div><div style=\"font-size:0.9rem;color:var(--text-dim);line-height:1.6;margin-bottom:20px\">Emergency alert for <strong style=\"color:#fff\">"+pet.name+"</strong> is now live. Every Tucson neighbor who opens this app will see it immediately.</div><button class=\"verify-confirm-btn ready\" onclick=\"closeSOS();switchTab('see')\" style=\"background:var(--red);box-shadow:0 4px 20px rgba(255,34,68,0.4)\">👁 VIEW LIVE ALERT</button></div>";
+    loadAlertBanner();
+  } catch(e) {
+    sc.innerHTML = "<div style=\"text-align:center;padding:20px\"><div style=\"color:#ff4444;margin-bottom:10px\">Error posting alert.</div><button class=\"verify-confirm-btn ready\" onclick=\"triggerSOS("+petIndex+")\">TRY AGAIN</button></div>";
+  }
+}
+
+function closeSOS() {
+  document.getElementById("sosOverlay").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+// ── SPOT A STRAY ───────────────────────────────────────────────────────────
+var _strayLatLng = null;
+var _strayPhotoData = null;
+
+function openStrayModal() {
+  document.getElementById("strayModal").classList.add("open");
+  document.getElementById("strayFormView").style.display = "block";
+  document.getElementById("straySuccessView").style.display = "none";
+  document.body.style.overflow = "hidden";
+}
+
+function closeStrayModal(e) {
+  if(e && e.target !== document.getElementById("strayModal") && !e.target.classList.contains("stray-close")) return;
+  document.getElementById("strayModal").classList.remove("open");
+  document.body.style.overflow = "";
+  _strayLatLng = null; _strayPhotoData = null;
+  document.getElementById("strayPhotoPreview").style.display = "none";
+  document.getElementById("strayPhotoHint").style.display = "flex";
+  document.getElementById("strayLocText").textContent = "Tap to capture your GPS location";
+  document.getElementById("strayLocText").className = "stray-loc-text";
+  document.getElementById("strayNote").value = "";
+  document.getElementById("strayPhone").value = "";
+  document.getElementById("strayPhotoInput").value = "";
+}
+
+function loadStrayPhoto(input) {
+  var f = input.files[0];
+  if(!f) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    _strayPhotoData = e.target.result;
+    var img = document.getElementById("strayPhotoPreview");
+    img.src = _strayPhotoData; img.style.display = "block";
+    document.getElementById("strayPhotoHint").style.display = "none";
+  };
+  reader.readAsDataURL(f);
+}
+
+function getStrayLocation() {
+  var el = document.getElementById("strayLocText");
+  el.textContent = "📡 Getting your location...";
+  if(!navigator.geolocation) { el.textContent = "GPS not available on this device"; return; }
+  navigator.geolocation.getCurrentPosition(
+    function(pos) {
+      _strayLatLng = {lat:pos.coords.latitude, lng:pos.coords.longitude};
+      el.textContent = "✅ Location captured ("+_strayLatLng.lat.toFixed(4)+", "+_strayLatLng.lng.toFixed(4)+")";
+      el.className = "stray-loc-text got";
+    },
+    function() { el.textContent = "Could not get location — tap to try again"; el.className = "stray-loc-text"; }
+  );
+}
+
+async function submitStray() {
+  if(!_strayPhotoData) { alert("Please take or upload a photo first!"); return; }
+  var btn = document.getElementById("straySubmitBtn");
+  btn.disabled = true; btn.textContent = "POSTING...";
+  var note = document.getElementById("strayNote").value.trim();
+  var phone = document.getElementById("strayPhone").value.trim();
+  var locStr = _strayLatLng ? "GPS: "+_strayLatLng.lat.toFixed(5)+", "+_strayLatLng.lng.toFixed(5) : "Location not captured";
+  try {
+    await addPet({status:"stray",name:"Stray Sighting",type:"Unknown",breed:"Unknown",location:locStr,description:note||"No additional notes.",phone:phone?fmtPhone(phone):"",photo_url:_strayPhotoData});
+    document.getElementById("strayFormView").style.display = "none";
+    document.getElementById("straySuccessView").style.display = "block";
+    loadAlertBanner();
+  } catch(e) { alert("Error posting. Please try again."); console.error(e); }
+  finally { btn.disabled=false; btn.textContent="📸 POST STRAY SIGHTING"; }
+}
+
+// ── SHARE ──────────────────────────────────────────────────────────────────
+function shareApp() {
+  var text = "🐾 FREE app for Tucson pet owners — Tucson Pet Finder! Post lost or found pets and neighbors get alerted instantly. No sign-up. No cost. Try it: tucson-pet-finder.vercel.app/tucson-pet-finder.html";
+  if(navigator.share) navigator.share({title:"Tucson Pet Finder",text:text,url:window.location.href});
+  else navigator.clipboard.writeText(text).then(function(){ alert("Copied! Paste in Nextdoor or text a friend!"); });
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+(function() {
+  var pid = getProfileId();
+  var local = localStorage.getItem("tpf_profile_local");
+  if(pid||local) {
+    var p = local ? JSON.parse(local) : null;
+    var hasPets = p ? (p.pets||[]).filter(Boolean).length > 0 : true;
+    updateSOSButton(hasPets);
+  }
+})();
+loadAlertBanner();
+showPetToast();
+</script>
 </body>
 </html>
