@@ -158,6 +158,11 @@ footer{background:var(--navy);padding:28px 22px 20px;text-align:center;margin-to
 .stray-success-icon{font-size:2.5rem;margin-bottom:10px}
 .stray-success-title{font-family:'Lora',serif;font-size:1.1rem;font-weight:700;color:var(--gold);margin-bottom:8px}
 .stray-success-msg{font-size:0.92rem;color:var(--text-mid);line-height:1.6}
+
+.photo-expand-overlay{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,0.88);display:none;align-items:center;justify-content:center;cursor:zoom-out}
+.photo-expand-overlay.open{display:flex}
+.photo-expand-overlay img{max-width:95vw;max-height:90vh;object-fit:contain;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.4)}
+.photo-expand-close{position:absolute;top:16px;right:16px;width:36px;height:36px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;color:#fff;cursor:pointer}
 </style>
 </head>
 <body>
@@ -189,27 +194,27 @@ footer{background:var(--navy);padding:28px 22px 20px;text-align:center;margin-to
   </div>
   <div class="form-panel active" id="formLost">
     <div class="form-banner lost">🔴 Fill in as much as you can — more details means a better chance of finding your pet!</div>
-    <div class="form-row"><label class="form-label">What is your pet's name? *</label><input class="form-input" type="text" id="lostName" placeholder="e.g. Max, Luna, Bella"/><div class="form-err" id="errLostName">Please enter your pet's name</div></div>
+    <div class="form-row"><label class="form-label">What is your pet's name? * <button type="button" onclick="startVoice('lostName')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><input class="form-input" type="text" id="lostName" placeholder="e.g. Max, Luna, Bella"/><div class="form-err" id="errLostName">Please enter your pet's name</div></div>
     <div class="form-row-2">
       <div><label class="form-label">Type of pet *</label><select class="form-select" id="lostType"><option value="">Choose...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select><div class="form-err" id="errLostType">Please select a type</div></div>
-      <div><label class="form-label">Color / Breed</label><input class="form-input" type="text" id="lostBreed" placeholder="e.g. Brown Lab"/></div>
+      <div><label class="form-label">Color / Breed <button type="button" onclick="startVoice('lostBreed')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><input class="form-input" type="text" id="lostBreed" placeholder="e.g. Brown Lab"/></div>
     </div>
     <div class="form-row"><label class="form-label">Where was your pet last seen? * <button type="button" onclick="startVoice('lostLoc')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><input class="form-input" type="text" id="lostLoc" placeholder="e.g. Near Speedway & Wilmot"/><div class="form-err" id="errLostLoc">Please enter a location</div></div>
     <div class="form-row"><label class="form-label">Additional details about your pet <button type="button" onclick="startVoice('lostDesc')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><textarea class="form-textarea" id="lostDesc" placeholder="Collar color, any special markings, when they went missing..."></textarea></div>
-    <div class="form-row"><label class="form-label">Your phone number * (so people can reach you)</label><input class="form-input" type="tel" id="lostPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/><div class="form-err" id="errLostPhone">Please enter a valid 10-digit phone number</div></div>
-    <div class="form-row"><label class="form-label">Add a photo — really helps neighbors recognize your pet!</label><div class="photo-upload" onclick="document.getElementById('lostPhoto').click()"><input type="file" id="lostPhoto" accept="image/*" onchange="prevPhoto(this,'lostPrev','lostPhotoHint')"/><div id="lostPhotoHint"><div class="photo-icon">📷</div><div class="photo-txt">Tap here to add a photo<br><strong>JPG or PNG works fine</strong></div></div><img class="photo-prev" id="lostPrev"/></div></div>
+    <div class="form-row"><label class="form-label">Your phone number * <button type="button" onclick="startVoice('lostPhone')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><input class="form-input" type="tel" id="lostPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/><div class="form-err" id="errLostPhone">Please enter a valid 10-digit phone number</div></div>
+    <div class="form-row"><label class="form-label">Add a photo — really helps neighbors recognize your pet!</label><div class="photo-upload" onclick="document.getElementById('lostPhoto').click()"><input type="file" id="lostPhoto" accept="image/*" onchange="prevPhoto(this,'lostPrev','lostPhotoHint')"/><div id="lostPhotoHint"><div class="photo-icon">📷</div><div class="photo-txt">Tap here to add a photo<br><strong>JPG or PNG works fine</strong></div></div><img class="photo-prev" id="lostPrev" onclick="expandPhoto(this)" style="cursor:zoom-in"/></div></div>
     <button class="submit-btn lost-btn" id="lostBtn" onclick="submit('lost')">🚨 Post My Lost Pet Alert</button>
   </div>
   <div class="form-panel" id="formFound">
     <div class="form-banner found">🟢 Thank you for helping! Fill in what you can and we'll alert neighbors right away.</div>
     <div class="form-row-2">
       <div><label class="form-label">Type of pet *</label><select class="form-select" id="foundType"><option value="">Choose...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select><div class="form-err" id="errFoundType">Please select a type</div></div>
-      <div><label class="form-label">Color / Breed</label><input class="form-input" type="text" id="foundBreed" placeholder="e.g. Black cat"/></div>
+      <div><label class="form-label">Color / Breed <button type="button" onclick="startVoice('foundBreed')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><input class="form-input" type="text" id="foundBreed" placeholder="e.g. Black cat"/></div>
     </div>
     <div class="form-row"><label class="form-label">Where did you find this pet? * <button type="button" onclick="startVoice('foundLoc')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><input class="form-input" type="text" id="foundLoc" placeholder="e.g. Near Grant & Swan"/><div class="form-err" id="errFoundLoc">Please enter a location</div></div>
     <div class="form-row"><label class="form-label">Describe the pet <button type="button" onclick="startVoice('foundDesc')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><textarea class="form-textarea" id="foundDesc" placeholder="Does it have a collar? Tags? Any markings? Is it friendly or scared?"></textarea></div>
-    <div class="form-row"><label class="form-label">Your phone number * (so the owner can reach you)</label><input class="form-input" type="tel" id="foundPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/><div class="form-err" id="errFoundPhone">Please enter a valid 10-digit phone number</div></div>
-    <div class="form-row"><label class="form-label">Add a photo of the pet</label><div class="photo-upload" onclick="document.getElementById('foundPhoto').click()"><input type="file" id="foundPhoto" accept="image/*" onchange="prevPhoto(this,'foundPrev','foundPhotoHint')"/><div id="foundPhotoHint"><div class="photo-icon">📷</div><div class="photo-txt">Tap here to add a photo<br><strong>A clear photo helps a lot!</strong></div></div><img class="photo-prev" id="foundPrev"/></div></div>
+    <div class="form-row"><label class="form-label">Your phone number * <button type="button" onclick="startVoice('foundPhone')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><input class="form-input" type="tel" id="foundPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/><div class="form-err" id="errFoundPhone">Please enter a valid 10-digit phone number</div></div>
+    <div class="form-row"><label class="form-label">Add a photo of the pet</label><div class="photo-upload" onclick="document.getElementById('foundPhoto').click()"><input type="file" id="foundPhoto" accept="image/*" onchange="prevPhoto(this,'foundPrev','foundPhotoHint')"/><div id="foundPhotoHint"><div class="photo-icon">📷</div><div class="photo-txt">Tap here to add a photo<br><strong>A clear photo helps a lot!</strong></div></div><img class="photo-prev" id="foundPrev" onclick="expandPhoto(this)" style="cursor:zoom-in"/></div></div>
     <button class="submit-btn found-btn" id="foundBtn" onclick="submit('found')">🟢 Post My Found Pet Alert</button>
   </div>
   <div class="success-panel" id="successPanel"><div class="success-icon" id="successIcon">🐾</div><div class="success-title" id="successTitle">Your Alert Is Posted!</div><div class="success-msg" id="successMsg">Your alert is now live and saved in our database.</div><button class="success-share" onclick="shareApp()">📲 Share This App With Neighbors</button></div>
@@ -287,8 +292,8 @@ footer{background:var(--navy);padding:28px 22px 20px;text-align:center;margin-to
   </div>
 </div>
 <script>
-const URL='https://mlgmigguhljsiopctkkj.supabase.co';
-const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1sZ21pZ2d1aGxqc2lvcGN0a2tqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMDM3NzcsImV4cCI6MjA4OTY3OTc3N30.rwX3Ck09LwcUyT7SntrRA8rtFmExRlPLsG3iQPMjBSs';
+const URL='https://msuqflssqixsplcearxr.supabase.co';
+const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdXFmbHNzcWl4c3BsY2VhcnhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMzU3NDgsImV4cCI6MjA4OTcxMTc0OH0.BlrDiIu2YdDB7oHJ0fFiSEiBDQGvHCFAUaysR6O24zk';
 const H={'Content-Type':'application/json','apikey':KEY,'Authorization':'Bearer '+KEY};
 
 async function getPets(){try{const r=await fetch(URL+'/rest/v1/pets?select=*&order=created_at.desc',{headers:H});return await r.json()}catch(e){return[]}}
@@ -366,6 +371,16 @@ async function submit(type){
     try{
       await addPet({status:'lost',name,type:pt,breed:document.getElementById('lostBreed').value.trim()||pt,location:loc,description:document.getElementById('lostDesc').value.trim(),phone:fmtPhone(phone)});
       showSuccess('lost',name);loadAlertBanner();
+
+function expandPhoto(img){
+  document.getElementById('photoExpandImg').src = img.src;
+  document.getElementById('photoExpandOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeExpandPhoto(){
+  document.getElementById('photoExpandOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
     }catch(e){alert('Error posting. Please try again.');console.error(e)}
     finally{btn.disabled=false;btn.textContent='🚨 Post My Lost Pet Alert'}
   } else {
@@ -470,6 +485,16 @@ async function markReunited(id,name){
     await patchPet(id,{status:'reunited'});
     closeModal({target:document.getElementById('modalOverlay')});
     renderListings();loadAlertBanner();
+
+function expandPhoto(img){
+  document.getElementById('photoExpandImg').src = img.src;
+  document.getElementById('photoExpandOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeExpandPhoto(){
+  document.getElementById('photoExpandOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
     alert('🎉 Wonderful news! So glad '+(name||'your pet')+' is safe at home! The whole Tucson community is smiling right now. 💙');
   }catch(e){alert('Error updating. Please try again.')}
 }
@@ -481,6 +506,16 @@ function shareApp(){
 }
 
 loadAlertBanner();
+
+function expandPhoto(img){
+  document.getElementById('photoExpandImg').src = img.src;
+  document.getElementById('photoExpandOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeExpandPhoto(){
+  document.getElementById('photoExpandOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
 
 let strayLatLng = null;
 let strayPhotoData = null;
@@ -555,10 +590,25 @@ async function submitStray(){
     document.getElementById('strayFormView').style.display='none';
     document.getElementById('straySuccessView').style.display='block';
     loadAlertBanner();
+
+function expandPhoto(img){
+  document.getElementById('photoExpandImg').src = img.src;
+  document.getElementById('photoExpandOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeExpandPhoto(){
+  document.getElementById('photoExpandOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
   }catch(e){alert('Error posting. Please try again.');console.error(e);}
   finally{btn.disabled=false;btn.textContent='📸 Post This Sighting';}
 }
 
 </script>
+
+<div class="photo-expand-overlay" id="photoExpandOverlay" onclick="closeExpandPhoto()">
+  <div class="photo-expand-close" onclick="closeExpandPhoto()">✕</div>
+  <img id="photoExpandImg" src="" alt="Pet photo"/>
+</div>
 </body>
 </html>
