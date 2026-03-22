@@ -78,7 +78,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(2,8,16,0.98
 .listing-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;display:flex;gap:14px;align-items:flex-start;cursor:pointer;transition:border-color 0.2s}
 .listing-card:hover{border-color:var(--border-bright)}
 .listing-card.found-card{border-color:rgba(0,255,136,0.15)}
-.listing-card.reunited{opacity:0.5}
+.listing-card.reunited{opacity:0.5}.listing-card.stray-card{border-color:rgba(255,215,0,0.25)}
 .listing-photo{width:70px;height:70px;border-radius:10px;background:var(--teal-dim);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0;overflow:hidden}
 .listing-photo img{width:100%;height:100%;object-fit:cover}
 .listing-info{flex:1;min-width:0}
@@ -86,7 +86,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(2,8,16,0.98
 .listing-type{font-family:'Share Tech Mono',monospace;font-size:0.58rem;padding:2px 8px;border-radius:4px;letter-spacing:0.08em;flex-shrink:0}
 .type-lost{background:rgba(255,68,102,0.12);color:var(--red);border:1px solid rgba(255,68,102,0.3)}
 .type-found{background:rgba(0,255,136,0.1);color:var(--green);border:1px solid rgba(0,255,136,0.3)}
-.type-reunited{background:rgba(255,255,255,0.06);color:var(--text-dim);border:1px solid rgba(255,255,255,0.1)}
+.type-reunited{background:rgba(255,255,255,0.06);color:var(--text-dim);border:1px solid rgba(255,255,255,0.1)}.type-stray{background:rgba(255,215,0,0.1);color:var(--gold);border:1px solid rgba(255,215,0,0.3)}
 .listing-name{font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .listing-breed{font-size:0.82rem;color:#7A9AB8;font-weight:300;margin-bottom:4px}
 .listing-loc{font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--text-dim)}
@@ -132,6 +132,36 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
 .modal-reunite{width:100%;background:transparent;color:var(--green);font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.06em;padding:12px;border-radius:10px;border:1px solid rgba(0,255,136,0.3);cursor:pointer;transition:all 0.2s}
 .modal-reunite:hover{background:rgba(0,255,136,0.08)}
 .modal-close{position:absolute;top:16px;right:16px;width:30px;height:30px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text-dim);cursor:pointer}
+
+.fab-stray{position:fixed;bottom:24px;right:20px;z-index:500;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#FF9500);border:none;box-shadow:0 4px 20px rgba(255,215,0,0.45);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.6rem;transition:transform 0.2s,box-shadow 0.2s;-webkit-tap-highlight-color:transparent}
+.fab-stray:active{transform:scale(0.92)}
+.fab-stray-label{position:fixed;bottom:90px;right:14px;z-index:500;background:rgba(2,8,16,0.92);border:1px solid var(--gold);color:var(--gold);font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap}
+.stray-modal{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);display:none;align-items:flex-end;justify-content:center}
+.stray-modal.open{display:flex}
+.stray-sheet{background:#040d1a;border:1px solid var(--border-bright);border-radius:20px 20px 0 0;padding:24px 20px 40px;width:100%;max-width:480px;animation:slideUp 0.3s ease both;position:relative}
+.stray-handle{width:36px;height:3px;background:var(--border-bright);border-radius:2px;margin:0 auto 18px}
+.stray-title{font-family:'Orbitron',sans-serif;font-size:0.9rem;font-weight:700;color:var(--gold);margin-bottom:4px}
+.stray-sub{font-size:0.82rem;color:var(--text-dim);margin-bottom:18px;font-weight:300}
+.stray-photo-zone{width:100%;aspect-ratio:4/3;border:2px dashed rgba(255,215,0,0.4);border-radius:14px;background:rgba(0,0,0,0.4);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;margin-bottom:14px;overflow:hidden;position:relative}
+.stray-photo-zone img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:12px}
+.stray-photo-hint{display:flex;flex-direction:column;align-items:center;gap:6px;z-index:1}
+.stray-photo-icon{font-size:2.4rem}
+.stray-photo-txt{font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--gold);letter-spacing:0.06em}
+.stray-loc-row{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:12px;cursor:pointer}
+.stray-loc-icon{font-size:1.2rem;flex-shrink:0}
+.stray-loc-text{font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--text-dim);flex:1;line-height:1.4}
+.stray-loc-text.got{color:var(--teal)}
+.stray-row{margin-bottom:12px}
+.stray-input{width:100%;background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-family:'Rajdhani',sans-serif;font-size:1.05rem;color:var(--text);outline:none}
+.stray-input:focus{border-color:var(--border-bright)}
+.stray-input::placeholder{color:var(--text-dim)}
+.stray-submit{width:100%;background:linear-gradient(135deg,var(--gold),#FF9500);color:#020810;font-family:'Orbitron',sans-serif;font-size:0.82rem;font-weight:700;letter-spacing:0.06em;padding:16px;border-radius:12px;border:none;cursor:pointer;margin-top:4px;box-shadow:0 4px 16px rgba(255,215,0,0.3)}
+.stray-submit:disabled{opacity:0.6;cursor:not-allowed}
+.stray-close{position:absolute;top:14px;right:16px;width:30px;height:30px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text-dim);cursor:pointer}
+.stray-success{text-align:center;padding:16px 0 8px}
+.stray-success-icon{font-size:2.5rem;margin-bottom:10px}
+.stray-success-title{font-family:'Orbitron',sans-serif;font-size:0.95rem;font-weight:700;color:var(--gold);margin-bottom:6px}
+.stray-success-msg{font-size:0.85rem;color:#8AADCC;font-weight:300;line-height:1.6}
 </style>
 </head>
 <body>
@@ -209,6 +239,45 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
     </div>
   </div>
   <footer><a class="footer-back" href="tucson-connect.html">← Back to Tucson Connect</a><div class="footer-credit">Tucson Pet Finder · 100% Free · Real Database · Built by Lamar Myers<br>VTREI, LLC · Tucson, AZ · 520-258-2714</div></footer>
+
+<!-- Spot a Stray FAB -->
+<div class="fab-stray-label">📸 SPOT A STRAY</div>
+<button class="fab-stray" onclick="openStrayModal()" aria-label="Spot a stray pet">📷</button>
+
+<!-- Spot a Stray Modal -->
+<div class="stray-modal" id="strayModal" onclick="closeStrayModal(event)">
+  <div class="stray-sheet">
+    <div class="stray-close" onclick="closeStrayModal()">✕</div>
+    <div class="stray-handle"></div>
+    <div id="strayFormView">
+      <div class="stray-title">📸 SPOT A STRAY</div>
+      <div class="stray-sub">Saw a stray? Snap a photo — neighbors will see it instantly.</div>
+      <div class="stray-photo-zone" id="strayPhotoZone" onclick="document.getElementById('strayPhotoInput').click()">
+        <input type="file" id="strayPhotoInput" accept="image/*" capture="environment" style="display:none" onchange="loadStrayPhoto(this)"/>
+        <div class="stray-photo-hint" id="strayPhotoHint">
+          <div class="stray-photo-icon">📷</div>
+          <div class="stray-photo-txt">TAP TO TAKE PHOTO</div>
+        </div>
+        <img id="strayPhotoPreview" style="display:none"/>
+      </div>
+      <div class="stray-loc-row" id="strayLocRow" onclick="getStrayLocation()">
+        <div class="stray-loc-icon">📍</div>
+        <div class="stray-loc-text" id="strayLocText">Tap to capture your GPS location</div>
+      </div>
+      <div class="stray-row"><input class="stray-input" type="text" id="strayNote" placeholder="Quick note — e.g. 'limping, near park entrance'" maxlength="120"/></div>
+      <div class="stray-row"><input class="stray-input" type="tel" id="strayPhone" placeholder="Your phone (optional) 520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/></div>
+      <button class="stray-submit" id="straySubmitBtn" onclick="submitStray()">📸 POST STRAY SIGHTING</button>
+    </div>
+    <div id="straySuccessView" style="display:none">
+      <div class="stray-success">
+        <div class="stray-success-icon">🙌</div>
+        <div class="stray-success-title">Sighting Posted!</div>
+        <div class="stray-success-msg">Your photo and location are live in the Tucson database. Every neighbor who opens this app will see it. Thank you for looking out! 🐾</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal-sheet" style="position:relative">
@@ -356,9 +425,9 @@ async function renderListings(){
   if(!pets.length){c.innerHTML='<div class="state-box"><div class="empty-icon">🐾</div><div class="empty-title">No alerts yet</div><div class="empty-sub">Be the first to post a lost or found pet alert for Tucson!</div></div>';return}
   [...active,...reunited].forEach(pet=>{
     const d=document.createElement('div');
-    d.className='listing-card'+(pet.status==='found'?' found-card':'')+(pet.status==='reunited'?' reunited':'');
+    d.className='listing-card'+(pet.status==='found'?' found-card':'')+(pet.status==='stray'?' stray-card':'')+(pet.status==='reunited'?' reunited':'');
     d.onclick=()=>openModal(pet);
-    d.innerHTML=`<div class="listing-photo">${pet.photo_url?`<img src="${pet.photo_url}"/>`:(petEmoji(pet.type))}</div><div class="listing-info"><div class="listing-top"><span class="listing-type type-${pet.status}">${pet.status.toUpperCase()}</span><span class="listing-name">${pet.name||'Unknown'}</span></div><div class="listing-breed">${pet.breed||pet.type}</div><div class="listing-loc">📍 ${pet.location}</div></div><div class="listing-time">${timeAgo(pet.created_at)}</div>`;
+    d.innerHTML=`<div class="listing-photo">${pet.photo_url?`<img src="${pet.photo_url}"/>`:(petEmoji(pet.type))}</div><div class="listing-info"><div class="listing-top"><span class="listing-type type-${pet.status}">${pet.status==='stray'?'STRAY':pet.status.toUpperCase()}</span><span class="listing-name">${pet.name||'Unknown'}</span></div><div class="listing-breed">${pet.breed||pet.type}</div><div class="listing-loc">📍 ${pet.location}</div></div><div class="listing-time">${timeAgo(pet.created_at)}</div>`;
     c.appendChild(d);
   });
 }
@@ -378,7 +447,7 @@ function openModal(pet){
   document.getElementById('mTitle').textContent=(pet.name||'Unknown')+(pet.status==='lost'?' — MISSING':pet.status==='found'?' — FOUND':' — REUNITED 🎉');
   document.getElementById('mBreed').textContent=(pet.breed||pet.type)+' · '+pet.type;
   document.getElementById('mDesc').textContent=pet.description||'No additional description.';
-  document.getElementById('mDetails').innerHTML=`<div class="modal-detail"><span class="modal-dlbl">STATUS</span><span class="modal-dval" style="color:${pet.status==='lost'?'var(--red)':pet.status==='found'?'var(--green)':'var(--text-dim)'}">${pet.status.toUpperCase()}</span></div><div class="modal-detail"><span class="modal-dlbl">LOCATION</span><span class="modal-dval">${pet.location}</span></div><div class="modal-detail" style="border:none"><span class="modal-dlbl">POSTED</span><span class="modal-dval">${timeAgo(pet.created_at)}</span></div>`;
+  document.getElementById('mDetails').innerHTML=`<div class="modal-detail"><span class="modal-dlbl">STATUS</span><span class="modal-dval" style="color:${pet.status==='lost'?'var(--red)':pet.status==='found'?'var(--green)':'var(--text-dim)'}">${pet.status==='stray'?'STRAY':pet.status.toUpperCase()}</span></div><div class="modal-detail"><span class="modal-dlbl">LOCATION</span><span class="modal-dval">${pet.location}</span></div><div class="modal-detail" style="border:none"><span class="modal-dlbl">POSTED</span><span class="modal-dval">${timeAgo(pet.created_at)}</span></div>`;
   const cb=document.getElementById('mCall');
   if(pet.phone&&pet.status!=='reunited'){cb.textContent='📞 Call '+pet.phone;cb.onclick=()=>window.location.href='tel:'+pet.phone.replace(/\D/g,'');cb.style.display='block';}
   else cb.style.display='none';
@@ -411,6 +480,85 @@ function shareApp(){
 }
 
 loadAlertBanner();
+
+let strayLatLng = null;
+let strayPhotoData = null;
+
+function openStrayModal(){
+  document.getElementById('strayModal').classList.add('open');
+  document.getElementById('strayFormView').style.display='block';
+  document.getElementById('straySuccessView').style.display='none';
+  document.body.style.overflow='hidden';
+}
+
+function closeStrayModal(e){
+  if(e && e.target !== document.getElementById('strayModal') && !e.target.classList.contains('stray-close')) return;
+  document.getElementById('strayModal').classList.remove('open');
+  document.body.style.overflow='';
+  // reset
+  strayLatLng=null; strayPhotoData=null;
+  document.getElementById('strayPhotoPreview').style.display='none';
+  document.getElementById('strayPhotoHint').style.display='flex';
+  document.getElementById('strayLocText').textContent='Tap to capture your GPS location';
+  document.getElementById('strayLocText').className='stray-loc-text';
+  document.getElementById('strayNote').value='';
+  document.getElementById('strayPhone').value='';
+  document.getElementById('strayPhotoInput').value='';
+}
+
+function loadStrayPhoto(input){
+  const f=input.files[0]; if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    strayPhotoData=e.target.result;
+    const img=document.getElementById('strayPhotoPreview');
+    img.src=strayPhotoData; img.style.display='block';
+    document.getElementById('strayPhotoHint').style.display='none';
+  };
+  r.readAsDataURL(f);
+}
+
+function getStrayLocation(){
+  const el=document.getElementById('strayLocText');
+  el.textContent='📡 Getting your location...';
+  if(!navigator.geolocation){el.textContent='GPS not available on this device';return;}
+  navigator.geolocation.getCurrentPosition(
+    pos=>{
+      strayLatLng={lat:pos.coords.latitude,lng:pos.coords.longitude};
+      el.textContent='✅ Location captured ('+strayLatLng.lat.toFixed(4)+', '+strayLatLng.lng.toFixed(4)+')';
+      el.className='stray-loc-text got';
+    },
+    ()=>{el.textContent='Could not get location — tap to try again';el.className='stray-loc-text';}
+  );
+}
+
+async function submitStray(){
+  if(!strayPhotoData){alert('Please take or upload a photo first!');return;}
+  const btn=document.getElementById('straySubmitBtn');
+  btn.disabled=true; btn.textContent='POSTING...';
+  const note=document.getElementById('strayNote').value.trim();
+  const phone=document.getElementById('strayPhone').value.trim();
+  const locStr=strayLatLng
+    ?'GPS: '+strayLatLng.lat.toFixed(5)+', '+strayLatLng.lng.toFixed(5)
+    :'Location not captured';
+  try{
+    await addPet({
+      status:'stray',
+      name:'Stray Sighting',
+      type:'Unknown',
+      breed:'Unknown',
+      location:locStr,
+      description:note||'No additional notes.',
+      phone:phone?fmtPhone(phone):'',
+      photo_url:strayPhotoData
+    });
+    document.getElementById('strayFormView').style.display='none';
+    document.getElementById('straySuccessView').style.display='block';
+    loadAlertBanner();
+  }catch(e){alert('Error posting. Please try again.');console.error(e);}
+  finally{btn.disabled=false;btn.textContent='📸 POST STRAY SIGHTING';}
+}
+
 </script>
 </body>
 </html>
