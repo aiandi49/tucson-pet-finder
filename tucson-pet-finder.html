@@ -377,49 +377,52 @@ function startVoice(fieldId){
   const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SpeechRecognition){alert('Voice input not supported on this browser. Try Chrome.');return;}
   const el=document.getElementById(fieldId);
+  const isPhone=el.type==='tel'||fieldId.toLowerCase().includes('phone');
+
+  if(isPhone){
+    // PHONE: single-shot, final-only, digits extracted immediately
+    const recog=new SpeechRecognition();
+    recog.lang='en-US';
+    recog.continuous=false;
+    recog.interimResults=false;
+    recog.maxAlternatives=1;
+    el.placeholder='🎤 Say your number...';
+    el.style.borderColor='var(--teal)';
+    recog.onresult=e=>{
+      const spoken=e.results[0][0].transcript;
+      const digits=spoken.replace(/\D/g,'').slice(0,10);
+      if(digits.length>=7)el.value=digits.slice(0,3)+'-'+digits.slice(3,6)+'-'+digits.slice(6);
+      else if(digits.length>=4)el.value=digits.slice(0,3)+'-'+digits.slice(3);
+      else if(digits.length>0)el.value=digits;
+    };
+    recog.onerror=()=>{el.placeholder='520-XXX-XXXX';el.style.borderColor='var(--border)';};
+    recog.onend=()=>{el.placeholder='520-XXX-XXXX';el.style.borderColor='var(--border)';};
+    recog.start();
+    return;
+  }
+
+  // ALL OTHER FIELDS: continuous, 15-second timeout
   const savedVal=el.value;
   el.value='';
-  
   const recog=new SpeechRecognition();
   recog.lang='en-US';
   recog.continuous=true;
   recog.interimResults=true;
   recog.maxAlternatives=1;
-  
   let finalTranscript='';
   let silenceTimer=null;
-  const TIMEOUT=15000; // 15 seconds
-  
-  function resetTimer(){
-    if(silenceTimer)clearTimeout(silenceTimer);
-    silenceTimer=setTimeout(()=>{recog.stop()},TIMEOUT);
-  }
-  
-  recog.onstart=()=>{
-    el.placeholder='🎤 Listening... take your time (15s)';
-    el.style.borderColor='var(--teal)';
-    resetTimer();
-  };
-  
+  const TIMEOUT=15000;
+  function resetTimer(){if(silenceTimer)clearTimeout(silenceTimer);silenceTimer=setTimeout(()=>{recog.stop()},TIMEOUT);}
+  recog.onstart=()=>{el.placeholder='🎤 Listening... take your time (15s)';el.style.borderColor='var(--teal)';resetTimer();};
   recog.onresult=e=>{
-    let interim='';
-    finalTranscript='';
+    let interim='';finalTranscript='';
     for(let i=0;i<e.results.length;i++){
       if(e.results[i].isFinal)finalTranscript+=e.results[i][0].transcript+' ';
       else interim+=e.results[i][0].transcript;
     }
-    let val=(finalTranscript+interim).trim();
-    // If phone field — extract digits only and format
-    if(el.type==='tel'||fieldId.toLowerCase().includes('phone')){
-      const digits=val.replace(/\D/g,'').slice(0,10);
-      if(digits.length>=7)val=digits.slice(0,3)+'-'+digits.slice(3,6)+'-'+digits.slice(6);
-      else if(digits.length>=4)val=digits.slice(0,3)+'-'+digits.slice(3);
-      else val=digits;
-    }
-    el.value=val;
+    el.value=(finalTranscript+interim).trim();
     resetTimer();
   };
-  
   recog.onerror=e=>{
     if(e.error==='no-speech')return;
     el.value=savedVal||finalTranscript||'';
@@ -427,14 +430,11 @@ function startVoice(fieldId){
     el.style.borderColor='var(--red)';
     if(silenceTimer)clearTimeout(silenceTimer);
   };
-  
   recog.onend=()=>{
     if(silenceTimer)clearTimeout(silenceTimer);
     if(finalTranscript.trim())el.value=finalTranscript.trim();
-    el.placeholder='';
-    el.style.borderColor='var(--border)';
+    el.placeholder='';el.style.borderColor='var(--border)';
   };
-  
   recog.start();
 }
 
@@ -552,7 +552,7 @@ function openModal(pet){
   document.getElementById('mTitle').textContent=(pet.name||'Unknown')+(pet.status==='lost'?' — MISSING':pet.status==='found'?' — FOUND':' — REUNITED 🎉');
   document.getElementById('mBreed').textContent=(pet.breed||pet.type)+' · '+pet.type;
   document.getElementById('mDesc').textContent=pet.description||'No additional description.';
-  document.getElementById('mDetails').innerHTML=`<div class="modal-detail"><span class="modal-dlbl">STATUS</span><span class="modal-dval" style="color:${pet.status==='lost'?'var(--red)':pet.status==='found'?'var(--green)':'var(--text-dim)'}">${pet.status==='stray'?'STRAY':pet.status.toUpperCase()}</span></div><div class="modal-detail"><span class="modal-dlbl">LOCATION</span><span class="modal-dval">${pet.location}</span></div><div class="modal-detail" style="border:none"><span class="modal-dlbl">POSTED</span><span class="modal-dval">${timeAgo(pet.created_at)}</span></div>`;
+  document.getElementById('mDetails').innerHTML=`<div class="modal-detail"><span class="modal-dlbl">STATUS</span><span class="modal-dval" style="color:${pet.status==='lost'?'var(--red)':pet.status==='found'?'var(--green)':'var(--text-dim)'}">${pet.status==='stray'?'STRAY':pet.status.toUpperCase()}</span></div><div class="modal-detail"><span class="modal-dlbl">LOCATION</span><span class="modal-dval" style="color:var(--text-dim);font-weight:400">${pet.location}</span></div><div class="modal-detail" style="border:none"><span class="modal-dlbl">POSTED</span><span class="modal-dval" style="color:var(--text-dim);font-weight:400">${timeAgo(pet.created_at)}</span></div>`;
   const cb=document.getElementById('mCall');
   if(pet.phone&&pet.status!=='reunited'){cb.textContent='📞 Call '+pet.phone;cb.onclick=()=>window.location.href='tel:'+pet.phone.replace(/\D/g,'');cb.style.display='block';}
   else cb.style.display='none';
