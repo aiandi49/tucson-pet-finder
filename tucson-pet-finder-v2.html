@@ -155,7 +155,7 @@ footer{background:var(--navy);padding:28px 22px 20px;text-align:center;margin-to
 
 .fab-stray{position:fixed;bottom:24px;right:20px;z-index:500;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#B8860B,#E6A817);border:none;box-shadow:0 4px 20px rgba(184,134,11,0.4);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.6rem;transition:transform 0.2s;-webkit-tap-highlight-color:transparent}
 .fab-stray:active{transform:scale(0.92)}
-.fab-stray-label{position:fixed;bottom:90px;right:14px;z-index:500;background:var(--navy);color:#E6A817;font-size:0.65rem;font-weight:700;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap;border:1px solid rgba(184,134,11,0.4)}
+.fab-stray-label{position:fixed;bottom:38px;right:88px;z-index:500;background:var(--navy);color:#E6A817;font-size:0.65rem;font-weight:700;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap;border:1px solid rgba(184,134,11,0.4)}
 .stray-modal{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,0.6);display:none;align-items:flex-end;justify-content:center}
 .stray-modal.open{display:flex}
 .stray-sheet{background:var(--white);border-radius:20px 20px 0 0;padding:24px 20px 40px;width:100%;max-width:480px;animation:slideUp 0.3s ease both;position:relative;box-shadow:0 -4px 30px rgba(0,0,0,0.15)}
@@ -221,13 +221,13 @@ footer{background:var(--navy);padding:28px 22px 20px;text-align:center;margin-to
 .verify-input{width:100%;background:var(--bg);border:2px solid var(--border);border-radius:10px;padding:12px 14px;font-family:'Source Sans 3',sans-serif;font-size:1rem;color:var(--text);outline:none;margin-top:6px;transition:border-color 0.2s}
 .verify-input:focus{border-color:var(--teal2)}
 .verify-input::placeholder{color:var(--text-light)}
-.reg-fab{position:fixed;bottom:96px;right:20px;z-index:500;background:linear-gradient(135deg,#1A2E4A,#2C4A6E);border:none;border-radius:50%;width:52px;height:52px;font-size:1.3rem;cursor:pointer;box-shadow:0 4px 16px rgba(26,46,74,0.4);display:flex;align-items:center;justify-content:center;transition:transform 0.2s}
+.reg-fab{position:fixed;bottom:100px;right:20px;z-index:500;background:linear-gradient(135deg,#1A2E4A,#2C4A6E);border:none;border-radius:50%;width:54px;height:54px;font-size:1.3rem;cursor:pointer;box-shadow:0 4px 16px rgba(26,46,74,0.4);display:flex;align-items:center;justify-content:center;transition:transform 0.2s}
 .reg-fab:active{transform:scale(0.92)}
-.reg-fab-label{position:fixed;bottom:152px;right:14px;z-index:500;background:var(--navy);color:#fff;font-size:0.65rem;font-weight:700;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap}
-.sos-fab{position:fixed;bottom:168px;right:20px;z-index:500;background:linear-gradient(135deg,#cc0000,#ff3322);border:none;border-radius:50%;width:56px;height:56px;font-size:1.4rem;cursor:pointer;box-shadow:0 4px 20px rgba(200,0,0,0.5);display:flex;align-items:center;justify-content:center;animation:sosPulse 2.5s ease-in-out infinite}
+.reg-fab-label{position:fixed;bottom:116px;right:84px;z-index:500;background:var(--navy);color:#fff;font-size:0.65rem;font-weight:700;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap}
+.sos-fab{position:fixed;bottom:176px;right:20px;z-index:500;background:linear-gradient(135deg,#cc0000,#ff3322);border:none;border-radius:50%;width:54px;height:54px;font-size:1.4rem;cursor:pointer;box-shadow:0 4px 20px rgba(200,0,0,0.5);display:flex;align-items:center;justify-content:center;animation:sosPulse 2.5s ease-in-out infinite}
 .sos-fab.no-profile{display:none}.sos-fab.has-profile{display:flex}
 @keyframes sosPulse{0%,100%{box-shadow:0 4px 20px rgba(200,0,0,0.5)}50%{box-shadow:0 4px 32px rgba(255,50,0,0.8)}}
-.sos-fab-label{position:fixed;bottom:228px;right:14px;z-index:500;background:var(--navy);border:1px solid rgba(200,0,0,0.4);color:#cc0000;font-size:0.65rem;font-weight:700;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap;display:none}
+.sos-fab-label{position:fixed;bottom:192px;right:84px;z-index:500;background:var(--navy);border:1px solid rgba(200,0,0,0.4);color:#cc0000;font-size:0.65rem;font-weight:700;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap;display:none}
 .sos-fab.has-profile ~ .sos-fab-label{display:block}
 .pet-slot{background:var(--bg2);border:2px dashed var(--border-dark);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:all 0.2s}
 .pet-slot:hover{border-color:var(--teal2);background:var(--teal-light)}
@@ -545,33 +545,54 @@ function _updateSpeakBtns(listening) {
 }
 
 function startVoice(fieldId) {
-  const recog = _getRecog();
-  if (!recog) { alert('Voice input not supported. Try Chrome on Android or Safari on iPhone.'); return; }
-  if (_isListening && _activeField === fieldId) { _stopListening(); return; }
-  if (_isListening) { _stopListening(); setTimeout(() => _doStart(fieldId), 300); return; }
+  if (!SR) { alert('Voice input not supported. Try Chrome on Android or Safari on iPhone.'); return; }
+  if (_isListening) {
+    try { if (_recog) _recog.abort(); } catch(e) {}
+    _recog = null;
+    _isListening = false;
+    if (_activeField === fieldId) {
+      const el = document.getElementById(fieldId);
+      if (el) { el.style.borderColor='var(--border)'; el.placeholder=''; }
+      _updateSpeakBtns(false);
+      clearTimeout(_silenceTimer);
+      return;
+    }
+  }
   _doStart(fieldId);
 }
 
 function _doStart(fieldId) {
-  const recog = _getRecog();
   const el = document.getElementById(fieldId);
-  if (!el || !recog) return;
+  if (!el) return;
   const isPhone = el.type === 'tel' || fieldId.toLowerCase().includes('phone');
+
+  if (_recog) {
+    try { _recog.abort(); } catch(e) {}
+    _recog = null;
+  }
+
+  const recog = _getRecog();
+  if (!recog) return;
 
   _activeField = fieldId;
   _finalText = '';
+  _isListening = true;
   recog.continuous = !isPhone;
   recog.interimResults = !isPhone;
 
   el.style.borderColor = 'var(--teal2)';
   el.placeholder = isPhone ? '🎤 Say your number...' : '🎤 Listening... (15s)';
-  _isListening = true;
+  _updateSpeakBtns(true);
   _resetSilence();
 
-  try { recog.start(); }
-  catch(e) {
-    _recog = null; _isListening = false;
-    setTimeout(() => _doStart(fieldId), 400);
+  try {
+    recog.start();
+  } catch(e) {
+    console.warn('recog.start error:', e);
+    _isListening = false;
+    el.placeholder = '';
+    el.style.borderColor = 'var(--border)';
+    _updateSpeakBtns(false);
   }
 }
 

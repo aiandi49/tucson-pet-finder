@@ -163,9 +163,9 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
 .modal-reunite:hover{background:rgba(0,255,136,0.08)}
 .modal-close{position:absolute;top:16px;right:16px;width:30px;height:30px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text-dim);cursor:pointer}
 
-.fab-stray{position:fixed;bottom:24px;right:20px;z-index:500;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#FF9500);border:none;box-shadow:0 4px 20px rgba(255,215,0,0.45);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.6rem;transition:transform 0.2s,box-shadow 0.2s;-webkit-tap-highlight-color:transparent}
+.fab-stray{position:fixed;bottom:24px;right:20px;z-index:500;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#FF9500);border:none;box-shadow:0 4px 20px rgba(255,215,0,0.45);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.5rem;transition:transform 0.2s,box-shadow 0.2s;-webkit-tap-highlight-color:transparent}
 .fab-stray:active{transform:scale(0.92)}
-.fab-stray-label{position:fixed;bottom:90px;right:14px;z-index:500;background:rgba(2,8,16,0.92);border:1px solid var(--gold);color:var(--gold);font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap}
+.fab-stray-label{position:fixed;bottom:38px;right:88px;z-index:500;background:rgba(2,8,16,0.92);border:1px solid var(--gold);color:var(--gold);font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap}
 .stray-modal{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);display:none;align-items:flex-end;justify-content:center}
 .stray-modal.open{display:flex}
 .stray-sheet{background:#040d1a;border:1px solid var(--border-bright);border-radius:20px 20px 0 0;padding:24px 20px 40px;width:100%;max-width:480px;animation:slideUp 0.3s ease both;position:relative}
@@ -236,19 +236,19 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
 .verify-input::placeholder{color:var(--text-dim)}
 
 /* ── PET REGISTRATION ── */
-.reg-fab{position:fixed;bottom:96px;right:20px;z-index:500;background:linear-gradient(135deg,#4444ff,#8844ff);border:none;border-radius:50%;width:52px;height:52px;font-size:1.3rem;cursor:pointer;box-shadow:0 4px 16px rgba(100,100,255,0.4);display:flex;align-items:center;justify-content:center;transition:transform 0.2s}
+.reg-fab{position:fixed;bottom:100px;right:20px;z-index:500;background:linear-gradient(135deg,#4444ff,#8844ff);border:none;border-radius:50%;width:54px;height:54px;font-size:1.3rem;cursor:pointer;box-shadow:0 4px 16px rgba(100,100,255,0.4);display:flex;align-items:center;justify-content:center;transition:transform 0.2s}
 .reg-fab:active{transform:scale(0.92)}
-.reg-fab-label{position:fixed;bottom:152px;right:14px;z-index:500;background:rgba(2,8,16,0.92);border:1px solid rgba(100,100,255,0.4);color:#8888ff;font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.06em;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap}
+.reg-fab-label{position:fixed;bottom:116px;right:84px;z-index:500;background:rgba(2,8,16,0.92);border:1px solid rgba(100,100,255,0.4);color:#8888ff;font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.06em;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap}
 .verified-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(0,255,212,0.1);border:1px solid var(--border-bright);color:var(--teal);font-family:'Share Tech Mono',monospace;font-size:0.62rem;padding:3px 9px;border-radius:20px;letter-spacing:0.06em}
 .listing-verified{margin-top:4px}
 
 /* ── SOS EMERGENCY BUTTON ── */
-.sos-fab{position:fixed;bottom:168px;right:20px;z-index:500;background:linear-gradient(135deg,#cc0000,#ff3322);border:none;border-radius:50%;width:56px;height:56px;font-size:1.4rem;cursor:pointer;box-shadow:0 4px 20px rgba(200,0,0,0.6);display:flex;align-items:center;justify-content:center;animation:sosPulse 2.5s ease-in-out infinite;-webkit-tap-highlight-color:transparent}
+.sos-fab{position:fixed;bottom:176px;right:20px;z-index:500;background:linear-gradient(135deg,#cc0000,#ff3322);border:none;border-radius:50%;width:54px;height:54px;font-size:1.4rem;cursor:pointer;box-shadow:0 4px 20px rgba(200,0,0,0.6);display:flex;align-items:center;justify-content:center;animation:sosPulse 2.5s ease-in-out infinite;-webkit-tap-highlight-color:transparent}
 .sos-fab.has-profile{display:flex}
 .sos-fab.no-profile{display:none}
 @keyframes sosPulse{0%,100%{box-shadow:0 4px 20px rgba(200,0,0,0.6)}50%{box-shadow:0 4px 32px rgba(255,50,0,0.9)}}
 .sos-fab:active{transform:scale(0.92)}
-.sos-fab-label{position:fixed;bottom:228px;right:14px;z-index:500;background:rgba(2,8,16,0.92);border:1px solid rgba(200,0,0,0.5);color:#ff4444;font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap;display:none}
+.sos-fab-label{position:fixed;bottom:192px;right:84px;z-index:500;background:rgba(2,8,16,0.92);border:1px solid rgba(200,0,0,0.5);color:#ff4444;font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap;display:none}
 .sos-fab.has-profile ~ .sos-fab-label{display:block}
 
 /* ── PROFILE SHEET ── */
@@ -593,39 +593,59 @@ function _updateSpeakBtns(listening) {
 }
 
 function startVoice(fieldId) {
-  const recog = _getRecog();
-  if (!recog) { alert('Voice input not supported on this browser. Try Chrome on Android or Safari on iPhone.'); return; }
-
-  // If already listening to THIS field — stop it
-  if (_isListening && _activeField === fieldId) { _stopListening(); return; }
-
-  // Stop any active session first
-  if (_isListening) { _stopListening(); setTimeout(() => _doStart(fieldId), 300); return; }
+  if (!SR) { alert('Voice input not supported. Try Chrome on Android or Safari on iPhone.'); return; }
+  // Stop current session if any, then start new one immediately
+  // Do NOT use setTimeout — iOS Safari requires start() in direct gesture chain
+  if (_isListening) {
+    try { if (_recog) _recog.abort(); } catch(e) {}
+    _recog = null;
+    _isListening = false;
+    if (_activeField === fieldId) {
+      // Same field tapped again = toggle off
+      const el = document.getElementById(fieldId);
+      if (el) { el.style.borderColor='var(--border)'; el.placeholder=''; }
+      _updateSpeakBtns(false);
+      clearTimeout(_silenceTimer);
+      return;
+    }
+  }
   _doStart(fieldId);
 }
 
 function _doStart(fieldId) {
-  const recog = _getRecog();
   const el = document.getElementById(fieldId);
-  if (!el || !recog) return;
+  if (!el) return;
   const isPhone = el.type === 'tel' || fieldId.toLowerCase().includes('phone');
+
+  // Always create fresh instance for iOS Safari compatibility
+  // iOS loses user-gesture context if we reuse across calls
+  if (_recog) {
+    try { _recog.abort(); } catch(e) {}
+    _recog = null;
+  }
+
+  const recog = _getRecog();
+  if (!recog) return;
 
   _activeField = fieldId;
   _finalText = '';
-  recog.continuous = !isPhone;      // phone = single-shot; others = continuous
-  recog.interimResults = !isPhone;  // phone = final only; others = show interim
+  _isListening = true;
+  recog.continuous = !isPhone;
+  recog.interimResults = !isPhone;
 
   el.style.borderColor = 'var(--teal)';
   el.placeholder = isPhone ? '🎤 Say your number...' : '🎤 Listening... (15s)';
-  _isListening = true;
   _updateSpeakBtns(true);
   _resetSilence();
 
-  try { recog.start(); }
-  catch(e) {
-    // Already started — recreate instance on next call
-    _recog = null; _isListening = false;
-    setTimeout(() => _doStart(fieldId), 400);
+  try {
+    recog.start();
+  } catch(e) {
+    console.warn('recog.start error:', e);
+    _isListening = false;
+    el.placeholder = '';
+    el.style.borderColor = 'var(--border)';
+    _updateSpeakBtns(false);
   }
 }
 
