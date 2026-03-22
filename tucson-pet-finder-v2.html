@@ -9,7 +9,7 @@
 :root{--bg:#F7F4EF;--bg2:#EDEAE3;--white:#FFFFFF;--navy:#1A2E4A;--navy2:#2C4A6E;--teal:#1A7A6E;--teal2:#22A090;--teal-light:#E8F5F3;--gold:#B8860B;--gold-light:#FEF9E7;--red:#C0392B;--red-light:#FDEDEC;--green:#1E8449;--green-light:#EAFAF1;--text:#2C3E50;--text-mid:#566573;--text-light:#85929E;--border:#D5D8DC;--border-dark:#AAB7B8;--shadow:0 2px 12px rgba(0,0,0,0.08);--shadow-hover:0 6px 24px rgba(0,0,0,0.13)}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'Source Sans 3',sans-serif;font-size:19px;line-height:1.7;min-height:100vh;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);font-family:'Source Sans 3',sans-serif;font-size:20px;line-height:1.7;min-height:100vh;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
 .page{max-width:480px;margin:0 auto;padding:62px 0 80px}
 nav{background:var(--navy);padding:15px 18px;display:flex;align-items:center;gap:12px;position:fixed;top:0;left:0;right:0;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
 .nav-back{color:rgba(255,255,255,0.8);font-size:0.95rem;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:5px;white-space:nowrap}
@@ -36,9 +36,9 @@ nav{background:var(--navy);padding:15px 18px;display:flex;align-items:center;gap
 .form-banner{border-radius:10px;padding:12px 14px;margin-bottom:18px;font-size:0.88rem;font-weight:500;line-height:1.5}
 .form-banner.lost{background:var(--teal-light);color:var(--teal)}
 .form-banner.found{background:var(--green-light);color:var(--green)}
-.form-label{display:block;font-size:0.88rem;font-weight:700;color:var(--navy);margin-bottom:7px}
+.form-label{display:block;font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:8px}
 .form-row{margin-bottom:16px}
-.form-input,.form-select,.form-textarea{width:100%;background:var(--bg);border:2px solid var(--border);border-radius:10px;padding:14px 16px;font-family:'Source Sans 3',sans-serif;font-size:1rem;color:var(--text);outline:none;transition:border-color 0.2s;-webkit-appearance:none}
+.form-input,.form-select,.form-textarea{width:100%;background:var(--bg);border:2px solid var(--border);border-radius:10px;padding:16px 18px;font-family:'Source Sans 3',sans-serif;font-size:1.1rem;color:var(--text);outline:none;transition:border-color 0.2s;-webkit-appearance:none}
 .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--teal2);background:var(--white)}
 .form-input::placeholder,.form-textarea::placeholder{color:var(--text-light)}
 .form-textarea{resize:none;min-height:90px;line-height:1.5}
@@ -50,7 +50,7 @@ nav{background:var(--navy);padding:15px 18px;display:flex;align-items:center;gap
 .photo-icon{font-size:2rem;margin-bottom:6px}
 .photo-txt{font-size:0.9rem;color:var(--text-mid);line-height:1.5}
 .photo-txt strong{color:var(--teal)}
-.photo-prev{display:none;width:100%;height:150px;object-fit:cover;border-radius:10px;margin-top:10px}
+.photo-prev{display:none;width:100%;height:180px;object-fit:cover;border-radius:10px;margin-top:12px;border:2px solid var(--teal2)}
 .submit-btn{width:100%;color:#fff;font-family:'Source Sans 3',sans-serif;font-size:1.05rem;font-weight:700;padding:16px;border-radius:12px;border:none;cursor:pointer;transition:background 0.2s,transform 0.15s;margin-top:6px}
 .submit-btn.lost-btn{background:var(--red);box-shadow:0 4px 16px rgba(192,57,43,0.3)}
 .submit-btn.found-btn{background:var(--green);box-shadow:0 4px 16px rgba(30,132,73,0.3)}
@@ -163,10 +163,10 @@ footer{background:var(--navy);padding:28px 22px 20px;text-align:center;margin-to
       <div><label class="form-label">Type of pet *</label><select class="form-select" id="lostType"><option value="">Choose...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select><div class="form-err" id="errLostType">Please select a type</div></div>
       <div><label class="form-label">Color / Breed</label><input class="form-input" type="text" id="lostBreed" placeholder="e.g. Brown Lab"/></div>
     </div>
-    <div class="form-row"><label class="form-label">Where was your pet last seen? *</label><input class="form-input" type="text" id="lostLoc" placeholder="e.g. Near Speedway & Wilmot"/><div class="form-err" id="errLostLoc">Please enter a location</div></div>
-    <div class="form-row"><label class="form-label">Additional details about your pet</label><textarea class="form-textarea" id="lostDesc" placeholder="Collar color, any special markings, when they went missing..."></textarea></div>
-    <div class="form-row"><label class="form-label">Your phone number * (so people can reach you)</label><input class="form-input" type="tel" id="lostPhone" placeholder="520-XXX-XXXX"/><div class="form-err" id="errLostPhone">Please enter a valid 10-digit phone number</div></div>
-    <div class="form-row"><label class="form-label">Add a photo — really helps neighbors recognize your pet!</label><div class="photo-upload" onclick="document.getElementById('lostPhoto').click()"><input type="file" id="lostPhoto" accept="image/*" onchange="prevPhoto(this,'lostPrev')"/><div class="photo-icon">📷</div><div class="photo-txt">Tap here to add a photo<br><strong>JPG or PNG works fine</strong></div><img class="photo-prev" id="lostPrev"/></div></div>
+    <div class="form-row"><label class="form-label">Where was your pet last seen? * <button type="button" onclick="startVoice('lostLoc')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><input class="form-input" type="text" id="lostLoc" placeholder="e.g. Near Speedway & Wilmot"/><div class="form-err" id="errLostLoc">Please enter a location</div></div>
+    <div class="form-row"><label class="form-label">Additional details about your pet <button type="button" onclick="startVoice('lostDesc')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><textarea class="form-textarea" id="lostDesc" placeholder="Collar color, any special markings, when they went missing..."></textarea></div>
+    <div class="form-row"><label class="form-label">Your phone number * (so people can reach you)</label><input class="form-input" type="tel" id="lostPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/><div class="form-err" id="errLostPhone">Please enter a valid 10-digit phone number</div></div>
+    <div class="form-row"><label class="form-label">Add a photo — really helps neighbors recognize your pet!</label><div class="photo-upload" onclick="document.getElementById('lostPhoto').click()"><input type="file" id="lostPhoto" accept="image/*" onchange="prevPhoto(this,'lostPrev','lostPhotoHint')"/><div id="lostPhotoHint"><div class="photo-icon">📷</div><div class="photo-txt">Tap here to add a photo<br><strong>JPG or PNG works fine</strong></div></div><img class="photo-prev" id="lostPrev"/></div></div>
     <button class="submit-btn lost-btn" id="lostBtn" onclick="submit('lost')">🚨 Post My Lost Pet Alert</button>
   </div>
   <div class="form-panel" id="formFound">
@@ -175,10 +175,10 @@ footer{background:var(--navy);padding:28px 22px 20px;text-align:center;margin-to
       <div><label class="form-label">Type of pet *</label><select class="form-select" id="foundType"><option value="">Choose...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select><div class="form-err" id="errFoundType">Please select a type</div></div>
       <div><label class="form-label">Color / Breed</label><input class="form-input" type="text" id="foundBreed" placeholder="e.g. Black cat"/></div>
     </div>
-    <div class="form-row"><label class="form-label">Where did you find this pet? *</label><input class="form-input" type="text" id="foundLoc" placeholder="e.g. Near Grant & Swan"/><div class="form-err" id="errFoundLoc">Please enter a location</div></div>
-    <div class="form-row"><label class="form-label">Describe the pet</label><textarea class="form-textarea" id="foundDesc" placeholder="Does it have a collar? Tags? Any markings? Is it friendly or scared?"></textarea></div>
-    <div class="form-row"><label class="form-label">Your phone number * (so the owner can reach you)</label><input class="form-input" type="tel" id="foundPhone" placeholder="520-XXX-XXXX"/><div class="form-err" id="errFoundPhone">Please enter a valid 10-digit phone number</div></div>
-    <div class="form-row"><label class="form-label">Add a photo of the pet</label><div class="photo-upload" onclick="document.getElementById('foundPhoto').click()"><input type="file" id="foundPhoto" accept="image/*" onchange="prevPhoto(this,'foundPrev')"/><div class="photo-icon">📷</div><div class="photo-txt">Tap here to add a photo<br><strong>A clear photo helps a lot!</strong></div><img class="photo-prev" id="foundPrev"/></div></div>
+    <div class="form-row"><label class="form-label">Where did you find this pet? * <button type="button" onclick="startVoice('foundLoc')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><input class="form-input" type="text" id="foundLoc" placeholder="e.g. Near Grant & Swan"/><div class="form-err" id="errFoundLoc">Please enter a location</div></div>
+    <div class="form-row"><label class="form-label">Describe the pet <button type="button" onclick="startVoice('foundDesc')" style="background:var(--teal-light);border:1px solid var(--teal2);border-radius:6px;color:var(--teal);font-size:0.8rem;padding:3px 10px;cursor:pointer;margin-left:6px;font-weight:600">🎤 Speak</button></label><textarea class="form-textarea" id="foundDesc" placeholder="Does it have a collar? Tags? Any markings? Is it friendly or scared?"></textarea></div>
+    <div class="form-row"><label class="form-label">Your phone number * (so the owner can reach you)</label><input class="form-input" type="tel" id="foundPhone" placeholder="520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/><div class="form-err" id="errFoundPhone">Please enter a valid 10-digit phone number</div></div>
+    <div class="form-row"><label class="form-label">Add a photo of the pet</label><div class="photo-upload" onclick="document.getElementById('foundPhoto').click()"><input type="file" id="foundPhoto" accept="image/*" onchange="prevPhoto(this,'foundPrev','foundPhotoHint')"/><div id="foundPhotoHint"><div class="photo-icon">📷</div><div class="photo-txt">Tap here to add a photo<br><strong>A clear photo helps a lot!</strong></div></div><img class="photo-prev" id="foundPrev"/></div></div>
     <button class="submit-btn found-btn" id="foundBtn" onclick="submit('found')">🟢 Post My Found Pet Alert</button>
   </div>
   <div class="success-panel" id="successPanel"><div class="success-icon" id="successIcon">🐾</div><div class="success-title" id="successTitle">Your Alert Is Posted!</div><div class="success-msg" id="successMsg">Your alert is now live and saved in our database.</div><button class="success-share" onclick="shareApp()">📲 Share This App With Neighbors</button></div>
@@ -245,11 +245,41 @@ function switchTab(tab){
   if(tab==='see')renderListings();
 }
 
-function prevPhoto(input,pid){
+function prevPhoto(input,pid,hintId){
   const f=input.files[0];if(!f)return;
   const r=new FileReader();
-  r.onload=e=>{const i=document.getElementById(pid);i.src=e.target.result;i.style.display='block'};
+  r.onload=e=>{
+    const i=document.getElementById(pid);
+    i.src=e.target.result;i.style.display='block';
+    if(hintId){const h=document.getElementById(hintId);if(h)h.style.display='none';}
+  };
   r.readAsDataURL(f);
+}
+
+function autoPhone(input){
+  let v=input.value.replace(/\D/g,'');
+  if(v.length>10)v=v.slice(0,10);
+  if(v.length>=7)input.value=v.slice(0,3)+'-'+v.slice(3,6)+'-'+v.slice(6);
+  else if(v.length>=4)input.value=v.slice(0,3)+'-'+v.slice(3);
+  else input.value=v;
+}
+
+function startVoice(fieldId){
+  const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SpeechRecognition){alert('Voice input is not available on this browser. Please try Chrome.');return;}
+  const el=document.getElementById(fieldId);
+  const recog=new SpeechRecognition();
+  recog.lang='en-US';recog.interimResults=false;recog.maxAlternatives=1;
+  recog.onstart=()=>{el.placeholder='🎤 Listening... speak now';el.style.borderColor='var(--teal2)'};
+  recog.onresult=e=>{
+    const transcript=e.results[0][0].transcript;
+    el.value=(el.value?el.value+' ':'')+transcript;
+    el.style.borderColor='var(--teal2)';
+    el.placeholder='';
+  };
+  recog.onerror=()=>{el.placeholder='Could not hear — tap to try again';el.style.borderColor='var(--red)'};
+  recog.onend=()=>{el.style.borderColor='var(--border)'};
+  recog.start();
 }
 
 async function submit(type){
