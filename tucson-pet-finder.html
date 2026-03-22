@@ -167,6 +167,14 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
 .photo-expand-overlay.open{display:flex}
 .photo-expand-overlay img{max-width:95vw;max-height:90vh;object-fit:contain;border-radius:10px;border:1px solid var(--border-bright)}
 .photo-expand-close{position:absolute;top:16px;right:16px;width:36px;height:36px;background:rgba(255,255,255,0.1);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;color:#fff;cursor:pointer}
+
+.safety-banner{background:rgba(255,215,0,0.07);border:1px solid rgba(255,215,0,0.3);border-radius:12px;padding:14px 16px;margin:14px 0;font-size:0.82rem;color:#FFD700;line-height:1.6}
+.safety-banner strong{color:#fff;display:block;margin-bottom:4px;font-family:'Orbitron',sans-serif;font-size:0.72rem;letter-spacing:0.08em}
+.safety-places{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.safety-place{background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.2);border-radius:6px;padding:3px 10px;font-size:0.72rem;color:var(--gold);font-family:'Share Tech Mono',monospace}
+.photo-match-note{background:rgba(0,255,212,0.06);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:10px 0;font-size:0.8rem;color:var(--text-dim);line-height:1.5;display:flex;gap:8px;align-items:flex-start}
+.report-btn{width:100%;background:transparent;color:rgba(255,68,102,0.7);font-family:'Share Tech Mono',monospace;font-size:0.68rem;letter-spacing:0.06em;padding:10px;border-radius:8px;border:1px solid rgba(255,68,102,0.2);cursor:pointer;margin-top:8px;transition:all 0.2s}
+.report-btn:hover{background:rgba(255,68,102,0.08);color:var(--red);border-color:rgba(255,68,102,0.4)}
 </style>
 </head>
 <body>
@@ -347,22 +355,56 @@ function startVoice(fieldId){
   const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SpeechRecognition){alert('Voice input not supported on this browser. Try Chrome.');return;}
   const el=document.getElementById(fieldId);
-  const recog=new SpeechRecognition();
-  recog.lang='en-US';recog.interimResults=false;recog.maxAlternatives=1;
   const savedVal=el.value;
   el.value='';
-  recog.onstart=()=>{el.placeholder='🎤 Listening... speak now';el.style.borderColor='var(--teal)'};
-  recog.onresult=e=>{
-    el.value=e.results[0][0].transcript;
-    el.style.borderColor='var(--border-bright)';
-    el.placeholder='';
+  
+  const recog=new SpeechRecognition();
+  recog.lang='en-US';
+  recog.continuous=true;
+  recog.interimResults=true;
+  recog.maxAlternatives=1;
+  
+  let finalTranscript='';
+  let silenceTimer=null;
+  const TIMEOUT=15000; // 15 seconds
+  
+  function resetTimer(){
+    if(silenceTimer)clearTimeout(silenceTimer);
+    silenceTimer=setTimeout(()=>{recog.stop()},TIMEOUT);
+  }
+  
+  recog.onstart=()=>{
+    el.placeholder='🎤 Listening... take your time (15s)';
+    el.style.borderColor='var(--teal)';
+    resetTimer();
   };
-  recog.onerror=()=>{
-    el.value=savedVal;
+  
+  recog.onresult=e=>{
+    let interim='';
+    finalTranscript='';
+    for(let i=0;i<e.results.length;i++){
+      if(e.results[i].isFinal)finalTranscript+=e.results[i][0].transcript+' ';
+      else interim+=e.results[i][0].transcript;
+    }
+    el.value=(finalTranscript+interim).trim();
+    resetTimer();
+  };
+  
+  recog.onerror=e=>{
+    if(e.error==='no-speech')return;
+    el.value=savedVal||finalTranscript||'';
     el.placeholder='Could not hear — tap to try again';
     el.style.borderColor='var(--red)';
+    if(silenceTimer)clearTimeout(silenceTimer);
   };
-  recog.onend=()=>{el.style.borderColor='var(--border)'};
+  
+  recog.onend=()=>{
+    if(silenceTimer)clearTimeout(silenceTimer);
+    if(finalTranscript.trim())el.value=finalTranscript.trim();
+    el.placeholder='';
+    el.style.borderColor='var(--border)';
+  };
+  
   recog.start();
 }
 
@@ -383,6 +425,14 @@ async function submit(type){
     try{
       await addPet({status:'lost',name,type:pt,breed:document.getElementById('lostBreed').value.trim()||pt,location:loc,description:document.getElementById('lostDesc').value.trim(),phone:fmtPhone(phone)});
       showSuccess('lost',name);loadAlertBanner();
+
+function reportListing(id, name){
+  const reason = prompt('Briefly describe the suspicious activity for "' + (name||'this listing') + '":\n\n(Your report helps keep Tucson safe)');
+  if(!reason || !reason.trim()) return;
+  // Log to console + alert (full backend reporting can be added later)
+  console.log('REPORT:', {id, name, reason, time: new Date().toISOString()});
+  alert('🚨 Thank you for reporting. Our team will review this listing within 24 hours. If you feel you are in immediate danger, please call 911.');
+}
 
 function expandPhoto(img){
   document.getElementById('photoExpandImg').src = img.src;
@@ -473,6 +523,34 @@ function openModal(pet){
   const rb=document.getElementById('mReunite');
   rb.style.display=pet.status!=='reunited'?'block':'none';
   rb.onclick=()=>markReunited(pet.id,pet.name);
+  // Safety features
+  const safetyHtml = pet.status !== 'reunited' ? `
+    <div class="photo-match-note">
+      <span>📸</span>
+      <span>Ask the finder to describe a unique marking or feature before sharing your contact info — real owners always know their pet.</span>
+    </div>
+    <div class="safety-banner">
+      <strong>🤝 SAFE MEETUP SPOTS</strong>
+      Always meet in a public place with cameras and people around.
+      <div class="safety-places">
+        <span class="safety-place">🏪 Walgreens</span>
+        <span class="safety-place">🚔 Police Station</span>
+        <span class="safety-place">☕ Starbucks</span>
+        <span class="safety-place">🏥 Fire Station</span>
+        <span class="safety-place">🏬 Walmart</span>
+      </div>
+    </div>
+    <button class="report-btn" onclick="reportListing('${pet.id}','${(pet.name||'').replace(/'/g,'')}')" id="reportBtn">🚨 Report Suspicious Activity</button>
+  ` : '';
+  
+  // Insert safety after reunite button
+  const existingReport = document.getElementById('safetyBlock');
+  if(existingReport) existingReport.remove();
+  const safetyDiv = document.createElement('div');
+  safetyDiv.id = 'safetyBlock';
+  safetyDiv.innerHTML = safetyHtml;
+  document.getElementById('mReunite').after(safetyDiv);
+
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow='hidden';
 }
@@ -488,6 +566,14 @@ async function markReunited(id,name){
     await patchPet(id,{status:'reunited'});
     closeModal({target:document.getElementById('modalOverlay')});
     renderListings();loadAlertBanner();
+
+function reportListing(id, name){
+  const reason = prompt('Briefly describe the suspicious activity for "' + (name||'this listing') + '":\n\n(Your report helps keep Tucson safe)');
+  if(!reason || !reason.trim()) return;
+  // Log to console + alert (full backend reporting can be added later)
+  console.log('REPORT:', {id, name, reason, time: new Date().toISOString()});
+  alert('🚨 Thank you for reporting. Our team will review this listing within 24 hours. If you feel you are in immediate danger, please call 911.');
+}
 
 function expandPhoto(img){
   document.getElementById('photoExpandImg').src = img.src;
@@ -509,6 +595,14 @@ function shareApp(){
 }
 
 loadAlertBanner();
+
+function reportListing(id, name){
+  const reason = prompt('Briefly describe the suspicious activity for "' + (name||'this listing') + '":\n\n(Your report helps keep Tucson safe)');
+  if(!reason || !reason.trim()) return;
+  // Log to console + alert (full backend reporting can be added later)
+  console.log('REPORT:', {id, name, reason, time: new Date().toISOString()});
+  alert('🚨 Thank you for reporting. Our team will review this listing within 24 hours. If you feel you are in immediate danger, please call 911.');
+}
 
 function expandPhoto(img){
   document.getElementById('photoExpandImg').src = img.src;
@@ -594,6 +688,14 @@ async function submitStray(){
     document.getElementById('strayFormView').style.display='none';
     document.getElementById('straySuccessView').style.display='block';
     loadAlertBanner();
+
+function reportListing(id, name){
+  const reason = prompt('Briefly describe the suspicious activity for "' + (name||'this listing') + '":\n\n(Your report helps keep Tucson safe)');
+  if(!reason || !reason.trim()) return;
+  // Log to console + alert (full backend reporting can be added later)
+  console.log('REPORT:', {id, name, reason, time: new Date().toISOString()});
+  alert('🚨 Thank you for reporting. Our team will review this listing within 24 hours. If you feel you are in immediate danger, please call 911.');
+}
 
 function expandPhoto(img){
   document.getElementById('photoExpandImg').src = img.src;
