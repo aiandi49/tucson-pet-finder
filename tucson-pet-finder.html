@@ -4,280 +4,928 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Tucson Pet Finder — Free Lost & Found Pet Alerts</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!-- Supabase JS for Google Auth -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <!-- EmailJS for report notifications -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
-:root{
-  --bg:#020810;--bg2:#040d1a;--panel:rgba(6,18,40,0.92);
-  --teal:#00FFD4;--teal-glow:rgba(0,255,212,0.25);--teal-dim:rgba(0,255,212,0.07);
-  --gold:#FFD700;--green:#00FF88;--red:#FF4466;--text:#C8E8FF;
-  --text-dim:#4A6A88;--border:rgba(0,255,212,0.12);--border-bright:rgba(0,255,212,0.4);
+:root {
+  --bg:       #0C0C12;
+  --bg2:      #111118;
+  --bg3:      #16161F;
+  --card:     #1B1B27;
+  --card2:    #20202F;
+  --border:   rgba(255,255,255,0.07);
+  --border2:  rgba(255,255,255,0.13);
+  --text:     #F0F0F8;
+  --text2:    #8A8AA8;
+  --text3:    #4A4A62;
+  --accent:   #FF5C6C;
+  --accent2:  #FF7A86;
+  --accent-glow: rgba(255,92,108,0.22);
+  --teal:     #00D4B4;
+  --teal-dim: rgba(0,212,180,0.12);
+  --gold:     #F5C842;
+  --gold-dim: rgba(245,200,66,0.10);
+  --green:    #2DCA7D;
+  --green-dim:rgba(45,202,125,0.10);
+  --purple:   #8B72FF;
+  --purple-dim:rgba(139,114,255,0.12);
+  --red:      #FF5C6C;
+  --r: 16px;
+  --r-sm: 10px;
+  /* Legacy compat aliases */
+  --bg-panel: rgba(27,27,39,0.96);
+  --border-bright: rgba(255,255,255,0.18);
+  --text-dim: #4A4A62;
+  --teal-glow: rgba(0,212,180,0.22);
+  --gold-glow: rgba(245,200,66,0.25);
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:20px;line-height:1.7;min-height:100vh;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
-.bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,255,212,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,212,0.018) 1px,transparent 1px);background-size:50px 50px}
-.orb{position:fixed;pointer-events:none;z-index:0;border-radius:50%;filter:blur(100px)}
-.orb1{width:400px;height:400px;top:-100px;left:-100px;background:radial-gradient(circle,rgba(0,255,212,0.07),transparent 70%);animation:o1 14s ease-in-out infinite}
-.orb2{width:350px;height:350px;bottom:-80px;right:-80px;background:radial-gradient(circle,rgba(255,100,50,0.05),transparent 70%);animation:o2 17s ease-in-out infinite}
-@keyframes o1{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,25px)}}
-@keyframes o2{0%,100%{transform:translate(0,0)}50%{transform:translate(-30px,-20px)}}
-nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(2,8,16,0.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;gap:12px}
-.page{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:64px 0 160px}
-.nav-back{color:var(--teal);font-family:'Share Tech Mono',monospace;font-size:0.78rem;letter-spacing:0.08em;text-decoration:none}
-.nav-title{font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;color:#fff;flex:1}
-.nav-live{font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--green);border:1px solid rgba(0,255,136,0.3);padding:4px 12px;border-radius:20px;display:flex;align-items:center;gap:5px}
-.nav-live::before{content:"●";animation:blink 1.5s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
-.hero{padding:36px 20px 28px;text-align:center}
-.hero-icon{font-size:3rem;margin-bottom:12px;animation:pawPulse 3s ease-in-out infinite}
-@keyframes pawPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-.hero-title{font-family:'Orbitron',sans-serif;font-size:clamp(1.5rem,7vw,2.2rem);font-weight:900;color:#fff;line-height:1.1;margin-bottom:8px}
-.hero-title span{color:var(--teal);text-shadow:0 0 20px var(--teal-glow)}
-.hero-sub{font-size:1rem;color:#7A9AB8;font-weight:300;line-height:1.6;max-width:320px;margin:0 auto 20px}
-.hero-stats{display:flex;justify-content:center;gap:24px}
-.hstat-num{font-family:'Orbitron',sans-serif;font-size:1.4rem;font-weight:700;color:var(--teal);line-height:1}
-.hstat-lbl{font-size:0.78rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em}
-.alert-strip{margin:20px 16px;background:rgba(255,68,102,0.08);border:1px solid rgba(255,68,102,0.25);border-radius:12px;padding:14px 16px;display:flex;gap:12px;align-items:center;cursor:pointer}
-.alert-icon{font-size:1.4rem;flex-shrink:0}
-.alert-text{font-size:0.95rem;color:#FFAAAA;line-height:1.5}
-.alert-text strong{color:#fff}
-.tabs{display:flex;margin:0 16px 20px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:4px;gap:4px}
-.tab-btn{flex:1;padding:13px 8px;font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.04em;border:none;border-radius:9px;background:transparent;color:var(--text-dim);cursor:pointer;transition:all 0.25s}
-.tab-btn.active{background:var(--teal);color:var(--bg);box-shadow:0 0 16px var(--teal-glow)}
-.tab-btn.active.found-tab{background:var(--green);box-shadow:0 0 16px rgba(0,255,136,0.4)}
-.form-panel{margin:0 16px 24px;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:22px 20px;display:none}
-.form-panel.active{display:block}
-.form-title{font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;margin-bottom:18px}
-.form-title.lost{color:var(--teal)}.form-title.found{color:var(--green)}
-.form-row{margin-bottom:16px}
-.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.form-label{font-family:'Share Tech Mono',monospace;font-size:0.82rem;color:var(--text-dim);letter-spacing:0.08em;text-transform:uppercase;display:block;margin-bottom:8px}
-.form-input,.form-select,.form-textarea{width:100%;background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:10px;padding:16px 18px;font-family:'Rajdhani',sans-serif;font-size:1.15rem;color:var(--text);outline:none;transition:border-color 0.2s;-webkit-appearance:none}
-.form-input::placeholder,.form-textarea::placeholder{color:var(--text-dim)}
-.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--border-bright)}
-.form-select{color:var(--text);background:rgba(0,0,0,0.5)}
-.form-select option{background:#040d1a}
-.form-textarea{resize:none;min-height:80px;line-height:1.5}
-.form-err{font-size:0.72rem;color:var(--red);margin-top:4px;display:none}
-.spk-btn{background:rgba(0,255,212,0.1);border:1px solid var(--border-bright);border-radius:6px;color:var(--teal);font-size:0.75rem;padding:2px 8px;cursor:pointer;margin-left:6px;font-family:'Share Tech Mono',monospace}
-.spk-btn.listening{background:rgba(0,255,212,0.3);animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
-.photo-upload{width:100%;border:1px dashed var(--border-bright);border-radius:10px;padding:20px;text-align:center;cursor:pointer;background:rgba(0,0,0,0.3);transition:background 0.2s}
-.photo-upload:hover{background:var(--teal-dim)}
-.photo-upload input{display:none}
-.photo-icon{font-size:1.8rem;margin-bottom:6px}
-.photo-txt{font-size:0.82rem;color:var(--text-dim)}
-.photo-txt strong{color:var(--teal)}
-.photo-prev{display:none;width:100%;height:180px;object-fit:cover;border-radius:8px;margin-top:10px;border:1px solid var(--border-bright)}
-.submit-btn{width:100%;background:var(--teal);color:var(--bg);font-family:'Orbitron',sans-serif;font-size:0.8rem;font-weight:700;letter-spacing:0.08em;padding:15px;border-radius:10px;border:none;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 20px var(--teal-glow);margin-top:4px}
-.submit-btn.found-btn{background:var(--green);box-shadow:0 4px 20px rgba(0,255,136,0.4)}
-.submit-btn:disabled{opacity:0.6;cursor:not-allowed}
-.submit-btn:active:not(:disabled){transform:scale(0.97)}
-.success-panel{display:none;margin:0 16px 24px;background:rgba(0,255,212,0.06);border:1px solid var(--border-bright);border-radius:16px;padding:28px 22px;text-align:center}
-.success-icon{font-size:2.5rem;margin-bottom:12px}
-.success-title{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;color:var(--teal);margin-bottom:8px}
-.success-msg{font-size:0.9rem;color:#8AADCC;font-weight:300;line-height:1.6;margin-bottom:16px}
-.success-share{font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--gold);border:1px solid rgba(255,215,0,0.3);padding:8px 16px;border-radius:8px;background:rgba(255,215,0,0.06);cursor:pointer;display:inline-block}
-.listings-section{margin:0 16px 32px;display:none}
-.listings-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.listings-title{font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.15em}
-.listings-count{font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--teal)}
-.tier-div{display:flex;align-items:center;gap:10px;margin:20px 0 12px}
-.tier-div-line{flex:1;height:1px;background:var(--border)}
-.tier-lbl{font-family:'Orbitron',sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:0.12em;white-space:nowrap;padding:3px 10px;border-radius:20px}
-.tier-hot .tier-lbl{color:var(--red);border:1px solid rgba(255,68,102,0.3);background:rgba(255,68,102,0.08)}
-.tier-watching .tier-lbl{color:var(--gold);border:1px solid rgba(255,215,0,0.3);background:rgba(255,215,0,0.06)}
-.tier-archived .tier-lbl{color:var(--text-dim);border:1px solid var(--border);background:transparent}
-.listing-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;display:flex;gap:14px;align-items:flex-start;cursor:pointer;transition:border-color 0.2s}
-.listing-card:hover{border-color:var(--border-bright)}
-.listing-card.found-card{border-color:rgba(0,255,136,0.15)}
-.listing-card.watching{opacity:0.82;border-color:rgba(255,215,0,0.2)}
-.listing-photo{width:70px;height:70px;border-radius:10px;background:var(--teal-dim);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0;overflow:hidden}
-.listing-photo img{width:100%;height:100%;object-fit:cover;border-radius:10px}
-.listing-info{flex:1;min-width:0}
-.listing-top{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap}
-.listing-type{font-family:'Share Tech Mono',monospace;font-size:0.58rem;padding:2px 8px;border-radius:4px;letter-spacing:0.08em;flex-shrink:0}
-.type-lost{background:rgba(255,68,102,0.12);color:var(--red);border:1px solid rgba(255,68,102,0.3)}
-.type-found{background:rgba(0,255,136,0.1);color:var(--green);border:1px solid rgba(0,255,136,0.3)}
-.type-stray{background:rgba(255,215,0,0.1);color:var(--gold);border:1px solid rgba(255,215,0,0.3)}
-.type-reunited{background:rgba(255,255,255,0.06);color:var(--text-dim);border:1px solid rgba(255,255,255,0.1)}
-.age-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:2px}
-.dot-hot{background:var(--red);box-shadow:0 0 6px var(--red);animation:dotPulse 1.5s infinite}
-.dot-watching{background:var(--gold)}
-.dot-archived{background:var(--text-dim)}
-@keyframes dotPulse{0%,100%{opacity:1}50%{opacity:0.3}}
-.listing-name{font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.listing-breed{font-size:0.82rem;color:#7A9AB8;font-weight:300;margin-bottom:4px}
-.listing-loc{font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--text-dim)}
-.listing-time{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--text-dim);text-align:right;flex-shrink:0;white-space:nowrap}
-.state-box{text-align:center;padding:32px 20px;color:var(--text-dim);font-family:'Share Tech Mono',monospace;font-size:0.78rem}
-.res-section{margin:0 16px 28px}
-.res-title{font-family:'Orbitron',sans-serif;font-size:0.65rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:14px}
-.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.res-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;text-decoration:none;display:block;transition:border-color 0.2s}
-.res-card:hover{border-color:var(--border-bright)}
-.res-icon{font-size:1.3rem;margin-bottom:6px}
-.res-name{font-family:'Orbitron',sans-serif;font-size:0.68rem;font-weight:700;color:var(--teal);margin-bottom:2px;line-height:1.3}
-.res-info{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--text-dim);line-height:1.4}
-.share-cta{margin:0 16px 32px;background:linear-gradient(135deg,rgba(0,255,212,0.07),rgba(0,170,255,0.05));border:1px solid var(--border-bright);border-radius:16px;padding:22px 20px;text-align:center}
-.share-cta h3{font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;color:var(--teal);margin-bottom:8px}
-.share-cta p{font-size:0.85rem;color:#8AADCC;font-weight:300;line-height:1.6;margin-bottom:14px}
-.sbtn{padding:12px;border-radius:10px;font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:700;border:none;cursor:pointer;transition:all 0.2s;text-decoration:none;display:block;text-align:center;margin-bottom:8px}
-.sbtn-p{background:var(--teal);color:var(--bg);box-shadow:0 4px 14px var(--teal-glow)}
-.sbtn-s{background:transparent;color:var(--text-dim);border:1px solid var(--border)}
-footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--border);margin:0 16px}
-.footer-back{font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--teal);text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin-bottom:12px;padding:8px 16px;border:1px solid var(--border);border-radius:20px}
-.footer-credit{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--text-dim);line-height:1.8}
-.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center}
-.modal-overlay.open{display:flex}
-.modal-sheet{background:#040d1a;border:1px solid var(--border);border-radius:20px 20px 0 0;padding:28px 22px 40px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;animation:slideUp 0.35s ease both;position:relative}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal-handle{width:36px;height:3px;background:var(--border-bright);border-radius:2px;margin:0 auto 20px}
-.modal-photo{width:100%;height:180px;object-fit:cover;background:var(--teal-dim);display:flex;align-items:center;justify-content:center;font-size:4rem;margin-bottom:16px;overflow:hidden;border-radius:12px}
-.modal-photo img{width:100%;height:100%;object-fit:cover}
-.modal-title{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;color:#fff;margin-bottom:6px}
-.modal-breed{font-size:0.88rem;color:#7A9AB8;font-weight:300;margin-bottom:18px}
-.modal-detail{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:0.88rem}
-.modal-dlbl{color:var(--text-dim);font-family:'Share Tech Mono',monospace;font-size:0.68rem;letter-spacing:0.1em}
-.modal-dval{color:#8AADCC;font-weight:400;text-align:right;max-width:60%}
-.modal-desc{margin:14px 0 18px;font-size:0.88rem;color:#8AADCC;font-weight:300;line-height:1.6}
-.modal-call{width:100%;background:var(--teal);color:var(--bg);font-family:'Orbitron',sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.06em;padding:14px;border-radius:10px;border:none;cursor:pointer;margin-bottom:8px;box-shadow:0 4px 20px var(--teal-glow)}
-.modal-reunite{width:100%;background:transparent;color:var(--green);font-family:'Orbitron',sans-serif;font-size:0.72rem;font-weight:700;padding:12px;border-radius:10px;border:1px solid rgba(0,255,136,0.3);cursor:pointer;transition:all 0.2s;margin-bottom:8px}
-.modal-reunite:hover{background:rgba(0,255,136,0.08)}
-.modal-close{position:absolute;top:16px;right:16px;width:30px;height:30px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text-dim);cursor:pointer}
-.claim-lost-btn{width:100%;background:linear-gradient(135deg,#ff2244,#ff6644);color:#fff;font-family:'Orbitron',sans-serif;font-size:0.8rem;font-weight:700;padding:15px;border-radius:10px;border:none;cursor:pointer;margin-bottom:8px;box-shadow:0 4px 20px rgba(255,34,68,0.4);animation:claimP 2s ease-in-out infinite}
-.claim-found-btn{width:100%;background:linear-gradient(135deg,#00aa44,#00ff88);color:#000;font-family:'Orbitron',sans-serif;font-size:0.8rem;font-weight:700;padding:15px;border-radius:10px;border:none;cursor:pointer;margin-bottom:8px;box-shadow:0 4px 20px rgba(0,255,136,0.35);animation:claimP2 2s ease-in-out infinite}
-@keyframes claimP{0%,100%{box-shadow:0 4px 20px rgba(255,34,68,0.4)}50%{box-shadow:0 4px 30px rgba(255,34,68,0.7)}}
-@keyframes claimP2{0%,100%{box-shadow:0 4px 20px rgba(0,255,136,0.35)}50%{box-shadow:0 4px 30px rgba(0,255,136,0.6)}}
-.safety-note{background:rgba(0,255,212,0.06);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:10px 0;font-size:0.8rem;color:var(--text-dim);line-height:1.5;display:flex;gap:8px;align-items:flex-start}
-.safety-banner{background:rgba(255,215,0,0.07);border:1px solid rgba(255,215,0,0.3);border-radius:12px;padding:14px 16px;margin:10px 0;font-size:0.82rem;color:#FFD700;line-height:1.6}
-.safety-banner strong{color:#fff;display:block;margin-bottom:4px;font-family:'Orbitron',sans-serif;font-size:0.72rem;letter-spacing:0.08em}
-.safety-places{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.safety-place{background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.2);border-radius:6px;padding:3px 10px;font-size:0.72rem;color:var(--gold);font-family:'Share Tech Mono',monospace}
-.report-btn{width:100%;background:transparent;color:rgba(255,68,102,0.7);font-family:'Share Tech Mono',monospace;font-size:0.68rem;padding:10px;border-radius:8px;border:1px solid rgba(255,68,102,0.2);cursor:pointer;margin-top:8px;transition:all 0.2s}
-.report-btn:hover{background:rgba(255,68,102,0.08);color:var(--red)}
-.verify-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.88);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px}
-.verify-overlay.open{display:flex}
-.verify-sheet{background:#040d1a;border:1px solid var(--border-bright);border-radius:20px;padding:28px 22px;width:100%;max-width:460px;max-height:88vh;overflow-y:auto;position:relative}
-.verify-close{position:absolute;top:14px;right:16px;width:30px;height:30px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text-dim);cursor:pointer;z-index:10}
-.verify-title{font-family:'Orbitron',sans-serif;font-size:0.95rem;font-weight:700;color:var(--teal);margin-bottom:6px}
-.verify-sub{font-size:0.85rem;color:var(--text-dim);margin-bottom:20px;line-height:1.5;font-weight:300}
-.verify-checklist{background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:14px 0}
-.verify-checklist-title{font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--teal);letter-spacing:0.1em;margin-bottom:10px}
-.verify-check{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer}
-.verify-check:last-of-type{border-bottom:none}
-.verify-check input[type=checkbox]{width:20px;height:20px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
-.verify-check label{font-size:0.88rem;color:var(--text);cursor:pointer;line-height:1.4}
-.verify-input{width:100%;background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-family:'Rajdhani',sans-serif;font-size:1rem;color:var(--text);outline:none;margin-top:6px;transition:border-color 0.2s}
-.verify-input:focus{border-color:var(--border-bright)}
-.verify-input::placeholder{color:var(--text-dim)}
-.verify-confirm-btn{width:100%;background:var(--teal);color:var(--bg);font-family:'Orbitron',sans-serif;font-size:0.8rem;font-weight:700;padding:14px;border-radius:10px;border:none;cursor:pointer;margin-top:14px;opacity:0.4;pointer-events:none;transition:all 0.2s}
-.verify-confirm-btn.ready{opacity:1;pointer-events:auto}
-.pet-toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);z-index:800;background:rgba(4,13,26,0.97);border:1px solid var(--border-bright);border-radius:16px;padding:14px 18px;max-width:340px;width:calc(100% - 40px);display:flex;gap:12px;align-items:center;opacity:0;transition:all 0.4s ease;pointer-events:none;backdrop-filter:blur(16px)}
-.pet-toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
-.toast-photo{width:52px;height:52px;border-radius:10px;background:var(--teal-dim);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;overflow:hidden}
-.toast-photo img{width:100%;height:100%;object-fit:cover;border-radius:10px}
-.toast-body{flex:1;min-width:0}
-.toast-title{font-family:'Orbitron',sans-serif;font-size:0.68rem;font-weight:700;color:var(--red);margin-bottom:3px}
-.toast-name{font-size:0.9rem;font-weight:600;color:#fff;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.toast-sub{font-size:0.72rem;color:var(--text-dim);line-height:1.3}
-.toast-view{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--teal);text-decoration:underline;cursor:pointer;margin-top:4px;display:inline-block}
-.toast-close{font-size:0.8rem;color:var(--text-dim);cursor:pointer;flex-shrink:0;padding:4px}
-.fab-stray{position:fixed;bottom:24px;right:20px;z-index:500;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#FF9500);border:none;box-shadow:0 4px 20px rgba(255,215,0,0.45);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.5rem;transition:transform 0.2s;-webkit-tap-highlight-color:transparent}
-.fab-stray:active{transform:scale(0.92)}
-.fab-stray-label{position:fixed;bottom:38px;right:88px;z-index:500;background:rgba(2,8,16,0.92);border:1px solid var(--gold);color:var(--gold);font-family:'Share Tech Mono',monospace;font-size:0.6rem;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap}
-.reg-fab{position:fixed;bottom:100px;right:20px;z-index:500;background:linear-gradient(135deg,#4444ff,#8844ff);border:none;border-radius:50%;width:54px;height:54px;font-size:1.3rem;cursor:pointer;box-shadow:0 4px 16px rgba(100,100,255,0.4);display:flex;align-items:center;justify-content:center;transition:transform 0.2s;-webkit-tap-highlight-color:transparent}
-.reg-fab:active{transform:scale(0.92)}
-.reg-fab-label{position:fixed;bottom:116px;right:84px;z-index:500;background:rgba(2,8,16,0.92);border:1px solid rgba(100,100,255,0.4);color:#8888ff;font-family:'Share Tech Mono',monospace;font-size:0.6rem;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap}
-.sos-fab{position:fixed;bottom:176px;right:20px;z-index:500;background:linear-gradient(135deg,#cc0000,#ff3322);border:none;border-radius:50%;width:54px;height:54px;font-size:1.4rem;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(200,0,0,0.6);animation:sosPulse 2.5s ease-in-out infinite;-webkit-tap-highlight-color:transparent}
-.sos-fab.visible{display:flex}
-.sos-fab:active{transform:scale(0.92)}
-@keyframes sosPulse{0%,100%{box-shadow:0 4px 20px rgba(200,0,0,0.6)}50%{box-shadow:0 4px 32px rgba(255,50,0,0.9)}}
-.sos-fab-label{position:fixed;bottom:192px;right:84px;z-index:500;background:rgba(2,8,16,0.92);border:1px solid rgba(200,0,0,0.5);color:#ff4444;font-family:'Share Tech Mono',monospace;font-size:0.6rem;padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap;display:none}
-.sos-fab.visible ~ .sos-fab-label{display:block}
-.pet-slot{background:rgba(0,255,212,0.04);border:1px dashed var(--border-bright);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:all 0.2s}
-.pet-slot:hover{background:rgba(0,255,212,0.08)}
-.pet-slot.filled{border-style:solid;border-color:rgba(0,255,136,0.3);background:rgba(0,255,136,0.05)}
-.pet-slot-top{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.pet-slot-emoji{font-size:1.4rem}
-.pet-slot-name{font-family:'Orbitron',sans-serif;font-size:0.78rem;font-weight:700;color:#fff}
-.pet-slot-detail{font-size:0.78rem;color:var(--text-dim)}
-.pet-slot-add{font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--teal);text-align:center;padding:6px 0}
-.sos-pick-btn{width:100%;background:rgba(255,50,0,0.1);border:1px solid rgba(255,50,0,0.35);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:all 0.2s;text-align:left}
-.sos-pick-btn:hover{background:rgba(255,50,0,0.18);border-color:rgba(255,50,0,0.6)}
-.sos-pick-emoji{font-size:1.8rem;flex-shrink:0}
-.sos-pick-name{font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;color:#fff;margin-bottom:2px}
-.sos-pick-detail{font-size:0.78rem;color:var(--text-dim)}
-.photo-expand-overlay{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,0.92);display:none;align-items:center;justify-content:center;cursor:zoom-out}
-.photo-expand-overlay.open{display:flex}
-.photo-expand-overlay img{max-width:95vw;max-height:90vh;object-fit:contain;border-radius:10px;border:1px solid var(--border-bright)}
-.photo-expand-close{position:absolute;top:16px;right:16px;width:36px;height:36px;background:rgba(255,255,255,0.1);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;color:#fff;cursor:pointer}
-.stray-modal{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);display:none;align-items:flex-end;justify-content:center}
-.stray-modal.open{display:flex}
-.stray-sheet{background:#040d1a;border:1px solid var(--border-bright);border-radius:20px 20px 0 0;padding:24px 20px 40px;width:100%;max-width:480px;animation:slideUp 0.3s ease both;position:relative}
-.stray-handle{width:36px;height:3px;background:var(--border-bright);border-radius:2px;margin:0 auto 18px}
-.stray-title{font-family:'Orbitron',sans-serif;font-size:0.9rem;font-weight:700;color:var(--gold);margin-bottom:4px}
-.stray-sub{font-size:0.82rem;color:var(--text-dim);margin-bottom:18px;font-weight:300}
-.stray-photo-zone{width:100%;aspect-ratio:4/3;border:2px dashed rgba(255,215,0,0.4);border-radius:14px;background:rgba(0,0,0,0.4);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;margin-bottom:14px;overflow:hidden;position:relative}
-.stray-photo-zone img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:12px}
-.stray-photo-hint{display:flex;flex-direction:column;align-items:center;gap:6px;z-index:1}
-.stray-photo-icon{font-size:2.4rem}
-.stray-photo-txt{font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--gold);letter-spacing:0.06em}
-.stray-loc-row{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:12px;cursor:pointer}
-.stray-loc-icon{font-size:1.2rem;flex-shrink:0}
-.stray-loc-text{font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--text-dim);flex:1;line-height:1.4}
-.stray-loc-text.got{color:var(--teal)}
-.stray-row{margin-bottom:12px}
-.stray-input{width:100%;background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-family:'Rajdhani',sans-serif;font-size:1.05rem;color:var(--text);outline:none}
-.stray-input:focus{border-color:var(--border-bright)}
-.stray-input::placeholder{color:var(--text-dim)}
-.stray-submit{width:100%;background:linear-gradient(135deg,var(--gold),#FF9500);color:#020810;font-family:'Orbitron',sans-serif;font-size:0.82rem;font-weight:700;padding:16px;border-radius:12px;border:none;cursor:pointer;margin-top:4px;box-shadow:0 4px 16px rgba(255,215,0,0.3)}
-.stray-submit:disabled{opacity:0.6;cursor:not-allowed}
-.stray-close{position:absolute;top:14px;right:16px;width:30px;height:30px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text-dim);cursor:pointer}
-.stray-success{text-align:center;padding:16px 0 8px}
-/* ── PAWS ALERT ─────────────────────────────────────────────────────────── */
-.paws-overlay{position:fixed;inset:0;z-index:2000;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;animation:pawsIn 0.4s ease both}
-.paws-overlay.show{display:flex}
-@keyframes pawsIn{from{opacity:0;transform:scale(1.04)}to{opacity:1;transform:scale(1)}}
-.paws-strobe{position:absolute;inset:0;background:rgba(255,50,50,0.18);animation:strobe 0.7s ease-in-out infinite;pointer-events:none}
-@keyframes strobe{0%,100%{opacity:0}50%{opacity:1}}
-.paws-top-bar{position:absolute;top:0;left:0;right:0;background:var(--red);padding:10px;font-family:'Orbitron',sans-serif;font-size:0.7rem;font-weight:700;letter-spacing:0.25em;color:#fff;display:flex;align-items:center;justify-content:center;gap:10px}
-.paws-siren{font-size:1.6rem;animation:sirenSpin 0.5s linear infinite}
-@keyframes sirenSpin{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
-.paws-paw{font-size:clamp(5rem,20vw,10rem);animation:pawBounce 0.6s ease-in-out infinite;margin-bottom:16px;filter:drop-shadow(0 0 40px rgba(255,50,50,0.8))}
-@keyframes pawBounce{0%,100%{transform:scale(1) rotate(-5deg)}50%{transform:scale(1.12) rotate(5deg)}}
-.paws-stop{font-family:'Orbitron',sans-serif;font-size:clamp(2rem,10vw,4rem);font-weight:900;color:var(--red);letter-spacing:0.1em;text-shadow:0 0 30px rgba(255,50,50,0.8);margin-bottom:8px;animation:stopPulse 0.5s ease-in-out infinite}
-@keyframes stopPulse{0%,100%{opacity:1}50%{opacity:0.5}}
-.paws-name{font-family:'Orbitron',sans-serif;font-size:clamp(2.5rem,12vw,5rem);font-weight:900;color:#fff;text-shadow:0 0 40px rgba(255,255,255,0.6);margin-bottom:4px;line-height:1}
-.paws-status{font-family:'Orbitron',sans-serif;font-size:clamp(1.2rem,5vw,2rem);font-weight:700;color:var(--red);letter-spacing:0.15em;margin-bottom:20px}
-.paws-photo{width:140px;height:140px;border-radius:50%;object-fit:cover;border:4px solid var(--red);box-shadow:0 0 40px rgba(255,50,50,0.7);margin-bottom:20px}
-.paws-desc{font-size:clamp(0.9rem,3vw,1.1rem);color:#C8E8FF;line-height:1.6;max-width:340px;margin-bottom:24px}
-.paws-loc{font-family:'Share Tech Mono',monospace;font-size:0.85rem;color:var(--gold);margin-bottom:24px;display:flex;align-items:center;justify-content:center;gap:6px}
-.paws-btn{background:var(--red);color:#fff;font-family:'Orbitron',sans-serif;font-size:0.82rem;font-weight:700;letter-spacing:0.08em;padding:16px 32px;border-radius:12px;border:none;cursor:pointer;box-shadow:0 4px 24px rgba(255,50,50,0.6);margin-bottom:10px;width:100%;max-width:340px}
-.paws-dismiss{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:rgba(255,255,255,0.3);cursor:pointer;letter-spacing:0.1em;margin-top:4px}
-.paws-progress{position:absolute;bottom:0;left:0;height:4px;background:var(--red);width:100%;transform-origin:left;animation:none}
-.paws-progress.running{animation:progressBar var(--paws-duration,10s) linear forwards}
-@keyframes progressBar{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── AMBIENT BACKGROUND ── */
+body::before {
+  content:'';
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 50% at 0% 0%, rgba(255,92,108,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(0,212,180,0.05) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(139,114,255,0.04) 0%, transparent 65%);
+}
+
+/* ── NAV ── */
+nav {
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:rgba(12,12,18,0.96);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:14px 18px;
+  display:flex;align-items:center;gap:12px;
+}
+.page { position:relative;z-index:1;max-width:480px;margin:0 auto;padding:68px 0 160px; }
+
+.nav-back {
+  color: var(--teal);
+  font-family:'DM Mono',monospace;
+  font-size:0.75rem;
+  letter-spacing:0.06em;
+  text-decoration:none;
+}
+.nav-title {
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:0.9rem;
+  font-weight:800;
+  color:#fff;
+  flex:1;
+  letter-spacing:-0.01em;
+}
+.nav-light-link {
+  font-family:'DM Mono',monospace;
+  font-size:0.62rem;
+  color:var(--gold);
+  border:1px solid rgba(245,200,66,0.3);
+  padding:3px 10px;
+  border-radius:20px;
+  text-decoration:none;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.nav-live {
+  font-family:'DM Mono',monospace;
+  font-size:0.65rem;
+  color:var(--green);
+  border:1px solid rgba(45,202,125,0.3);
+  padding:4px 12px;
+  border-radius:20px;
+  display:flex;align-items:center;gap:5px;
+}
+.nav-live::before { content:"●"; animation:blink 1.5s infinite; }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:0.2} }
+
+/* ── HERO ── */
+.hero { padding:32px 20px 24px; text-align:center; }
+.hero-icon { font-size:2.8rem; margin-bottom:12px; animation:pawPulse 3s ease-in-out infinite; }
+@keyframes pawPulse { 0%,100%{transform:scale(1)}50%{transform:scale(1.07)} }
+.hero-title {
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(2rem,8vw,2.8rem);
+  font-weight:400;
+  color:#fff;
+  line-height:1.05;
+  margin-bottom:10px;
+  letter-spacing:-0.02em;
+}
+.hero-title span { color:var(--teal); font-style:italic; }
+.hero-sub {
+  font-size:0.95rem;
+  color:var(--text2);
+  font-weight:400;
+  line-height:1.6;
+  max-width:300px;
+  margin:0 auto 22px;
+}
+.hero-stats { display:flex; justify-content:center; gap:28px; }
+.hstat-num {
+  font-family:'Instrument Serif',serif;
+  font-size:1.5rem;
+  color:var(--teal);
+  line-height:1;
+}
+.hstat-lbl {
+  font-size:0.72rem;
+  color:var(--text3);
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  margin-top:2px;
+}
+
+/* ── ALERT STRIP ── */
+.alert-strip {
+  margin:16px 16px;
+  background:rgba(255,92,108,0.06);
+  border:1px solid rgba(255,92,108,0.2);
+  border-radius:14px;
+  padding:14px 16px;
+  display:flex;gap:12px;align-items:center;cursor:pointer;
+  transition:border-color 0.2s;
+}
+.alert-strip:hover { border-color:rgba(255,92,108,0.35); }
+.alert-icon { font-size:1.3rem; flex-shrink:0; }
+.alert-text { font-size:0.9rem; color:#FFB8C0; line-height:1.5; }
+.alert-text strong { color:#fff; }
+
+/* ── TABS ── */
+.tabs {
+  display:flex;
+  margin:0 16px 18px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:4px;
+  gap:4px;
+}
+.tab-btn {
+  flex:1;
+  padding:12px 8px;
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:0.78rem;
+  font-weight:700;
+  letter-spacing:-0.01em;
+  border:none;
+  border-radius:10px;
+  background:transparent;
+  color:var(--text3);
+  cursor:pointer;
+  transition:all 0.25s;
+}
+.tab-btn.active { background:var(--accent); color:#fff; box-shadow:0 4px 14px var(--accent-glow); }
+.tab-btn.active.found-tab { background:var(--teal); color:var(--bg); box-shadow:0 4px 14px var(--teal-glow); }
+
+/* ── FORM PANELS ── */
+.form-panel {
+  margin:0 16px 22px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:22px 18px;
+  display:none;
+  transition:border-color 0.2s;
+}
+.form-panel.active { display:block; }
+.form-title {
+  font-family:'Instrument Serif',serif;
+  font-size:1.2rem;
+  margin-bottom:18px;
+  line-height:1;
+}
+.form-title.lost { color:var(--accent); }
+.form-title.found { color:var(--teal); }
+.form-row { margin-bottom:16px; }
+.form-row-2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.form-label {
+  font-family:'DM Mono',monospace;
+  font-size:0.72rem;
+  color:var(--text3);
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  display:block;
+  margin-bottom:8px;
+}
+.form-input, .form-select, .form-textarea {
+  width:100%;
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px 16px;
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:1rem;
+  color:var(--text);
+  outline:none;
+  transition:border-color 0.2s;
+  -webkit-appearance:none;
+}
+.form-input::placeholder, .form-textarea::placeholder { color:var(--text3); }
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color:var(--border2); }
+.form-select { color:var(--text); background:var(--bg2); }
+.form-select option { background:var(--bg); }
+.form-textarea { resize:none; min-height:78px; line-height:1.5; }
+.form-err { font-size:0.72rem; color:var(--accent); margin-top:4px; display:none; }
+
+/* ── SPEAK BUTTON ── */
+.spk-btn {
+  background:var(--teal-dim);
+  border:1px solid rgba(0,212,180,0.3);
+  border-radius:6px;
+  color:var(--teal);
+  font-size:0.72rem;
+  padding:2px 8px;
+  cursor:pointer;
+  margin-left:6px;
+  font-family:'DM Mono',monospace;
+  transition:all 0.2s;
+}
+.spk-btn.listening {
+  background:rgba(255,92,108,0.15);
+  border-color:var(--accent);
+  color:var(--accent);
+  animation:spkPulse 1s infinite;
+}
+@keyframes spkPulse { 0%,100%{opacity:1}50%{opacity:0.5} }
+
+/* ── PHOTO UPLOAD ── */
+.photo-upload {
+  width:100%;
+  border:1px dashed var(--border2);
+  border-radius:12px;
+  padding:20px;
+  text-align:center;
+  cursor:pointer;
+  background:var(--bg2);
+  transition:background 0.2s, border-color 0.2s;
+}
+.photo-upload:hover { background:var(--card2); border-color:rgba(0,212,180,0.3); }
+.photo-upload input { display:none; }
+.photo-icon { font-size:1.8rem; margin-bottom:6px; }
+.photo-txt { font-size:0.82rem; color:var(--text3); }
+.photo-txt strong { color:var(--teal); }
+.photo-prev { display:none; width:100%; height:180px; object-fit:cover; border-radius:10px; margin-top:10px; border:1px solid var(--border2); }
+
+/* ── SUBMIT BUTTON ── */
+.submit-btn {
+  width:100%;
+  background:var(--accent);
+  color:#fff;
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:0.85rem;
+  font-weight:800;
+  letter-spacing:-0.01em;
+  padding:15px;
+  border-radius:12px;
+  border:none;
+  cursor:pointer;
+  transition:all 0.2s;
+  box-shadow:0 4px 18px var(--accent-glow);
+  margin-top:4px;
+}
+.submit-btn.found-btn { background:var(--teal); color:var(--bg); box-shadow:0 4px 18px var(--teal-glow); }
+.submit-btn:disabled { opacity:0.5; cursor:not-allowed; }
+.submit-btn:active:not(:disabled) { transform:scale(0.98); }
+
+/* ── SUCCESS PANEL ── */
+.success-panel {
+  display:none;
+  margin:0 16px 22px;
+  background:rgba(0,212,180,0.06);
+  border:1px solid rgba(0,212,180,0.2);
+  border-radius:18px;
+  padding:26px 20px;
+  text-align:center;
+}
+.success-icon { font-size:2.4rem; margin-bottom:12px; }
+.success-title {
+  font-family:'Instrument Serif',serif;
+  font-size:1.3rem;
+  color:var(--teal);
+  margin-bottom:8px;
+}
+.success-msg { font-size:0.9rem; color:var(--text2); line-height:1.6; margin-bottom:16px; }
+.success-share {
+  font-family:'DM Mono',monospace;
+  font-size:0.7rem;
+  color:var(--gold);
+  border:1px solid rgba(245,200,66,0.3);
+  padding:8px 16px;
+  border-radius:8px;
+  background:var(--gold-dim);
+  cursor:pointer;
+  display:inline-block;
+}
+
+/* ── LISTINGS ── */
+.listings-section { margin:0 16px 28px; display:none; }
+.listings-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.listings-title {
+  font-family:'DM Mono',monospace;
+  font-size:0.7rem;
+  font-weight:500;
+  color:var(--text3);
+  text-transform:uppercase;
+  letter-spacing:0.12em;
+}
+.listings-count { font-family:'DM Mono',monospace; font-size:0.68rem; color:var(--teal); }
+
+.tier-div { display:flex; align-items:center; gap:10px; margin:20px 0 12px; }
+.tier-div-line { flex:1; height:1px; background:var(--border); }
+.tier-lbl {
+  font-family:'DM Mono',monospace;
+  font-size:0.6rem;
+  font-weight:500;
+  letter-spacing:0.1em;
+  white-space:nowrap;
+  padding:3px 10px;
+  border-radius:20px;
+}
+.tier-hot .tier-lbl { color:var(--accent); border:1px solid rgba(255,92,108,0.25); background:rgba(255,92,108,0.07); }
+.tier-watching .tier-lbl { color:var(--gold); border:1px solid rgba(245,200,66,0.25); background:var(--gold-dim); }
+.tier-archived .tier-lbl { color:var(--text3); border:1px solid var(--border); }
+
+.listing-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:14px;
+  margin-bottom:10px;
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  cursor:pointer;
+  transition:border-color 0.2s, background 0.2s;
+}
+.listing-card:hover { border-color:var(--border2); background:var(--card2); }
+.listing-card.found-card { border-color:rgba(0,212,180,0.15); }
+.listing-card.watching { opacity:0.82; border-color:rgba(245,200,66,0.15); }
+
+.listing-photo {
+  width:66px;height:66px;
+  border-radius:var(--r-sm);
+  background:var(--card2);
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.8rem;flex-shrink:0;overflow:hidden;
+}
+.listing-photo img { width:100%;height:100%;object-fit:cover;border-radius:var(--r-sm); }
+.listing-info { flex:1; min-width:0; }
+.listing-top { display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap; }
+.listing-type {
+  font-family:'DM Mono',monospace;
+  font-size:0.58rem;
+  padding:2px 8px;
+  border-radius:4px;
+  letter-spacing:0.06em;
+  flex-shrink:0;
+}
+.type-lost { background:rgba(255,92,108,0.1); color:var(--accent); border:1px solid rgba(255,92,108,0.25); }
+.type-found { background:var(--teal-dim); color:var(--teal); border:1px solid rgba(0,212,180,0.25); }
+.type-stray { background:var(--gold-dim); color:var(--gold); border:1px solid rgba(245,200,66,0.25); }
+.type-reunited { background:rgba(255,255,255,0.04); color:var(--text3); border:1px solid var(--border); }
+
+.age-dot { width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:2px; }
+.dot-hot { background:var(--accent); box-shadow:0 0 6px var(--accent); animation:dotPulse 1.5s infinite; }
+.dot-watching { background:var(--gold); }
+.dot-archived { background:var(--text3); }
+@keyframes dotPulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+
+.listing-name {
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:0.92rem;
+  font-weight:800;
+  color:#fff;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.listing-breed { font-size:0.82rem; color:var(--text2); margin-bottom:4px; }
+.listing-loc { font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--text3); }
+.listing-time { font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--text3); text-align:right; flex-shrink:0; white-space:nowrap; }
+.state-box { text-align:center; padding:32px 20px; color:var(--text3); font-family:'DM Mono',monospace; font-size:0.75rem; }
+
+/* ── RESOURCES ── */
+.res-section { margin:0 16px 24px; }
+.res-title {
+  font-family:'DM Mono',monospace;
+  font-size:0.65rem;
+  font-weight:500;
+  color:var(--text3);
+  text-transform:uppercase;
+  letter-spacing:0.12em;
+  margin-bottom:12px;
+}
+.res-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.res-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px;
+  text-decoration:none;
+  display:block;
+  transition:border-color 0.2s, background 0.2s;
+}
+.res-card:hover { border-color:var(--border2); background:var(--card2); }
+.res-icon { font-size:1.3rem; margin-bottom:6px; }
+.res-name {
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:0.75rem;
+  font-weight:700;
+  color:var(--teal);
+  margin-bottom:3px;
+  line-height:1.3;
+}
+.res-info { font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--text3); line-height:1.5; }
+
+/* ── SHARE CTA ── */
+.share-cta {
+  margin:0 16px 28px;
+  background:linear-gradient(135deg,rgba(0,212,180,0.06),rgba(139,114,255,0.04));
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px 18px;
+  text-align:center;
+}
+.share-cta h3 {
+  font-family:'Instrument Serif',serif;
+  font-size:1.1rem;
+  color:#fff;
+  margin-bottom:8px;
+}
+.share-cta p { font-size:0.88rem; color:var(--text2); line-height:1.6; margin-bottom:14px; }
+.sbtn {
+  padding:12px;
+  border-radius:10px;
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:0.8rem;
+  font-weight:700;
+  border:none;
+  cursor:pointer;
+  transition:all 0.2s;
+  text-decoration:none;
+  display:block;
+  text-align:center;
+  margin-bottom:8px;
+}
+.sbtn-p { background:var(--teal); color:var(--bg); box-shadow:0 4px 14px var(--teal-glow); }
+.sbtn-s { background:transparent; color:var(--text3); border:1px solid var(--border); }
+
+/* ── FOOTER ── */
+footer {
+  text-align:center;
+  padding:22px 20px 12px;
+  border-top:1px solid var(--border);
+  margin:0 16px;
+}
+.footer-back {
+  font-family:'DM Mono',monospace;
+  font-size:0.68rem;
+  color:var(--teal);
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-bottom:12px;
+  padding:8px 16px;
+  border:1px solid var(--border);
+  border-radius:20px;
+  transition:border-color 0.2s;
+}
+.footer-back:hover { border-color:var(--teal); }
+.footer-credit { font-family:'DM Mono',monospace; font-size:0.6rem; color:var(--text3); line-height:1.9; }
+
+/* ── MODAL OVERLAY ── */
+.modal-overlay {
+  position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,0.75);
+  backdrop-filter:blur(8px);
+  display:none;align-items:flex-end;justify-content:center;
+}
+.modal-overlay.open { display:flex; }
+.modal-sheet {
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:22px 22px 0 0;
+  padding:26px 20px 40px;
+  width:100%;
+  max-width:480px;
+  max-height:85vh;
+  overflow-y:auto;
+  animation:slideUp 0.32s ease both;
+  position:relative;
+}
+@keyframes slideUp { from{transform:translateY(100%)}to{transform:translateY(0)} }
+.modal-handle { width:36px;height:3px;background:var(--border2);border-radius:2px;margin:0 auto 20px; }
+.modal-photo {
+  width:100%;height:180px;
+  object-fit:cover;
+  background:var(--card2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:4rem;
+  margin-bottom:16px;overflow:hidden;border-radius:14px;
+}
+.modal-photo img { width:100%;height:100%;object-fit:cover; }
+.modal-title {
+  font-family:'Instrument Serif',serif;
+  font-size:1.2rem;
+  color:#fff;
+  margin-bottom:6px;
+}
+.modal-breed { font-size:0.88rem; color:var(--text2); margin-bottom:18px; }
+.modal-detail { display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:0.88rem; }
+.modal-dlbl { color:var(--text3); font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:0.08em; }
+.modal-dval { color:var(--text2); text-align:right; max-width:60%; }
+.modal-desc { margin:14px 0 18px; font-size:0.88rem; color:var(--text2); line-height:1.6; }
+.modal-call {
+  width:100%;
+  background:var(--teal);
+  color:var(--bg);
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:0.85rem;
+  font-weight:800;
+  padding:14px;
+  border-radius:12px;
+  border:none;
+  cursor:pointer;
+  margin-bottom:8px;
+  box-shadow:0 4px 18px var(--teal-glow);
+}
+.modal-reunite {
+  width:100%;
+  background:transparent;
+  color:var(--green);
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:0.82rem;
+  font-weight:700;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid rgba(45,202,125,0.3);
+  cursor:pointer;
+  transition:all 0.2s;
+  margin-bottom:8px;
+}
+.modal-reunite:hover { background:var(--green-dim); }
+.modal-close {
+  position:absolute;top:16px;right:16px;
+  width:30px;height:30px;
+  background:var(--card2);
+  border:1px solid var(--border);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.8rem;color:var(--text3);cursor:pointer;
+}
+
+/* ── CLAIM BUTTONS ── */
+.claim-lost-btn {
+  width:100%;
+  background:linear-gradient(135deg,#FF2244,#FF5C6C);
+  color:#fff;
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:0.85rem;font-weight:800;
+  padding:15px;border-radius:12px;border:none;cursor:pointer;
+  margin-bottom:8px;
+  box-shadow:0 4px 18px rgba(255,34,68,0.35);
+  animation:claimP 2s ease-in-out infinite;
+}
+.claim-found-btn {
+  width:100%;
+  background:linear-gradient(135deg,#00aa44,#2DCA7D);
+  color:#fff;
+  font-family:'Cabinet Grotesk',sans-serif;
+  font-size:0.85rem;font-weight:800;
+  padding:15px;border-radius:12px;border:none;cursor:pointer;
+  margin-bottom:8px;
+  box-shadow:0 4px 18px rgba(45,202,125,0.3);
+  animation:claimP2 2s ease-in-out infinite;
+}
+@keyframes claimP { 0%,100%{box-shadow:0 4px 18px rgba(255,34,68,0.35)}50%{box-shadow:0 4px 26px rgba(255,34,68,0.6)} }
+@keyframes claimP2 { 0%,100%{box-shadow:0 4px 18px rgba(45,202,125,0.3)}50%{box-shadow:0 4px 26px rgba(45,202,125,0.55)} }
+
+.safety-note {
+  background:var(--card2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px 14px;margin:10px 0;
+  font-size:0.8rem;color:var(--text2);line-height:1.5;
+  display:flex;gap:8px;align-items:flex-start;
+}
+.safety-banner {
+  background:var(--gold-dim);
+  border:1px solid rgba(245,200,66,0.25);
+  border-radius:12px;
+  padding:14px 16px;margin:10px 0;
+  font-size:0.82rem;color:var(--gold);line-height:1.6;
+}
+.safety-banner strong { color:#fff;display:block;margin-bottom:4px;font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.08em; }
+.safety-places { display:flex;flex-wrap:wrap;gap:6px;margin-top:8px; }
+.safety-place {
+  background:rgba(245,200,66,0.1);
+  border:1px solid rgba(245,200,66,0.2);
+  border-radius:6px;padding:3px 10px;
+  font-size:0.7rem;color:var(--gold);
+  font-family:'DM Mono',monospace;
+}
+.report-btn {
+  width:100%;background:transparent;
+  color:rgba(255,92,108,0.6);
+  font-family:'DM Mono',monospace;font-size:0.65rem;
+  padding:10px;border-radius:8px;
+  border:1px solid rgba(255,92,108,0.15);
+  cursor:pointer;margin-top:8px;transition:all 0.2s;
+}
+.report-btn:hover { background:rgba(255,92,108,0.06);color:var(--accent); }
+
+/* ── VERIFY OVERLAY ── */
+.verify-overlay {
+  position:fixed;inset:0;z-index:300;
+  background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+.verify-overlay.open { display:flex; }
+.verify-sheet {
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:26px 20px;
+  width:100%;max-width:460px;max-height:88vh;overflow-y:auto;position:relative;
+}
+.verify-close {
+  position:absolute;top:14px;right:16px;width:30px;height:30px;
+  background:var(--card2);border:1px solid var(--border);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.8rem;color:var(--text3);cursor:pointer;z-index:10;
+}
+.verify-title {
+  font-family:'Instrument Serif',serif;
+  font-size:1.2rem;color:var(--teal);margin-bottom:6px;
+}
+.verify-sub { font-size:0.88rem;color:var(--text2);margin-bottom:20px;line-height:1.5; }
+.verify-checklist { background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:14px 0; }
+.verify-checklist-title { font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--teal);letter-spacing:0.08em;margin-bottom:10px; }
+.verify-check { display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer; }
+.verify-check:last-of-type { border-bottom:none; }
+.verify-check input[type=checkbox] { width:20px;height:20px;accent-color:var(--teal);cursor:pointer;flex-shrink:0; }
+.verify-check label { font-size:0.88rem;color:var(--text);cursor:pointer;line-height:1.4; }
+.verify-input {
+  width:100%;
+  background:var(--card2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px 14px;
+  font-family:'Cabinet Grotesk',sans-serif;font-size:1rem;color:var(--text);outline:none;
+  margin-top:6px;transition:border-color 0.2s;
+}
+.verify-input:focus { border-color:var(--border2); }
+.verify-input::placeholder { color:var(--text3); }
+.verify-confirm-btn {
+  width:100%;
+  background:var(--teal);color:var(--bg);
+  font-family:'Cabinet Grotesk',sans-serif;font-size:0.85rem;font-weight:800;
+  padding:14px;border-radius:12px;border:none;cursor:pointer;
+  margin-top:14px;opacity:0.35;pointer-events:none;transition:all 0.2s;
+}
+.verify-confirm-btn.ready { opacity:1;pointer-events:auto; }
+
+/* ── TOAST ── */
+.pet-toast {
+  position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);
+  z-index:800;
+  background:rgba(27,27,39,0.97);
+  border:1px solid var(--border2);
+  border-radius:16px;
+  padding:14px 16px;
+  max-width:340px;width:calc(100% - 40px);
+  display:flex;gap:12px;align-items:center;
+  opacity:0;transition:all 0.4s ease;
+  pointer-events:none;backdrop-filter:blur(16px);
+}
+.pet-toast.show { opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto; }
+.toast-photo { width:52px;height:52px;border-radius:10px;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;overflow:hidden; }
+.toast-photo img { width:100%;height:100%;object-fit:cover;border-radius:10px; }
+.toast-body { flex:1;min-width:0; }
+.toast-title { font-family:'DM Mono',monospace;font-size:0.65rem;font-weight:500;color:var(--accent);margin-bottom:3px; }
+.toast-name { font-size:0.9rem;font-weight:700;color:#fff;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.toast-sub { font-size:0.7rem;color:var(--text3);line-height:1.3; }
+.toast-view { font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--teal);text-decoration:underline;cursor:pointer;margin-top:4px;display:inline-block; }
+.toast-close { font-size:0.8rem;color:var(--text3);cursor:pointer;flex-shrink:0;padding:4px; }
+
+/* ── FABs ── */
+.fab-stray {
+  position:fixed;bottom:24px;right:20px;z-index:500;
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),#F59E0B);
+  border:none;box-shadow:0 4px 18px var(--gold-glow);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;transition:transform 0.2s;-webkit-tap-highlight-color:transparent;
+}
+.fab-stray:active { transform:scale(0.92); }
+.fab-stray-label {
+  position:fixed;bottom:38px;right:86px;z-index:500;
+  background:rgba(12,12,18,0.95);
+  border:1px solid var(--gold);color:var(--gold);
+  font-family:'DM Mono',monospace;font-size:0.58rem;
+  padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap;
+}
+.reg-fab {
+  position:fixed;bottom:98px;right:20px;z-index:500;
+  background:linear-gradient(135deg,#4444ff,#8844ff);
+  border:none;border-radius:50%;width:52px;height:52px;
+  font-size:1.2rem;cursor:pointer;
+  box-shadow:0 4px 14px rgba(100,100,255,0.4);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform 0.2s;-webkit-tap-highlight-color:transparent;
+}
+.reg-fab:active { transform:scale(0.92); }
+.reg-fab-label {
+  position:fixed;bottom:114px;right:82px;z-index:500;
+  background:rgba(12,12,18,0.95);
+  border:1px solid rgba(100,100,255,0.4);color:#8888ff;
+  font-family:'DM Mono',monospace;font-size:0.58rem;
+  padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap;
+}
+.sos-fab {
+  position:fixed;bottom:172px;right:20px;z-index:500;
+  background:linear-gradient(135deg,#cc0000,#FF5C6C);
+  border:none;border-radius:50%;width:52px;height:52px;
+  font-size:1.3rem;cursor:pointer;display:none;
+  align-items:center;justify-content:center;
+  box-shadow:0 4px 18px rgba(200,0,0,0.5);
+  animation:sosPulse 2.5s ease-in-out infinite;
+  -webkit-tap-highlight-color:transparent;
+}
+.sos-fab.visible { display:flex; }
+.sos-fab:active { transform:scale(0.92); }
+@keyframes sosPulse { 0%,100%{box-shadow:0 4px 18px rgba(200,0,0,0.5)}50%{box-shadow:0 4px 28px rgba(255,50,0,0.8)} }
+.sos-fab-label {
+  position:fixed;bottom:188px;right:82px;z-index:500;
+  background:rgba(12,12,18,0.95);
+  border:1px solid rgba(200,0,0,0.5);color:#ff5c6c;
+  font-family:'DM Mono',monospace;font-size:0.58rem;
+  padding:4px 10px;border-radius:10px;pointer-events:none;white-space:nowrap;display:none;
+}
+
+/* ── PET SLOTS ── */
+.pet-slot {
+  background:rgba(0,212,180,0.04);border:1px dashed var(--border2);
+  border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:all 0.2s;
+}
+.pet-slot:hover { background:var(--teal-dim); }
+.pet-slot.filled { border-style:solid;border-color:rgba(45,202,125,0.3);background:var(--green-dim); }
+.pet-slot-top { display:flex;align-items:center;gap:10px;margin-bottom:4px; }
+.pet-slot-emoji { font-size:1.4rem; }
+.pet-slot-name { font-family:'Cabinet Grotesk',sans-serif;font-size:0.82rem;font-weight:700;color:#fff; }
+.pet-slot-detail { font-size:0.78rem;color:var(--text2); }
+.pet-slot-add { font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--teal);text-align:center;padding:6px 0; }
+
+/* ── SOS PICK ── */
+.sos-pick-btn {
+  width:100%;background:rgba(255,50,0,0.08);border:1px solid rgba(255,50,0,0.28);
+  border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;
+  display:flex;align-items:center;gap:14px;transition:all 0.2s;text-align:left;
+}
+.sos-pick-btn:hover { background:rgba(255,50,0,0.14);border-color:rgba(255,50,0,0.5); }
+.sos-pick-emoji { font-size:1.8rem;flex-shrink:0; }
+.sos-pick-name { font-family:'Cabinet Grotesk',sans-serif;font-size:0.88rem;font-weight:700;color:#fff;margin-bottom:2px; }
+.sos-pick-detail { font-size:0.78rem;color:var(--text2); }
+
+/* ── PHOTO EXPAND ── */
+.photo-expand-overlay {
+  position:fixed;inset:0;z-index:800;
+  background:rgba(0,0,0,0.92);display:none;align-items:center;justify-content:center;cursor:zoom-out;
+}
+.photo-expand-overlay.open { display:flex; }
+.photo-expand-overlay img { max-width:95vw;max-height:90vh;object-fit:contain;border-radius:10px;border:1px solid var(--border2); }
+.photo-expand-close {
+  position:absolute;top:16px;right:16px;width:36px;height:36px;
+  background:rgba(255,255,255,0.1);border:1px solid var(--border);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:1rem;color:#fff;cursor:pointer;
+}
+
+/* ── STRAY MODAL ── */
+.stray-modal {
+  position:fixed;inset:0;z-index:600;
+  background:rgba(0,0,0,0.82);backdrop-filter:blur(10px);
+  display:none;align-items:flex-end;justify-content:center;
+}
+.stray-modal.open { display:flex; }
+.stray-sheet {
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:22px 22px 0 0;padding:24px 20px 40px;
+  width:100%;max-width:480px;animation:slideUp 0.3s ease both;position:relative;
+}
+.stray-handle { width:36px;height:3px;background:var(--border2);border-radius:2px;margin:0 auto 18px; }
+.stray-title { font-family:'Instrument Serif',serif;font-size:1.2rem;color:var(--gold);margin-bottom:4px; }
+.stray-sub { font-size:0.85rem;color:var(--text2);margin-bottom:18px; }
+.stray-photo-zone {
+  width:100%;aspect-ratio:4/3;
+  border:2px dashed rgba(245,200,66,0.35);border-radius:14px;
+  background:var(--card2);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;margin-bottom:14px;overflow:hidden;position:relative;
+}
+.stray-photo-zone img { position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:12px; }
+.stray-photo-hint { display:flex;flex-direction:column;align-items:center;gap:6px;z-index:1; }
+.stray-photo-icon { font-size:2.4rem; }
+.stray-photo-txt { font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--gold);letter-spacing:0.06em; }
+.stray-loc-row {
+  display:flex;align-items:center;gap:10px;
+  background:var(--card2);border:1px solid var(--border);border-radius:10px;
+  padding:12px 14px;margin-bottom:12px;cursor:pointer;
+}
+.stray-loc-icon { font-size:1.2rem;flex-shrink:0; }
+.stray-loc-text { font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--text3);flex:1;line-height:1.4; }
+.stray-loc-text.got { color:var(--teal); }
+.stray-row { margin-bottom:12px; }
+.stray-input {
+  width:100%;background:var(--card2);border:1px solid var(--border);
+  border-radius:10px;padding:13px 16px;
+  font-family:'Cabinet Grotesk',sans-serif;font-size:1rem;color:var(--text);outline:none;
+}
+.stray-input:focus { border-color:var(--border2); }
+.stray-input::placeholder { color:var(--text3); }
+.stray-submit {
+  width:100%;
+  background:linear-gradient(135deg,var(--gold),#F59E0B);
+  color:var(--bg);
+  font-family:'Cabinet Grotesk',sans-serif;font-size:0.85rem;font-weight:800;
+  padding:15px;border-radius:12px;border:none;cursor:pointer;margin-top:4px;
+  box-shadow:0 4px 14px var(--gold-glow);
+}
+.stray-submit:disabled { opacity:0.5;cursor:not-allowed; }
+.stray-close {
+  position:absolute;top:14px;right:16px;width:30px;height:30px;
+  background:var(--card2);border:1px solid var(--border);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text3);cursor:pointer;
+}
+.stray-success { text-align:center;padding:16px 0 8px; }
+
+/* ── PAWS ALERT ── */
+.paws-overlay {
+  position:fixed;inset:0;z-index:2000;background:#000;
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:24px;animation:pawsIn 0.4s ease both;
+}
+.paws-overlay.show { display:flex; }
+@keyframes pawsIn { from{opacity:0;transform:scale(1.04)}to{opacity:1;transform:scale(1)} }
+.paws-strobe { position:absolute;inset:0;background:rgba(255,92,108,0.16);animation:strobe 0.7s ease-in-out infinite;pointer-events:none; }
+@keyframes strobe { 0%,100%{opacity:0}50%{opacity:1} }
+.paws-top-bar {
+  position:absolute;top:0;left:0;right:0;
+  background:var(--accent);padding:10px;
+  font-family:'DM Mono',monospace;font-size:0.68rem;font-weight:500;
+  letter-spacing:0.2em;color:#fff;display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.paws-siren { font-size:1.6rem;animation:sirenSpin 0.5s linear infinite; }
+@keyframes sirenSpin { 0%,100%{transform:scale(1)}50%{transform:scale(1.3)} }
+.paws-paw { font-size:clamp(5rem,20vw,10rem);animation:pawBounce 0.6s ease-in-out infinite;margin-bottom:16px; }
+@keyframes pawBounce { 0%,100%{transform:scale(1) rotate(-5deg)}50%{transform:scale(1.1) rotate(5deg)} }
+.paws-stop { font-family:'Instrument Serif',serif;font-size:clamp(2rem,10vw,4rem);font-style:italic;color:var(--accent);margin-bottom:8px;animation:stopPulse 0.5s ease-in-out infinite; }
+@keyframes stopPulse { 0%,100%{opacity:1}50%{opacity:0.5} }
+.paws-name { font-family:'Instrument Serif',serif;font-size:clamp(2.5rem,12vw,5rem);color:#fff;margin-bottom:4px;line-height:1; }
+.paws-status { font-family:'DM Mono',monospace;font-size:clamp(1rem,4vw,1.5rem);font-weight:500;color:var(--accent);letter-spacing:0.12em;margin-bottom:20px; }
+.paws-photo { width:140px;height:140px;border-radius:50%;object-fit:cover;border:4px solid var(--accent);box-shadow:0 0 40px var(--accent-glow);margin-bottom:20px; }
+.paws-desc { font-size:clamp(0.9rem,3vw,1.05rem);color:var(--text2);line-height:1.6;max-width:340px;margin-bottom:24px; }
+.paws-loc { font-family:'DM Mono',monospace;font-size:0.82rem;color:var(--gold);margin-bottom:24px;display:flex;align-items:center;justify-content:center;gap:6px; }
+.paws-btn {
+  background:var(--accent);color:#fff;
+  font-family:'Cabinet Grotesk',sans-serif;font-size:0.85rem;font-weight:800;
+  padding:16px 32px;border-radius:12px;border:none;cursor:pointer;
+  box-shadow:0 4px 20px var(--accent-glow);margin-bottom:10px;width:100%;max-width:340px;
+}
+.paws-dismiss { font-family:'DM Mono',monospace;font-size:0.62rem;color:rgba(255,255,255,0.3);cursor:pointer;letter-spacing:0.08em;margin-top:4px; }
+.paws-progress { position:absolute;bottom:0;left:0;height:4px;background:var(--accent);width:100%;transform-origin:left;animation:none; }
+.paws-progress.running { animation:progressBar var(--paws-duration,10s) linear forwards; }
+@keyframes progressBar { from{transform:scaleX(1)}to{transform:scaleX(0)} }
 </style>
 </head>
 <body>
-<div class="bg-grid"></div>
-<div class="orb orb1"></div>
-<div class="orb orb2"></div>
 <div class="page">
   <nav>
-    <a class="nav-back" href="/">← HOME</a>
-    <div class="nav-title">🐾 PET FINDER</div>
-    <a href="tucson-pet-finder-v2.html" style="font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--gold);border:1px solid rgba(255,215,0,0.3);padding:3px 10px;border-radius:20px;text-decoration:none;white-space:nowrap;flex-shrink:0">☀️ LIGHT</a>
+    <a class="nav-back" href="/">← Home</a>
+    <div class="nav-title">🐾 Pet Finder</div>
+    <a href="tucson-pet-finder-v2.html" class="nav-light-link">☀️ Light</a>
     <div class="nav-live">LIVE</div>
   </nav>
+
   <div class="hero">
-    <div class="hero-icon" style="font-size:0;margin-bottom:16px"><img src="data:image/jpeg;base64,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" alt="Tucson Pet Finder" style="width:120px;height:120px;border-radius:50%;object-fit:cover;object-position:center top;border:3px solid var(--teal);box-shadow:0 0 32px var(--teal-glow)" onerror="this.parentNode.innerHTML='🐾';this.parentNode.style.fontSize='3rem'"/></div>
-    <h1 class="hero-title">TUCSON<br><span>PET FINDER</span></h1>
+    <div class="hero-icon">🐾</div>
+    <h1 class="hero-title">Tucson<br><span>Pet Finder</span></h1>
     <p class="hero-sub">Lost or found a pet in Tucson? Post in 60 seconds. Neighbors get alerted instantly. Free forever.</p>
     <div class="hero-stats">
       <div><div class="hstat-num">5mi</div><div class="hstat-lbl">Alert Radius</div></div>
@@ -285,14 +933,16 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
       <div><div class="hstat-num">60s</div><div class="hstat-lbl">To Post</div></div>
     </div>
   </div>
+
   <div class="alert-strip" id="alertStrip" onclick="switchTab('see')" title="Click to see all alerts">
     <div class="alert-icon">🔍</div>
     <div class="alert-text" id="alertText">Checking Tucson alerts...</div>
   </div>
+
   <div class="tabs">
-    <button class="tab-btn active" id="tabLost" onclick="switchTab('lost')">🔴 I LOST A PET</button>
-    <button class="tab-btn found-tab" id="tabFound" onclick="switchTab('found')">🟢 I FOUND A PET</button>
-    <button class="tab-btn" id="tabSee" onclick="switchTab('see')">📋 SEE ALL</button>
+    <button class="tab-btn active" id="tabLost" onclick="switchTab('lost')">🔴 I Lost a Pet</button>
+    <button class="tab-btn found-tab" id="tabFound" onclick="switchTab('found')">🟢 I Found a Pet</button>
+    <button class="tab-btn" id="tabSee" onclick="switchTab('see')">📋 See All</button>
   </div>
 
   <!-- LOST FORM -->
@@ -336,7 +986,7 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
         <img class="photo-prev" id="lostPrev" onclick="expandPhoto(this)" style="cursor:zoom-in"/>
       </div>
     </div>
-    <button class="submit-btn" id="lostBtn" onclick="doSubmit('lost')">🚨 POST LOST PET ALERT</button>
+    <button class="submit-btn" id="lostBtn" onclick="doSubmit('lost')">🚨 Post Lost Pet Alert</button>
   </div>
 
   <!-- FOUND FORM -->
@@ -379,7 +1029,7 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
         <img class="photo-prev" id="foundPrev" onclick="expandPhoto(this)" style="cursor:zoom-in"/>
       </div>
     </div>
-    <button class="submit-btn found-btn" id="foundBtn" onclick="doSubmit('found')">🟢 POST FOUND PET ALERT</button>
+    <button class="submit-btn found-btn" id="foundBtn" onclick="doSubmit('found')">🟢 Post Found Pet Alert</button>
   </div>
 
   <!-- SUCCESS -->
@@ -409,12 +1059,14 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
       <a class="res-card" href="https://pawfbi.com" target="_blank"><div class="res-icon">🚁</div><div class="res-name">PawFBI</div><div class="res-info">Drone and thermal<br>pet tracking</div></a>
     </div>
   </div>
+
   <div class="share-cta">
     <h3>🌐 Know a Tucson neighbor with a lost pet?</h3>
     <p>This app is 100% free. The more neighbors who use it, the faster pets get home.</p>
     <button class="sbtn sbtn-p" onclick="shareApp()" style="display:block;width:100%;text-align:center">📲 Share Tucson Pet Finder</button>
     <a class="sbtn sbtn-s" href="https://aini-marketplace.vercel.app/" target="_blank" style="display:block;width:100%;text-align:center;box-sizing:border-box">🛒 Visit AI&amp;I Marketplace</a>
   </div>
+
   <footer>
     <a class="footer-back" href="https://aini-marketplace.vercel.app/" target="_blank">🛒 AI&amp;I Marketplace</a>
     <div class="footer-credit">Tucson Pet Finder · 100% Free · Real Database · Built by Lamar Myers<br>VTREI, LLC · Tucson, AZ · 520-258-2714</div>
@@ -434,15 +1086,15 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
 </div>
 
 <!-- SOS FAB -->
-<div class="sos-fab-label">🚨 EMERGENCY SOS</div>
+<div class="sos-fab-label">🚨 Emergency SOS</div>
 <button class="sos-fab" id="sosFab" onclick="openSOS()">🆘</button>
 
 <!-- PROFILE FAB -->
-<div class="reg-fab-label" id="regFabLabel">🐾 MY PROFILE</div>
+<div class="reg-fab-label" id="regFabLabel">🐾 My Profile</div>
 <button class="reg-fab" id="regFab" onclick="openProfileModal()">🐾</button>
 
 <!-- STRAY FAB -->
-<div class="fab-stray-label">📸 SPOT A STRAY</div>
+<div class="fab-stray-label">📸 Spot a Stray</div>
 <button class="fab-stray" onclick="openStrayModal()">📷</button>
 
 <!-- MAIN MODAL -->
@@ -469,14 +1121,6 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
   </div>
 </div>
 
-<!-- PROFILE MODAL -->
-<div class="verify-overlay" id="regOverlay">
-  <div class="verify-sheet">
-    <div class="verify-close" onclick="closeProfileModal()">✕</div>
-    <div id="profileContent"></div>
-  </div>
-</div>
-
 <!-- SOS MODAL -->
 <div class="verify-overlay" id="sosOverlay">
   <div class="verify-sheet">
@@ -491,7 +1135,7 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
     <div class="stray-close" onclick="closeStrayModal()">✕</div>
     <div class="stray-handle"></div>
     <div id="strayFormView">
-      <div class="stray-title">📸 SPOT A STRAY</div>
+      <div class="stray-title">📸 Spot a Stray</div>
       <div class="stray-sub">Saw a stray nearby? Post a photo — neighbors will see it instantly.</div>
       <div class="stray-photo-zone" id="strayPhotoZone" onclick="document.getElementById('strayPhotoInput').click()">
         <input type="file" id="strayPhotoInput" accept="image/*" capture="environment" style="display:none" onchange="loadStrayPhoto(this)"/>
@@ -504,14 +1148,14 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
       </div>
       <div class="stray-row"><input class="stray-input" type="text" id="strayNote" placeholder="Quick note — e.g. limping, near park entrance" maxlength="120"/></div>
       <div class="stray-row"><input class="stray-input" type="tel" id="strayPhone" placeholder="Your phone (optional) 520-XXX-XXXX" inputmode="numeric" oninput="autoPhone(this)"/></div>
-      <button class="stray-submit" id="straySubmitBtn" onclick="submitStray()">📸 POST STRAY SIGHTING</button>
+      <button class="stray-submit" id="straySubmitBtn" onclick="submitStray()">📸 Post Stray Sighting</button>
     </div>
     <div id="straySuccessView" style="display:none">
       <div class="stray-success" style="padding:30px 10px 20px">
         <div style="font-size:3rem;margin-bottom:14px">🙌</div>
-        <div style="font-family:'Orbitron',sans-serif;font-size:0.95rem;color:var(--gold);margin-bottom:12px;letter-spacing:0.06em">SIGHTING POSTED!</div>
-        <div style="font-size:0.88rem;color:var(--text-dim);line-height:1.7;margin-bottom:24px">Your photo is now live. Every Tucson neighbor who opens this app will see it. Thank you! 🐾</div>
-        <button class="stray-submit" onclick="closeStrayModal()" style="background:var(--teal);color:var(--bg);box-shadow:0 4px 16px var(--teal-glow)">✓ DONE</button>
+        <div style="font-family:'Instrument Serif',serif;font-size:1.2rem;color:var(--gold);margin-bottom:12px">Sighting Posted!</div>
+        <div style="font-size:0.88rem;color:var(--text2);line-height:1.7;margin-bottom:24px">Your photo is now live. Every Tucson neighbor who opens this app will see it. Thank you! 🐾</div>
+        <button class="stray-submit" onclick="closeStrayModal()" style="background:var(--teal);color:var(--bg);box-shadow:0 4px 14px var(--teal-glow)">✓ Done</button>
       </div>
     </div>
   </div>
@@ -523,7 +1167,15 @@ footer{text-align:center;padding:24px 20px 12px;border-top:1px solid var(--borde
   <img id="photoExpandImg" src="" alt="Pet photo"/>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<!-- PROFILE MODAL -->
+<div class="verify-overlay" id="regOverlay">
+  <div class="verify-sheet">
+    <div class="verify-close" onclick="closeProfileModal()">✕</div>
+    <div id="profileContent"></div>
+  </div>
+</div>
+
+<script>
 // ── SUPABASE CONFIG ────────────────────────────────────────────────────────
 var SURL = "https://msuqflssqixsplcearxr.supabase.co";
 var SKEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdXFmbHNzcWl4c3BsY2VhcnhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMzU3NDgsImV4cCI6MjA4OTcxMTc0OH0.BlrDiIu2YdDB7oHJ0fFiSEiBDQGvHCFAUaysR6O24zk";
@@ -557,9 +1209,8 @@ async function patchPet(id, data) {
 
 async function uploadPhoto(b64, fileName) {
   try {
-    var base64 = b64.split(",")[1];
     var mime = b64.split(",")[0].split(":")[1].split(";")[0];
-    var binary = atob(base64);
+    var binary = atob(b64.split(",")[1]);
     var arr = new Uint8Array(binary.length);
     for(var i=0;i<binary.length;i++) arr[i] = binary.charCodeAt(i);
     var blob = new Blob([arr], {type:mime});
@@ -710,8 +1361,6 @@ function _setBtn(btn, listening) {
     btn.setAttribute("data-orig", btn.textContent);
     btn.textContent = "🔴 Listening...";
     btn.classList.add("listening");
-    btn.style.color = "var(--red)";
-    btn.style.borderColor = "var(--red)";
   } else {
     var orig = btn.getAttribute("data-orig");
     if(orig) btn.textContent = orig;
@@ -722,13 +1371,11 @@ function _setBtn(btn, listening) {
 }
 
 function startVoice(fieldId, btn) {
-  // btn param is optional — find it from the event if not passed
   if(!btn && window.event) btn = window.event.currentTarget || window.event.target;
   if(!_SR) {
     alert("Voice input not supported on this browser.\n\niPhone: use Safari\nAndroid: use Chrome\n\nMake sure microphone permission is allowed for this site.");
     return;
   }
-  // Toggle off if same field tapped again
   if(_isListening) {
     if(_recog) { try { _recog.abort(); } catch(e) {} }
     _recog = null;
@@ -760,15 +1407,10 @@ function doVoiceStart(fieldId) {
   _activeField = fieldId;
   _finalText = "";
   _isListening = true;
-
-  // Visual feedback — input border + placeholder
   el.style.borderColor = "var(--teal)";
   el.placeholder = isPhone ? "🎤 Say your number..." : "🎤 Listening... speak now!";
   el.focus();
-
-  // Visual feedback — button
   _setBtn(_activeBtn, true);
-
   clearTimeout(_silenceTimer);
   _silenceTimer = setTimeout(function() { if(_recog && _isListening) _recog.stop(); }, isPhone ? 8000 : 15000);
 
@@ -792,14 +1434,14 @@ function doVoiceStart(fieldId) {
   };
 
   _recog.onerror = function(e) {
-    if(e.error === "no-speech") return; // silence timeout — let onend handle it
+    if(e.error === "no-speech") return;
     _isListening = false;
     _setBtn(_activeBtn, false);
     el.style.borderColor = "";
     el.placeholder = "";
     clearTimeout(_silenceTimer);
     if(e.error === "not-allowed" || e.error === "service-not-allowed") {
-      alert("Microphone access was denied.\n\nTo fix this:\n• iPhone Safari: Settings → Safari → Microphone → Allow\n• Android Chrome: tap the 🔒 lock icon in the address bar → Microphone → Allow\n\nThen reload the page and try again.");
+      alert("Microphone access was denied.\n\nTo fix this:\n• iPhone Safari: Settings → Safari → Microphone → Allow\n• Android Chrome: tap the 🔒 lock icon → Microphone → Allow\n\nThen reload the page and try again.");
     } else if(e.error === "network") {
       alert("Voice recognition needs an internet connection. Please check your connection and try again.");
     }
@@ -823,14 +1465,12 @@ function doVoiceStart(fieldId) {
     el.style.borderColor = "";
     el.placeholder = "";
     _setBtn(_activeBtn, false);
-    console.warn("Voice start error:", e);
   }
 }
 
 // ── SMART NAME PARSER ──────────────────────────────────────────────────────
 function smartParseName(raw) {
   if(!raw) return raw;
-  // Patterns like "name on collar says George", "her name is Bella", "his name's Max", "they call him Buddy"
   var patterns = [
     /(?:name\s+on\s+(?:the\s+)?(?:collar|tag|tags)\s+(?:says?|reads?|is))\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
     /(?:(?:her|his|the|its)\s+name\s+(?:is|was|'s))\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,
@@ -845,13 +1485,10 @@ function smartParseName(raw) {
     var m = raw.match(patterns[i]);
     if(m && m[1]) {
       var name = m[1].trim();
-      // Capitalize first letter of each word
       return name.replace(/\b\w/g, function(c){ return c.toUpperCase(); });
     }
   }
-  // If it's a short input (1-2 words, under 25 chars) just use it as-is
   if(raw.split(/\s+/).length <= 2 && raw.length <= 25) return raw;
-  // Long freeform speech — return as-is, let the full text show in description
   return raw;
 }
 
@@ -869,7 +1506,7 @@ async function doSubmit(type) {
     showErr("errLostPhone",!validPhone(phone)); if(!validPhone(phone)) ok=false;
     if(!ok) return;
     var btn = document.getElementById("lostBtn");
-    btn.disabled=true; btn.textContent="POSTING...";
+    btn.disabled=true; btn.textContent="Posting...";
     try {
       var photoFile = document.getElementById("lostPhoto").files[0];
       var photoUrl = null;
@@ -877,9 +1514,8 @@ async function doSubmit(type) {
       await addPet({status:"lost",name:name,type:pt,breed:document.getElementById("lostBreed").value.trim()||pt,location:loc,description:document.getElementById("lostDesc").value.trim(),phone:fmtPhone(phone),photo_url:photoUrl||""});
       showSuccess("lost", name);
       loadAlertBanner();
-      // PAWS Alert will fire via loadAlertBanner → checkForPAWSAlert
-    } catch(e) { alert("Error posting. Please try again."); console.error(e); }
-    finally { btn.disabled=false; btn.textContent="🚨 POST LOST PET ALERT"; }
+    } catch(e) { alert("Error posting. Please try again."); }
+    finally { btn.disabled=false; btn.textContent="🚨 Post Lost Pet Alert"; }
   } else {
     var pt2   = document.getElementById("foundType").value;
     var loc2  = document.getElementById("foundLoc").value.trim();
@@ -889,7 +1525,7 @@ async function doSubmit(type) {
     showErr("errFoundPhone",!validPhone(phone2)); if(!validPhone(phone2)) ok=false;
     if(!ok) return;
     var btn2 = document.getElementById("foundBtn");
-    btn2.disabled=true; btn2.textContent="POSTING...";
+    btn2.disabled=true; btn2.textContent="Posting...";
     try {
       var photoFile2 = document.getElementById("foundPhoto").files[0];
       var photoUrl2 = null;
@@ -898,8 +1534,8 @@ async function doSubmit(type) {
       await addPet({status:"found",name:foundName2||"Found "+pt2,type:pt2,breed:document.getElementById("foundBreed").value.trim()||pt2,location:loc2,description:document.getElementById("foundDesc").value.trim(),phone:fmtPhone(phone2),photo_url:photoUrl2||""});
       showSuccess("found");
       loadAlertBanner();
-    } catch(e) { alert("Error posting. Please try again."); console.error(e); }
-    finally { btn2.disabled=false; btn2.textContent="🟢 POST FOUND PET ALERT"; }
+    } catch(e) { alert("Error posting. Please try again."); }
+    finally { btn2.disabled=false; btn2.textContent="🟢 Post Found Pet Alert"; }
   }
 }
 
@@ -910,18 +1546,18 @@ function showSuccess(type, name) {
   sp.style.display = "block";
   if(type==="lost") {
     document.getElementById("successIcon").textContent = "🚨";
-    document.getElementById("successTitle").textContent = name ? name+"s Alert Is Live!" : "Alert Posted!";
-    document.getElementById("successTitle").style.color = "var(--red)";
+    document.getElementById("successTitle").textContent = name ? name+"'s Alert Is Live!" : "Alert Posted!";
+    document.getElementById("successTitle").style.color = "var(--accent)";
     document.getElementById("successMsg").textContent = "Saved in our database — every Tucson neighbor who opens this app will see it. Share to get more eyes looking!";
-    sp.style.background = "rgba(255,68,102,0.06)";
-    sp.style.borderColor = "rgba(255,68,102,0.3)";
+    sp.style.background = "rgba(255,92,108,0.06)";
+    sp.style.borderColor = "rgba(255,92,108,0.25)";
   } else {
     document.getElementById("successIcon").textContent = "🟢";
     document.getElementById("successTitle").textContent = "Found Pet Posted!";
-    document.getElementById("successTitle").style.color = "var(--green)";
+    document.getElementById("successTitle").style.color = "var(--teal)";
     document.getElementById("successMsg").textContent = "Your report is live. The owner can now find and contact you directly. Thank you!";
-    sp.style.background = "rgba(0,255,136,0.06)";
-    sp.style.borderColor = "rgba(0,255,136,0.3)";
+    sp.style.background = "rgba(0,212,180,0.06)";
+    sp.style.borderColor = "rgba(0,212,180,0.2)";
   }
   sp.scrollIntoView({behavior:"smooth",block:"center"});
 }
@@ -952,7 +1588,7 @@ function buildCard(pet) {
 }
 
 function tierDivider(type) {
-  var labels = {hot:"🔴 ACTIVE — Last 24 Hours", watching:"👀 STILL OUT THERE — 1-3 Days", archived:"📁 Older Alerts"};
+  var labels = {hot:"🔴 Active — Last 24 Hours", watching:"👀 Still Out There — 1-3 Days", archived:"📁 Older Alerts"};
   var d = document.createElement("div");
   d.className = "tier-div tier-"+type;
   d.innerHTML = "<div class=\"tier-div-line\"></div><div class=\"tier-lbl\">"+labels[type]+"</div><div class=\"tier-div-line\"></div>";
@@ -967,7 +1603,6 @@ async function renderListings() {
   var hot = pets.filter(function(p) { return skip.indexOf(p.status)<0 && petAgeTier(p.created_at)==="hot"; });
   var watching = pets.filter(function(p) { return skip.indexOf(p.status)<0 && petAgeTier(p.created_at)==="watching"; });
   var archived = pets.filter(function(p) { return skip.indexOf(p.status)<0 && petAgeTier(p.created_at)==="archived"; });
-  var activeCount = hot.length + watching.length;
   document.getElementById("listingCount").textContent = hot.length+" hot · "+watching.length+" watching";
   c.innerHTML = "";
   if(!pets.filter(function(p){return skip.indexOf(p.status)<0;}).length) {
@@ -980,7 +1615,7 @@ async function renderListings() {
     var wrap = document.createElement("div");
     var toggle = document.createElement("div");
     toggle.style.cssText = "text-align:center;padding:12px 0;cursor:pointer";
-    toggle.innerHTML = "<span style=\"font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--text-dim);border:1px solid var(--border);padding:6px 16px;border-radius:20px\">📁 Show "+archived.length+" older alert"+(archived.length!==1?"s":"")+"</span>";
+    toggle.innerHTML = "<span style=\"font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--text3);border:1px solid var(--border);padding:6px 16px;border-radius:20px\">📁 Show "+archived.length+" older alert"+(archived.length!==1?"s":"")+"</span>";
     toggle.onclick = function() {
       wrap.innerHTML = "";
       c.appendChild(tierDivider("archived"));
@@ -1000,7 +1635,7 @@ async function loadAlertBanner() {
   var strip = document.getElementById("alertStrip");
   if(lost===0 && found===0) {
     el.textContent = "No active alerts in Tucson right now. Post below if you lost or found a pet.";
-    strip.style.borderColor = "rgba(0,255,212,0.2)";
+    strip.style.borderColor = "rgba(0,212,180,0.15)";
     document.querySelector(".alert-icon").textContent = "✅";
   } else {
     var parts = [];
@@ -1008,7 +1643,6 @@ async function loadAlertBanner() {
     if(found>0) parts.push("<strong>"+found+" found</strong> waiting for owner");
     el.innerHTML = parts.join(" · ")+" in Tucson. <span style='text-decoration:underline;opacity:0.7'>Tap to view →</span>";
   }
-  // Check for brand-new pets to trigger PAWS Alert
   checkForPAWSAlert();
 }
 
@@ -1027,7 +1661,7 @@ function openModal(pet) {
   document.getElementById("mTitle").textContent = (pet.name||"Unknown")+statusLabel;
   document.getElementById("mBreed").textContent = (pet.breed||pet.type)+" · "+pet.type;
   document.getElementById("mDesc").textContent = pet.description||"No additional description.";
-  var statusColor = pet.status==="lost"?"var(--red)":pet.status==="found"?"var(--green)":"var(--text-dim)";
+  var statusColor = pet.status==="lost"?"var(--accent)":pet.status==="found"?"var(--teal)":"var(--text2)";
   document.getElementById("mDetails").innerHTML =
     "<div class=\"modal-detail\"><span class=\"modal-dlbl\">STATUS</span><span class=\"modal-dval\" style=\"color:"+statusColor+";font-weight:700\">"+pet.status.toUpperCase()+"</span></div>"
     +"<div class=\"modal-detail\"><span class=\"modal-dlbl\">LOCATION</span><span class=\"modal-dval\">"+pet.location+"</span></div>"
@@ -1042,24 +1676,22 @@ function openModal(pet) {
     cb.textContent = "📞 Call Reporter: "+pet.phone;
     cb.onclick = function(){window.location.href="tel:"+pet.phone.replace(/\D/g,"");};
     cb.style.display = "block";
-    rb.style.display = "none"; // hidden — only shown after ownership verified
     extra.innerHTML =
-      "<div class=\"safety-banner\"><strong>🤝 SAFE MEETUP SPOTS</strong> Always meet in a public place with cameras around.<div class=\"safety-places\"><span class=\"safety-place\">🏪 Walgreens</span><span class=\"safety-place\">🚔 Police Station</span><span class=\"safety-place\">☕ Starbucks</span><span class=\"safety-place\">🏥 Fire Station</span><span class=\"safety-place\">🏬 Walmart</span></div></div>"
-      +"<button class=\"claim-lost-btn\" onclick=\"openClaimFlow('lost')\">🐕 THIS IS MY PET — I AM THE OWNER</button>"
+      "<div class=\"safety-banner\"><strong>🤝 Safe Meetup Spots</strong> Always meet in a public place with cameras around.<div class=\"safety-places\"><span class=\"safety-place\">🏪 Walgreens</span><span class=\"safety-place\">🚔 Police Station</span><span class=\"safety-place\">☕ Starbucks</span><span class=\"safety-place\">🏥 Fire Station</span><span class=\"safety-place\">🏬 Walmart</span></div></div>"
+      +"<button class=\"claim-lost-btn\" onclick=\"openClaimFlow('lost')\">🐕 This Is My Pet — I Am the Owner</button>"
       +"<div class=\"safety-note\"><span>🔒</span><span>Clicking above starts a <strong>verification checklist</strong>. Once verified, you'll get the contact info and a green <strong>Mark as Reunited</strong> button.</span></div>"
       +"<button class=\"report-btn\" onclick=\"reportListing()\">🚨 Report Suspicious Activity</button>";
   } else if(pet.status==="found") {
     cb.textContent = "📞 Contact Finder: "+pet.phone;
     cb.onclick = function(){window.location.href="tel:"+pet.phone.replace(/\D/g,"");};
     cb.style.display = "block";
-    rb.style.display = "none"; // hidden — only shown after ownership verified
     extra.innerHTML =
-      "<div class=\"safety-banner\"><strong>🤝 SAFE MEETUP SPOTS</strong> Always meet in a public place with cameras around.<div class=\"safety-places\"><span class=\"safety-place\">🏪 Walgreens</span><span class=\"safety-place\">🚔 Police Station</span><span class=\"safety-place\">☕ Starbucks</span><span class=\"safety-place\">🏥 Fire Station</span><span class=\"safety-place\">🏬 Walmart</span></div></div>"
-      +"<button class=\"claim-found-btn\" onclick=\"openClaimFlow('found')\">🏠 THIS IS MY PET — REUNITE NOW</button>"
+      "<div class=\"safety-banner\"><strong>🤝 Safe Meetup Spots</strong> Always meet in a public place with cameras around.<div class=\"safety-places\"><span class=\"safety-place\">🏪 Walgreens</span><span class=\"safety-place\">🚔 Police Station</span><span class=\"safety-place\">☕ Starbucks</span><span class=\"safety-place\">🏥 Fire Station</span><span class=\"safety-place\">🏬 Walmart</span></div></div>"
+      +"<button class=\"claim-found-btn\" onclick=\"openClaimFlow('found')\">🏠 This Is My Pet — Reunite Now</button>"
       +"<div class=\"safety-note\"><span>🔒</span><span>Clicking above opens a <strong>quick verification</strong>. Once confirmed, you'll get the finder's contact and a green <strong>Mark as Reunited</strong> button.</span></div>"
       +"<button class=\"report-btn\" onclick=\"reportListing()\">🚨 Report Suspicious Activity</button>";
   } else if(pet.status==="reunited") {
-    extra.innerHTML = "<div style=\"text-align:center;padding:16px 0;font-size:0.88rem;color:var(--text-dim)\">🎉 This pet has been reunited with their family!</div>";
+    extra.innerHTML = "<div style=\"text-align:center;padding:16px 0;font-size:0.88rem;color:var(--text2)\">🎉 This pet has been reunited with their family!</div>";
   }
   document.getElementById("modalOverlay").classList.add("open");
   document.body.style.overflow = "hidden";
@@ -1074,49 +1706,18 @@ function closeModalOverlay(e) {
 async function reportListing() {
   if(!_currentPet) return;
   var pet = _currentPet;
-  var reason = prompt("Briefly describe the issue with \"" + (pet.name||"this listing") + "\":\n\n(Your report helps keep Tucson safe)");
+  var reason = prompt("Briefly describe the issue with \""+(pet.name||"this listing")+"\":\n\n(Your report helps keep Tucson safe)");
   if(!reason || !reason.trim()) return;
-
   var reportData = {
-    pet_id: pet.id,
-    pet_name: pet.name||"Unknown",
-    pet_status: pet.status,
-    pet_location: pet.location||"",
-    reason: reason.trim(),
+    pet_id: pet.id, pet_name: pet.name||"Unknown", pet_status: pet.status,
+    pet_location: pet.location||"", reason: reason.trim(),
     reported_at: new Date().toISOString(),
     reporter_info: _supaUser ? _supaUser.email : "Anonymous"
   };
-
-  // 1. Save to Supabase reports table
   try {
-    await fetch(SURL+"/rest/v1/reports", {
-      method:"POST",
-      headers:{...SH,"Prefer":"return=minimal"},
-      body: JSON.stringify(reportData)
-    });
-  } catch(e) { console.warn("Report save failed:", e); }
-
-  // 2. Email notification via EmailJS
-  // TO SET UP: create free account at emailjs.com
-  // Service ID, Template ID, and Public Key go below
-  // Template variables: {{pet_name}}, {{pet_status}}, {{pet_location}}, {{reason}}, {{reporter_info}}, {{reported_at}}
-  try {
-    var EMAILJS_SERVICE = "YOUR_EMAILJS_SERVICE_ID";   // ← replace after EmailJS setup
-    var EMAILJS_TEMPLATE = "YOUR_EMAILJS_TEMPLATE_ID"; // ← replace after EmailJS setup
-    var EMAILJS_KEY = "YOUR_EMAILJS_PUBLIC_KEY";        // ← replace after EmailJS setup
-    if(EMAILJS_SERVICE !== "YOUR_EMAILJS_SERVICE_ID") {
-      await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
-        pet_name: reportData.pet_name,
-        pet_status: reportData.pet_status,
-        pet_location: reportData.pet_location,
-        reason: reportData.reason,
-        reporter_info: reportData.reporter_info,
-        reported_at: reportData.reported_at
-      }, EMAILJS_KEY);
-    }
-  } catch(e) { console.warn("Email notification failed:", e); }
-
-  alert("🚨 Report submitted. Our team will review \"" + (pet.name||"this listing") + "\" within 24 hours. Thank you for keeping Tucson safe.");
+    await fetch(SURL+"/rest/v1/reports", {method:"POST",headers:{...SH,"Prefer":"return=minimal"},body:JSON.stringify(reportData)});
+  } catch(e) {}
+  alert("🚨 Report submitted. Our team will review \""+(pet.name||"this listing")+"\" within 24 hours. Thank you for keeping Tucson safe.");
 }
 
 // ── CLAIM / VERIFY FLOW ────────────────────────────────────────────────────
@@ -1125,23 +1726,23 @@ function openClaimFlow(petStatus) {
   var pet = _currentPet;
   var isReunite = petStatus==="reunite";
   var vc = document.getElementById("verifyContent");
-  var titleText = isReunite ? "✅ CONFIRM REUNIFICATION" : (petStatus==="lost" ? "🐕 CLAIM YOUR PET" : "🏠 CLAIM YOUR PET");
+  var titleText = isReunite ? "✅ Confirm Reunification" : (petStatus==="lost" ? "🐕 Claim Your Pet" : "🏠 Claim Your Pet");
   var subText = isReunite
     ? "Confirm that "+pet.name+" has been safely returned to their owner."
     : "Before we connect you, confirm you are the owner of "+pet.name+".";
   var chk1 = isReunite ? "The owner has been positively identified" : "I can describe a unique marking on this pet";
   var chk2 = isReunite ? "The pet and owner have already reunited in person" : "I have photos of me with this pet available";
-  var chk3 = isReunite ? "I personally witnessed the reunion" : "I know my pets vet name or clinic";
+  var chk3 = isReunite ? "I personally witnessed the reunion" : "I know my pet's vet name or clinic";
   var chk4 = isReunite ? "I understand this will permanently remove the alert" : "I will meet the finder in a public place";
   var extraFields = isReunite ? "" :
-    "<div style=\"margin-bottom:12px\"><label style=\"font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px\">DESCRIBE A UNIQUE FEATURE YOUR PET HAS *</label><input class=\"verify-input\" id=\"claimMark\" placeholder=\"e.g. white patch on left ear, missing tooth...\"/></div>"
-    +"<div style=\"margin-bottom:12px\"><label style=\"font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px\">YOUR PHONE NUMBER *</label><input class=\"verify-input\" type=\"tel\" id=\"claimPhone\" placeholder=\"520-XXX-XXXX\" inputmode=\"numeric\" oninput=\"autoPhone(this)\"/></div>";
-  var btnText = isReunite ? "🎉 YES — MARK AS REUNITED" : "🔓 VERIFIED — CONNECT ME NOW";
+    "<div style=\"margin-bottom:12px\"><label style=\"font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text3);display:block;margin-bottom:6px\">DESCRIBE A UNIQUE FEATURE YOUR PET HAS *</label><input class=\"verify-input\" id=\"claimMark\" placeholder=\"e.g. white patch on left ear, missing tooth...\"/></div>"
+    +"<div style=\"margin-bottom:12px\"><label style=\"font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text3);display:block;margin-bottom:6px\">YOUR PHONE NUMBER *</label><input class=\"verify-input\" type=\"tel\" id=\"claimPhone\" placeholder=\"520-XXX-XXXX\" inputmode=\"numeric\" oninput=\"autoPhone(this)\"/></div>";
+  var btnText = isReunite ? "🎉 Yes — Mark as Reunited" : "🔓 Verified — Connect Me Now";
   vc.innerHTML =
     "<div class=\"verify-title\">"+titleText+"</div>"
     +"<div class=\"verify-sub\">"+subText+"</div>"
     +"<div class=\"verify-checklist\">"
-    +"<div class=\"verify-checklist-title\">✅ VERIFICATION CHECKLIST</div>"
+    +"<div class=\"verify-checklist-title\">✅ Verification Checklist</div>"
     +"<div class=\"verify-check\"><input type=\"checkbox\" id=\"chk1\" onchange=\"checkClaimBtn()\"><label for=\"chk1\">"+chk1+"</label></div>"
     +"<div class=\"verify-check\"><input type=\"checkbox\" id=\"chk2\" onchange=\"checkClaimBtn()\"><label for=\"chk2\">"+chk2+"</label></div>"
     +"<div class=\"verify-check\"><input type=\"checkbox\" id=\"chk3\" onchange=\"checkClaimBtn()\"><label for=\"chk3\">"+chk3+"</label></div>"
@@ -1149,7 +1750,7 @@ function openClaimFlow(petStatus) {
     +"</div>"
     +extraFields
     +"<button class=\"verify-confirm-btn\" id=\"claimConfirmBtn\" onclick=\"doConfirmClaim('"+isReunite+"')\">"+btnText+"</button>"
-    +"<p style=\"font-size:0.72rem;color:var(--text-dim);text-align:center;margin-top:10px;line-height:1.5\">"+(isReunite?"This removes the alert permanently.":"By proceeding you confirm this is your pet.")+"</p>";
+    +"<p style=\"font-size:0.72rem;color:var(--text3);text-align:center;margin-top:10px;line-height:1.5\">"+(isReunite?"This removes the alert permanently.":"By proceeding you confirm this is your pet.")+"</p>";
   document.getElementById("verifyOverlay").classList.add("open");
   document.body.style.overflow = "hidden";
 }
@@ -1165,8 +1766,8 @@ function checkClaimBtn() {
   var phoneOk = phoneEl ? phoneEl.value.replace(/\D/g,"").length===10 : true;
   var btn = document.getElementById("claimConfirmBtn");
   if(btn) {
-    if(allChecked && markOk && phoneOk) { btn.classList.add("ready"); }
-    else { btn.classList.remove("ready"); }
+    if(allChecked && markOk && phoneOk) btn.classList.add("ready");
+    else btn.classList.remove("ready");
   }
 }
 
@@ -1177,7 +1778,7 @@ async function doConfirmClaim(isReuniteStr) {
   if(isReuniteStr==="true") {
     try {
       await patchPet(pet.id, {status:"reunited"});
-      vc.innerHTML = "<div style=\"text-align:center;padding:30px 0\"><div style=\"font-size:3.5rem;margin-bottom:14px\">🎉</div><div style=\"font-family:'Orbitron',sans-serif;font-size:1rem;color:var(--green);margin-bottom:10px\">REUNITED!</div><div style=\"font-size:0.9rem;color:var(--text-dim);line-height:1.6\">"+(pet.name||"This pet")+" is home safe and removed from the active list.<br><br>Tucson is smiling right now. 💙</div></div>";
+      vc.innerHTML = "<div style=\"text-align:center;padding:30px 0\"><div style=\"font-size:3.5rem;margin-bottom:14px\">🎉</div><div style=\"font-family:'Instrument Serif',serif;font-size:1.3rem;color:var(--green);margin-bottom:10px\">Reunited!</div><div style=\"font-size:0.9rem;color:var(--text2);line-height:1.6\">"+(pet.name||"This pet")+" is home safe and removed from the active list.<br><br>Tucson is smiling right now. 💙</div></div>";
       setTimeout(function() {
         closeVerify();
         document.getElementById("modalOverlay").classList.remove("open");
@@ -1191,16 +1792,16 @@ async function doConfirmClaim(isReuniteStr) {
     var mark = document.getElementById("claimMark") ? document.getElementById("claimMark").value.trim() : "";
     if(!phone || !mark) return;
     var contactPhone = pet.phone||"";
-    var callLink = contactPhone ? "<a href=\"tel:"+contactPhone.replace(/\D/g,"")+"\" style=\"display:block;background:var(--teal);color:var(--bg);font-family:'Orbitron',sans-serif;font-size:0.88rem;font-weight:700;padding:16px;border-radius:12px;text-decoration:none;text-align:center;margin-bottom:12px;box-shadow:0 4px 20px var(--teal-glow)\">📞 CALL "+(pet.status==="found"?"FINDER":"REPORTER")+": "+contactPhone+"</a>" : "";
+    var callLink = contactPhone ? "<a href=\"tel:"+contactPhone.replace(/\D/g,"")+"\" style=\"display:block;background:var(--teal);color:var(--bg);font-family:'Cabinet Grotesk',sans-serif;font-size:0.88rem;font-weight:800;padding:16px;border-radius:12px;text-decoration:none;text-align:center;margin-bottom:12px;box-shadow:0 4px 18px var(--teal-glow)\">📞 Call "+(pet.status==="found"?"Finder":"Reporter")+": "+contactPhone+"</a>" : "";
     vc.innerHTML =
       "<div style=\"text-align:center;padding:20px 0 10px\">"
       +"<div style=\"font-size:3rem;margin-bottom:10px\">✅</div>"
-      +"<div style=\"font-family:'Orbitron',sans-serif;font-size:1rem;color:var(--teal);margin-bottom:8px\">OWNERSHIP VERIFIED!</div>"
-      +"<div style=\"font-size:0.88rem;color:var(--text-dim);line-height:1.6;margin-bottom:18px\">You are confirmed as the owner of <strong style=\"color:#fff\">"+(pet.name||"your pet")+"</strong>. Contact the "+(pet.status==="found"?"finder":"reporter")+" now:</div>"
+      +"<div style=\"font-family:'Instrument Serif',serif;font-size:1.3rem;color:var(--teal);margin-bottom:8px\">Ownership Verified!</div>"
+      +"<div style=\"font-size:0.88rem;color:var(--text2);line-height:1.6;margin-bottom:18px\">You are confirmed as the owner of <strong style=\"color:#fff\">"+(pet.name||"your pet")+"</strong>. Contact the "+(pet.status==="found"?"finder":"reporter")+" now:</div>"
       +callLink
-      +"<div class=\"safety-banner\" style=\"text-align:left;margin-bottom:16px\"><strong>🤝 SAFE MEETUP REMINDER</strong> Meet in public — Walgreens, Starbucks, Fire Station, or Police Station.</div>"
-      +"<button onclick=\"doConfirmClaim('true')\" style=\"width:100%;background:linear-gradient(135deg,#00cc55,#00ff88);color:#000;font-family:'Orbitron',sans-serif;font-size:0.82rem;font-weight:700;padding:16px;border-radius:12px;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(0,255,136,0.4);letter-spacing:0.05em\">🎉 PET IS HOME — MARK AS REUNITED</button>"
-      +"<p style=\"font-size:0.7rem;color:var(--text-dim);text-align:center;margin-top:10px\">Only tap this once your pet is safely back with you.</p>"
+      +"<div class=\"safety-banner\" style=\"text-align:left;margin-bottom:16px\"><strong>🤝 Safe Meetup Reminder</strong> Meet in public — Walgreens, Starbucks, Fire Station, or Police Station.</div>"
+      +"<button onclick=\"doConfirmClaim('true')\" style=\"width:100%;background:linear-gradient(135deg,#00cc55,#2DCA7D);color:#fff;font-family:'Cabinet Grotesk',sans-serif;font-size:0.85rem;font-weight:800;padding:16px;border-radius:12px;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(45,202,125,0.35)\">🎉 Pet Is Home — Mark as Reunited</button>"
+      +"<p style=\"font-size:0.7rem;color:var(--text3);text-align:center;margin-top:10px\">Only tap this once your pet is safely back with you.</p>"
       +"</div>";
   }
 }
@@ -1223,7 +1824,7 @@ async function showPetToast() {
   _toastPet = candidates.sort(function(a,b){return new Date(a.created_at)-new Date(b.created_at);})[0];
   var hrs = Math.floor((Date.now()-new Date(_toastPet.created_at))/3600000);
   var days = hrs>=48 ? "2 days" : "1 day";
-  document.getElementById("toastTitle").textContent = _toastPet.status==="lost" ? "👀 STILL MISSING — "+days+" ago" : "🐾 STILL WAITING FOR OWNER — "+days;
+  document.getElementById("toastTitle").textContent = _toastPet.status==="lost" ? "👀 Still Missing — "+days+" ago" : "🐾 Still Waiting for Owner — "+days;
   document.getElementById("toastName").textContent = _toastPet.name||"Unknown Pet";
   document.getElementById("toastSub").textContent = "📍 "+(_toastPet.location||"").slice(0,45);
   var photoEl = document.getElementById("toastPhoto");
@@ -1237,21 +1838,17 @@ async function showPetToast() {
 }
 
 // ── P.A.W.S. ALERT ENGINE ──────────────────────────────────────────────────
-// Triggered for brand-new lost/found pets (hot tier, < 30 min old)
-// Full-screen takeover for 10 seconds with voice announcement
 var _pawsTimer = null;
 var _pawsCountdownInterval = null;
-var _pawsTriggeredIds = {};  // prevent same pet triggering twice per session
+var _pawsTriggeredIds = {};
 
 async function checkForPAWSAlert() {
   var pets = await getPets();
-  // Only trigger for pets posted in the last 30 minutes
   var fresh = pets.filter(function(p) {
     var ageMin = (Date.now() - new Date(p.created_at)) / 60000;
     return (p.status==="lost" || p.status==="found") && ageMin < 30 && !_pawsTriggeredIds[p.id];
   });
   if(!fresh.length) return;
-  // Pick the most recent one
   var pet = fresh.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);})[0];
   _pawsTriggeredIds[pet.id] = true;
   triggerPAWSAlert(pet);
@@ -1259,38 +1856,23 @@ async function checkForPAWSAlert() {
 
 function triggerPAWSAlert(pet) {
   var overlay = document.getElementById("pawsOverlay");
-  var duration = 10; // seconds
-
-  // Fill in pet info
+  var duration = 10;
   document.getElementById("pawsName").textContent = (pet.name || "UNKNOWN PET").toUpperCase();
   document.getElementById("pawsStatus").textContent = pet.status==="lost" ? "IS MISSING" : "HAS BEEN FOUND";
   document.getElementById("pawsStop").textContent = pet.status==="lost" ? "STOP!" : "ATTENTION!";
-
   var descParts = [];
   if(pet.breed) descParts.push(pet.breed);
   if(pet.description) descParts.push(pet.description.slice(0,80)+(pet.description.length>80?"...":""));
   document.getElementById("pawsDesc").textContent = descParts.join(" — ") || "No description provided.";
   document.getElementById("pawsLoc").innerHTML = pet.location ? "📍 Last seen: "+pet.location : "";
-
-  // Photo
   var photoEl = document.getElementById("pawsPhoto");
   if(pet.photo_url && pet.photo_url.indexOf("data:")<0) {
-    photoEl.src = pet.photo_url;
-    photoEl.style.display = "block";
+    photoEl.src = pet.photo_url; photoEl.style.display = "block";
   } else {
     photoEl.style.display = "none";
     document.getElementById("pawsPaw").textContent = petEmoji(pet.type);
   }
-
-  // Paw icon color based on status
-  document.getElementById("pawsPaw").style.filter = pet.status==="lost"
-    ? "drop-shadow(0 0 40px rgba(255,50,50,0.9))"
-    : "drop-shadow(0 0 40px rgba(0,255,136,0.9))";
-
-  // View button stores the pet
   window._pawsCurrentPet = pet;
-
-  // Countdown
   var remaining = duration;
   document.getElementById("pawsCountdown").textContent = remaining;
   clearInterval(_pawsCountdownInterval);
@@ -1298,27 +1880,16 @@ function triggerPAWSAlert(pet) {
     remaining--;
     var el = document.getElementById("pawsCountdown");
     if(el) el.textContent = remaining;
-    if(remaining <= 0) {
-      clearInterval(_pawsCountdownInterval);
-      dismissPAWS(false);
-    }
+    if(remaining <= 0) { clearInterval(_pawsCountdownInterval); dismissPAWS(false); }
   }, 1000);
-
-  // Progress bar
   var prog = document.getElementById("pawsProgress");
   prog.classList.remove("running");
   prog.style.setProperty("--paws-duration", duration+"s");
-  void prog.offsetWidth; // force reflow to restart animation
+  void prog.offsetWidth;
   prog.classList.add("running");
-
-  // Show overlay
   overlay.classList.add("show");
   document.body.style.overflow = "hidden";
-
-  // Voice announcement
   speakPAWS(pet, duration);
-
-  // Auto-dismiss fallback
   clearTimeout(_pawsTimer);
   _pawsTimer = setTimeout(function(){ dismissPAWS(false); }, duration * 1000 + 500);
 }
@@ -1331,13 +1902,9 @@ function speakPAWS(pet, duration) {
   var loc = pet.location ? " Last seen near " + pet.location + "." : "";
   var msg = "Stop. Stop. " + name + " " + status + ". " + name + " " + status + "." + loc + " Have you seen " + name + "? Please look around you right now. Every second counts.";
   var utter = new SpeechSynthesisUtterance(msg);
-  utter.rate = 0.88;
-  utter.pitch = 1.1;
-  utter.volume = 1;
-  // Pick a clear voice if available
+  utter.rate = 0.88; utter.pitch = 1.1; utter.volume = 1;
   var voices = window.speechSynthesis.getVoices();
   var preferred = voices.find(function(v){ return v.lang==="en-US" && v.name.indexOf("Samantha")>=0; })
-    || voices.find(function(v){ return v.lang==="en-US" && !v.localService===false; })
     || voices.find(function(v){ return v.lang.indexOf("en")===0; });
   if(preferred) utter.voice = preferred;
   window.speechSynthesis.speak(utter);
@@ -1363,9 +1930,7 @@ function dismissToast(goToAlert) {
   }
 }
 
-// ── PROFILE SYSTEM ─────────────────────────────────────────────────────────
 // ── SUPABASE AUTH CLIENT ───────────────────────────────────────────────────
-// Uses the Supabase JS SDK (loaded in <head>) for Google OAuth
 var _supaClient = null;
 var _supaUser = null;
 var _supaProfile = null;
@@ -1377,32 +1942,26 @@ function getSupaClient() {
   return _supaClient;
 }
 
-// ── AUTH INIT ─────────────────────────────────────────────────────────────
 async function initAuth() {
   var client = getSupaClient();
   if(!client) return;
-  // Check if user is already signed in (handles OAuth redirect)
   var session = await client.auth.getSession();
   if(session && session.data && session.data.session) {
     _supaUser = session.data.session.user;
     await loadUserProfile();
     updateSOSButton(_supaProfile && (_supaProfile.pets||[]).filter(Boolean).length > 0);
   }
-  // Listen for auth state changes
   client.auth.onAuthStateChange(async function(event, session) {
     if(event === "SIGNED_IN" && session) {
       _supaUser = session.user;
       await loadUserProfile();
       updateSOSButton(_supaProfile && (_supaProfile.pets||[]).filter(Boolean).length > 0);
-      // If profile modal is open, refresh it
       var overlay = document.getElementById("regOverlay");
       if(overlay && overlay.classList.contains("open")) {
         _supaProfile ? renderProfileDashboard(_supaProfile) : renderProfileCreate();
       }
     } else if(event === "SIGNED_OUT") {
-      _supaUser = null;
-      _supaProfile = null;
-      updateSOSButton(false);
+      _supaUser = null; _supaProfile = null; updateSOSButton(false);
     }
   });
 }
@@ -1411,53 +1970,35 @@ async function signInWithGoogle() {
   var client = getSupaClient();
   if(!client) { alert("Auth not available. Please reload the page."); return; }
   var pc = document.getElementById("profileContent");
-  pc.innerHTML = "<div style=\"text-align:center;padding:30px;color:var(--text-dim)\">Redirecting to Google...</div>";
-  await client.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      redirectTo: window.location.href
-    }
-  });
+  pc.innerHTML = "<div style=\"text-align:center;padding:30px;color:var(--text2)\">Redirecting to Google...</div>";
+  await client.auth.signInWithOAuth({provider:"google",options:{redirectTo:window.location.href}});
 }
 
 async function signOut() {
   var client = getSupaClient();
   if(client) await client.auth.signOut();
-  _supaUser = null;
-  _supaProfile = null;
-  updateSOSButton(false);
+  _supaUser = null; _supaProfile = null; updateSOSButton(false);
   closeProfileModal();
 }
 
 async function loadUserProfile() {
   if(!_supaUser) return;
-  // Look up profile by user's email (unique per Google account)
   try {
     var r = await fetch(SURL+"/rest/v1/profiles?owner_email=eq."+encodeURIComponent(_supaUser.email)+"&select=*", {headers:SH});
     var data = await r.json();
-    if(data && data.length > 0) {
-      _supaProfile = data[0];
-    } else {
-      _supaProfile = null;
-    }
+    _supaProfile = (data && data.length > 0) ? data[0] : null;
   } catch(e) { _supaProfile = null; }
 }
 
 // ── PROFILE MODAL ─────────────────────────────────────────────────────────
-var PROFILE_KEY = "tpf_profile_id"; // kept for legacy fallback only
-
 async function openProfileModal() {
   document.getElementById("regOverlay").classList.add("open");
   document.body.style.overflow = "hidden";
   var pc = document.getElementById("profileContent");
-  pc.innerHTML = "<div style=\"text-align:center;padding:30px;color:var(--text-dim);font-size:0.8rem\">Loading...</div>";
-
+  pc.innerHTML = "<div style=\"text-align:center;padding:30px;color:var(--text2);font-size:0.8rem\">Loading...</div>";
   if(_supaUser) {
-    if(_supaProfile) {
-      renderProfileDashboard(_supaProfile);
-    } else {
-      renderProfileCreate();
-    }
+    if(_supaProfile) { renderProfileDashboard(_supaProfile); }
+    else { renderProfileCreate(); }
   } else {
     renderSignIn();
   }
@@ -1471,36 +2012,35 @@ function closeProfileModal() {
 function renderSignIn() {
   var pc = document.getElementById("profileContent");
   pc.innerHTML =
-    "<div class=\"verify-title\">🐾 TUCSON PET FINDER</div>"
+    "<div class=\"verify-title\">🐾 Tucson Pet Finder</div>"
     +"<div class=\"verify-sub\" style=\"margin-bottom:24px\">Sign in to register your pets, get verified owner status, and activate your one-tap SOS emergency button.</div>"
-    +"<div style=\"background:rgba(0,255,212,0.06);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:24px;font-size:0.82rem;color:var(--text-dim);line-height:1.9\">"
+    +"<div style=\"background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:24px;font-size:0.85rem;color:var(--text2);line-height:2\">"
     +"🆘 One-tap SOS emergency post<br>"
     +"✅ Verified Owner badge when claiming<br>"
     +"🐾 Up to 4 pets registered across all your devices<br>"
     +"📞 Your info pre-filled automatically"
     +"</div>"
-    +"<button onclick=\"signInWithGoogle()\" style=\"width:100%;background:#fff;color:#333;font-family:'Orbitron',sans-serif;font-size:0.78rem;font-weight:700;padding:16px;border-radius:12px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;box-shadow:0 4px 16px rgba(0,0,0,0.3);margin-bottom:12px\">"
+    +"<button onclick=\"signInWithGoogle()\" style=\"width:100%;background:#fff;color:#333;font-family:'Cabinet Grotesk',sans-serif;font-size:0.85rem;font-weight:700;padding:16px;border-radius:12px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;box-shadow:0 4px 16px rgba(0,0,0,0.3);margin-bottom:12px\">"
     +"<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"#4285F4\" d=\"M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z\"/><path fill=\"#34A853\" d=\"M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z\"/><path fill=\"#FBBC05\" d=\"M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z\"/><path fill=\"#EA4335\" d=\"M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z\"/></svg>"
     +"Continue with Google</button>"
-    +"<p style=\"font-size:0.68rem;color:var(--text-dim);text-align:center;line-height:1.5\">Your Google account keeps your profile safe across all devices.<br>No separate password needed.</p>";
+    +"<p style=\"font-size:0.7rem;color:var(--text3);text-align:center;line-height:1.5\">Your Google account keeps your profile safe across all devices.<br>No separate password needed.</p>";
 }
 
 function renderProfileCreate() {
   var pc = document.getElementById("profileContent");
-  // User is signed in via Google but hasn't set up their pet profile yet
   var email = _supaUser ? _supaUser.email : "";
   var displayName = _supaUser ? (_supaUser.user_metadata&&_supaUser.user_metadata.full_name ? _supaUser.user_metadata.full_name : email) : "";
   pc.innerHTML =
     "<div style=\"display:flex;align-items:center;gap:10px;margin-bottom:16px\">"
     +(_supaUser&&_supaUser.user_metadata&&_supaUser.user_metadata.avatar_url ? "<img src=\""+_supaUser.user_metadata.avatar_url+"\" style=\"width:40px;height:40px;border-radius:50%;border:2px solid var(--teal)\"/>" : "<div style=\"font-size:2rem\">🐾</div>")
-    +"<div><div style=\"font-family:'Orbitron',sans-serif;font-size:0.82rem;color:#fff\">"+displayName+"</div><div style=\"font-size:0.7rem;color:var(--teal)\">✅ Signed in with Google</div></div>"
+    +"<div><div style=\"font-family:'Cabinet Grotesk',sans-serif;font-size:0.9rem;font-weight:700;color:#fff\">"+displayName+"</div><div style=\"font-size:0.7rem;color:var(--teal)\">✅ Signed in with Google</div></div>"
     +"</div>"
-    +"<div class=\"verify-title\">🐾 COMPLETE YOUR PROFILE</div>"
+    +"<div class=\"verify-title\">🐾 Complete Your Profile</div>"
     +"<div class=\"verify-sub\">Add your phone number so you can be contacted and your info is pre-filled when posting alerts.</div>"
-    +"<div style=\"margin-bottom:12px\"><label style=\"font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px\">YOUR NAME *</label><input class=\"verify-input\" id=\"profName\" placeholder=\"e.g. Lamar Myers\" value=\""+displayName+"\"/></div>"
-    +"<div style=\"margin-bottom:18px\"><label style=\"font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px\">YOUR PHONE *</label><input class=\"verify-input\" type=\"tel\" id=\"profPhone\" placeholder=\"520-XXX-XXXX\" inputmode=\"numeric\" oninput=\"autoPhone(this)\"/></div>"
-    +"<button class=\"verify-confirm-btn ready\" onclick=\"createProfile()\" style=\"background:linear-gradient(135deg,#4444ff,#8844ff);box-shadow:0 4px 20px rgba(100,100,255,0.4)\">🐾 SAVE MY PROFILE →</button>"
-    +"<p style=\"font-size:0.7rem;color:var(--text-dim);text-align:center;margin-top:10px\">Your data is stored securely. 🌵</p>";
+    +"<div style=\"margin-bottom:12px\"><label style=\"font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text3);display:block;margin-bottom:6px\">YOUR NAME *</label><input class=\"verify-input\" id=\"profName\" placeholder=\"e.g. Lamar Myers\" value=\""+displayName+"\"/></div>"
+    +"<div style=\"margin-bottom:18px\"><label style=\"font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text3);display:block;margin-bottom:6px\">YOUR PHONE *</label><input class=\"verify-input\" type=\"tel\" id=\"profPhone\" placeholder=\"520-XXX-XXXX\" inputmode=\"numeric\" oninput=\"autoPhone(this)\"/></div>"
+    +"<button class=\"verify-confirm-btn ready\" onclick=\"createProfile()\" style=\"background:linear-gradient(135deg,#4444ff,#8844ff);box-shadow:0 4px 18px rgba(100,100,255,0.35)\">🐾 Save My Profile →</button>"
+    +"<p style=\"font-size:0.7rem;color:var(--text3);text-align:center;margin-top:10px\">Your data is stored securely. 🌵</p>";
 }
 
 async function createProfile() {
@@ -1509,18 +2049,12 @@ async function createProfile() {
   if(!name || !validPhone(phone)) { alert("Please enter your name and a valid phone number."); return; }
   if(!_supaUser) { alert("Please sign in first."); return; }
   var btn = document.querySelector("#profileContent .verify-confirm-btn");
-  if(btn) { btn.disabled=true; btn.textContent="SAVING..."; }
+  if(btn) { btn.disabled=true; btn.textContent="Saving..."; }
   try {
     var r = await fetch(SURL+"/rest/v1/profiles", {
       method:"POST",
       headers:{...SH,"Prefer":"return=representation"},
-      body: JSON.stringify({
-        owner_name: name,
-        owner_phone: fmtPhone(phone),
-        owner_email: _supaUser.email,
-        google_id: _supaUser.id,
-        pets: []
-      })
+      body:JSON.stringify({owner_name:name,owner_phone:fmtPhone(phone),owner_email:_supaUser.email,google_id:_supaUser.id,pets:[]})
     });
     if(!r.ok) throw new Error(await r.text());
     var data = await r.json();
@@ -1528,9 +2062,7 @@ async function createProfile() {
     updateSOSButton(false);
     renderProfileDashboard(_supaProfile);
   } catch(e) {
-    console.error("Profile save error:", e);
-    // Fallback to local
-    _supaProfile = {id:"local_"+Date.now(), owner_name:name, owner_phone:fmtPhone(phone), owner_email:_supaUser.email, pets:[]};
+    _supaProfile = {id:"local_"+Date.now(),owner_name:name,owner_phone:fmtPhone(phone),owner_email:_supaUser.email,pets:[]};
     updateSOSButton(false);
     renderProfileDashboard(_supaProfile);
   }
@@ -1541,23 +2073,21 @@ function renderProfileDashboard(profile) {
   var pets = profile.pets||[];
   var slots = [0,1,2,3].map(function(i) {
     var p = pets[i];
-    if(p) return "<div class=\"pet-slot filled\" onclick=\"editPetSlot("+i+")\"><div class=\"pet-slot-top\"><span class=\"pet-slot-emoji\">"+petEmoji(p.type)+"</span><div><div class=\"pet-slot-name\">"+p.name+"</div><div class=\"pet-slot-detail\">"+(p.breed||p.type)+(p.marking?" · "+p.marking:"")+"</div></div><span style=\"margin-left:auto;font-size:0.7rem;color:var(--green)\">✅ REGISTERED</span></div></div>";
-    return "<div class=\"pet-slot\" onclick=\"addPetToProfile("+i+")\"><div class=\"pet-slot-add\">+ ADD PET "+(i+1)+"</div></div>";
+    if(p) return "<div class=\"pet-slot filled\" onclick=\"editPetSlot("+i+")\"><div class=\"pet-slot-top\"><span class=\"pet-slot-emoji\">"+petEmoji(p.type)+"</span><div><div class=\"pet-slot-name\">"+p.name+"</div><div class=\"pet-slot-detail\">"+(p.breed||p.type)+(p.marking?" · "+p.marking:"")+"</div></div><span style=\"margin-left:auto;font-size:0.7rem;color:var(--green)\">✅</span></div></div>";
+    return "<div class=\"pet-slot\" onclick=\"addPetToProfile("+i+")\"><div class=\"pet-slot-add\">+ Add Pet "+(i+1)+"</div></div>";
   }).join("");
   var sosTip = pets.filter(Boolean).length>0
-    ? "<div style=\"background:rgba(200,0,0,0.08);border:1px solid rgba(200,0,0,0.3);border-radius:12px;padding:14px 16px;margin-top:16px\"><div style=\"font-family:'Orbitron',sans-serif;font-size:0.68rem;color:#ff4444;letter-spacing:0.1em;margin-bottom:6px\">🆘 SOS EMERGENCY BUTTON ACTIVE</div><div style=\"font-size:0.82rem;color:var(--text-dim);line-height:1.5\">Your red SOS button is live. One tap posts an emergency alert instantly with all your pet's info.</div></div>"
-    : "<div style=\"background:rgba(0,255,212,0.05);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-top:16px;text-align:center;font-size:0.85rem;color:var(--text-dim)\">Add at least one pet above to activate your SOS button.</div>";
-
+    ? "<div style=\"background:rgba(200,0,0,0.07);border:1px solid rgba(200,0,0,0.25);border-radius:12px;padding:14px 16px;margin-top:16px\"><div style=\"font-family:'DM Mono',monospace;font-size:0.65rem;color:#ff5c6c;letter-spacing:0.08em;margin-bottom:6px\">🆘 SOS Emergency Button Active</div><div style=\"font-size:0.82rem;color:var(--text2);line-height:1.5\">Your red SOS button is live. One tap posts an emergency alert instantly with all your pet's info.</div></div>"
+    : "<div style=\"background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-top:16px;text-align:center;font-size:0.85rem;color:var(--text2)\">Add at least one pet above to activate your SOS button.</div>";
   var googleAvatar = _supaUser&&_supaUser.user_metadata&&_supaUser.user_metadata.avatar_url
     ? "<img src=\""+_supaUser.user_metadata.avatar_url+"\" style=\"width:36px;height:36px;border-radius:50%;border:2px solid var(--teal);flex-shrink:0\"/>"
     : "<div style=\"font-size:2rem\">🐾</div>";
-
   pc.innerHTML =
-    "<div style=\"display:flex;align-items:center;gap:10px;margin-bottom:18px\">"+googleAvatar+"<div><div style=\"font-family:'Orbitron',sans-serif;font-size:0.9rem;font-weight:700;color:#fff\">"+profile.owner_name+"</div><div style=\"font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--teal)\">"+profile.owner_phone+" · ✅ VERIFIED OWNER</div></div></div>"
-    +"<div style=\"font-family:'Orbitron',sans-serif;font-size:0.68rem;color:var(--text-dim);letter-spacing:0.1em;margin-bottom:10px\">MY PETS ("+pets.filter(Boolean).length+"/4 registered)</div>"
+    "<div style=\"display:flex;align-items:center;gap:10px;margin-bottom:18px\">"+googleAvatar+"<div><div style=\"font-family:'Cabinet Grotesk',sans-serif;font-size:0.95rem;font-weight:700;color:#fff\">"+profile.owner_name+"</div><div style=\"font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--teal)\">"+profile.owner_phone+" · ✅ Verified Owner</div></div></div>"
+    +"<div style=\"font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--text3);letter-spacing:0.08em;margin-bottom:10px\">MY PETS ("+pets.filter(Boolean).length+"/4 registered)</div>"
     +slots+sosTip
-    +"<button class=\"verify-confirm-btn ready\" onclick=\"closeProfileModal()\" style=\"margin-top:16px;background:rgba(0,255,212,0.1);border:1px solid var(--border-bright);color:var(--teal);box-shadow:none\">✓ Done</button>"
-    +"<button onclick=\"signOut()\" style=\"width:100%;background:none;border:none;color:var(--text-dim);font-family:'Share Tech Mono',monospace;font-size:0.65rem;cursor:pointer;margin-top:10px;padding:6px\">Sign out</button>";
+    +"<button class=\"verify-confirm-btn ready\" onclick=\"closeProfileModal()\" style=\"margin-top:16px;background:var(--card2);border:1px solid var(--border2);color:var(--teal);box-shadow:none\">✓ Done</button>"
+    +"<button onclick=\"signOut()\" style=\"width:100%;background:none;border:none;color:var(--text3);font-family:'DM Mono',monospace;font-size:0.62rem;cursor:pointer;margin-top:10px;padding:6px\">Sign out</button>";
 }
 
 var _editingSlot = -1;
@@ -1567,15 +2097,15 @@ function editPetSlot(slot) { _editingSlot = slot; renderAddPetForm(); }
 function renderAddPetForm() {
   var pc = document.getElementById("profileContent");
   pc.innerHTML =
-    "<button onclick=\"reopenDashboard()\" style=\"background:none;border:none;color:var(--teal);font-family:'Share Tech Mono',monospace;font-size:0.72rem;cursor:pointer;margin-bottom:14px\">← BACK TO PROFILE</button>"
-    +"<div class=\"verify-title\">🐾 ADD PET "+(_editingSlot+1)+"</div>"
+    "<button onclick=\"reopenDashboard()\" style=\"background:none;border:none;color:var(--teal);font-family:'DM Mono',monospace;font-size:0.7rem;cursor:pointer;margin-bottom:14px\">← Back to Profile</button>"
+    +"<div class=\"verify-title\">🐾 Add Pet "+(_editingSlot+1)+"</div>"
     +"<div class=\"verify-sub\">Used for instant SOS posts and verified ownership.</div>"
-    +"<div style=\"margin-bottom:12px\"><label style=\"font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px\">PET NAME *</label><input class=\"verify-input\" id=\"addPetName\" placeholder=\"e.g. Mojo\"/></div>"
-    +"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px\"><div><label style=\"font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px\">TYPE *</label><select class=\"verify-input\" id=\"addPetType\" style=\"color:var(--text)\"><option value=\"\">Select...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select></div><div><label style=\"font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px\">BREED / COLOR</label><input class=\"verify-input\" id=\"addPetBreed\" placeholder=\"e.g. Black lab mix\"/></div></div>"
-    +"<div style=\"margin-bottom:12px\"><label style=\"font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px\">UNIQUE MARKING</label><input class=\"verify-input\" id=\"addPetMark\" placeholder=\"e.g. white spot on left ear\"/></div>"
-    +"<div style=\"margin-bottom:12px\"><label style=\"font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px\">NEIGHBORHOOD / AREA</label><input class=\"verify-input\" id=\"addPetArea\" placeholder=\"e.g. Midtown Tucson near Speedway\"/></div>"
-    +"<div style=\"margin-bottom:18px\"><label style=\"font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);display:block;margin-bottom:6px\">VET NAME AND PHONE (optional)</label><input class=\"verify-input\" id=\"addPetVet\" placeholder=\"e.g. Dr. Smith 520-555-1234\"/></div>"
-    +"<button class=\"verify-confirm-btn ready\" onclick=\"savePetToProfile()\" style=\"background:linear-gradient(135deg,#00aa44,#00ff88);color:#000\">✅ SAVE THIS PET</button>";
+    +"<div style=\"margin-bottom:12px\"><label style=\"font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text3);display:block;margin-bottom:6px\">PET NAME *</label><input class=\"verify-input\" id=\"addPetName\" placeholder=\"e.g. Mojo\"/></div>"
+    +"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px\"><div><label style=\"font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text3);display:block;margin-bottom:6px\">TYPE *</label><select class=\"verify-input\" id=\"addPetType\" style=\"color:var(--text)\"><option value=\"\">Select...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select></div><div><label style=\"font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text3);display:block;margin-bottom:6px\">BREED / COLOR</label><input class=\"verify-input\" id=\"addPetBreed\" placeholder=\"e.g. Black lab mix\"/></div></div>"
+    +"<div style=\"margin-bottom:12px\"><label style=\"font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text3);display:block;margin-bottom:6px\">UNIQUE MARKING</label><input class=\"verify-input\" id=\"addPetMark\" placeholder=\"e.g. white spot on left ear\"/></div>"
+    +"<div style=\"margin-bottom:12px\"><label style=\"font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text3);display:block;margin-bottom:6px\">NEIGHBORHOOD / AREA</label><input class=\"verify-input\" id=\"addPetArea\" placeholder=\"e.g. Midtown Tucson near Speedway\"/></div>"
+    +"<div style=\"margin-bottom:18px\"><label style=\"font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text3);display:block;margin-bottom:6px\">VET NAME AND PHONE (optional)</label><input class=\"verify-input\" id=\"addPetVet\" placeholder=\"e.g. Dr. Smith 520-555-1234\"/></div>"
+    +"<button class=\"verify-confirm-btn ready\" onclick=\"savePetToProfile()\" style=\"background:linear-gradient(135deg,#00aa44,#2DCA7D);color:#fff\">✅ Save This Pet</button>";
 }
 
 async function reopenDashboard() {
@@ -1589,7 +2119,7 @@ async function savePetToProfile() {
   var type = document.getElementById("addPetType").value;
   if(!name||!type) { alert("Pet name and type are required."); return; }
   var pet = {
-    name:name, type:type,
+    name:name,type:type,
     breed:document.getElementById("addPetBreed").value.trim()||type,
     marking:document.getElementById("addPetMark").value.trim(),
     area:document.getElementById("addPetArea").value.trim(),
@@ -1599,11 +2129,9 @@ async function savePetToProfile() {
   var pets = (_supaProfile.pets||[]).slice();
   pets[_editingSlot] = pet;
   _supaProfile.pets = pets;
-  // Save to Supabase if has a real ID
   if(_supaProfile.id && !String(_supaProfile.id).startsWith("local_")) {
     await fetch(SURL+"/rest/v1/profiles?id=eq."+_supaProfile.id, {
-      method:"PATCH", headers:{...SH,"Prefer":"return=minimal"},
-      body: JSON.stringify({pets:pets})
+      method:"PATCH",headers:{...SH,"Prefer":"return=minimal"},body:JSON.stringify({pets:pets})
     });
   }
   updateSOSButton(pets.filter(Boolean).length>0);
@@ -1631,13 +2159,13 @@ function renderSOSPick(profile) {
   var sc = document.getElementById("sosContent");
   var pets = (profile.pets||[]).filter(Boolean);
   if(!pets.length) {
-    sc.innerHTML = "<div class=\"verify-title\" style=\"color:#ff4444\">🆘 SOS EMERGENCY</div><div class=\"verify-sub\">Add pets to your profile first.</div><button class=\"verify-confirm-btn ready\" onclick=\"closeSOS();openProfileModal()\" style=\"background:linear-gradient(135deg,#4444ff,#8844ff)\">🐾 GO TO MY PROFILE</button>";
+    sc.innerHTML = "<div class=\"verify-title\" style=\"color:var(--accent)\">🆘 SOS Emergency</div><div class=\"verify-sub\">Add pets to your profile first.</div><button class=\"verify-confirm-btn ready\" onclick=\"closeSOS();openProfileModal()\" style=\"background:linear-gradient(135deg,#4444ff,#8844ff)\">🐾 Go to My Profile</button>";
     return;
   }
   var buttons = pets.map(function(p,i) {
-    return "<button class=\"sos-pick-btn\" onclick=\"triggerSOS("+i+")\"><span class=\"sos-pick-emoji\">"+petEmoji(p.type)+"</span><div><div class=\"sos-pick-name\">"+p.name+"</div><div class=\"sos-pick-detail\">"+(p.breed||p.type)+(p.marking?" · "+p.marking:"")+"</div></div><span style=\"margin-left:auto;color:#ff4444;font-size:1.2rem\">🆘</span></button>";
+    return "<button class=\"sos-pick-btn\" onclick=\"triggerSOS("+i+")\"><span class=\"sos-pick-emoji\">"+petEmoji(p.type)+"</span><div><div class=\"sos-pick-name\">"+p.name+"</div><div class=\"sos-pick-detail\">"+(p.breed||p.type)+(p.marking?" · "+p.marking:"")+"</div></div><span style=\"margin-left:auto;color:var(--accent);font-size:1.2rem\">🆘</span></button>";
   }).join("");
-  sc.innerHTML = "<div class=\"verify-title\" style=\"color:#ff4444\">🆘 EMERGENCY SOS</div><div class=\"verify-sub\">Which pet is missing? We will post an emergency alert instantly.</div>"+buttons+"<button onclick=\"closeSOS()\" style=\"width:100%;background:none;border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--text-dim);font-family:'Share Tech Mono',monospace;font-size:0.72rem;cursor:pointer;margin-top:4px\">CANCEL</button>";
+  sc.innerHTML = "<div class=\"verify-title\" style=\"color:var(--accent)\">🆘 Emergency SOS</div><div class=\"verify-sub\">Which pet is missing? We will post an emergency alert instantly.</div>"+buttons+"<button onclick=\"closeSOS()\" style=\"width:100%;background:none;border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--text2);font-family:'DM Mono',monospace;font-size:0.7rem;cursor:pointer;margin-top:4px\">Cancel</button>";
 }
 
 async function triggerSOS(petIndex) {
@@ -1645,13 +2173,13 @@ async function triggerSOS(petIndex) {
   if(!profile) return;
   var pet = profile.pets[petIndex];
   var sc = document.getElementById("sosContent");
-  sc.innerHTML = "<div style=\"text-align:center;padding:30px\"><div style=\"font-size:3rem;margin-bottom:14px;animation:sosSpin 0.8s linear infinite\">🆘</div><div style=\"font-family:'Orbitron',sans-serif;font-size:0.88rem;color:#ff4444;margin-bottom:8px\">POSTING EMERGENCY ALERT...</div><div style=\"font-size:0.82rem;color:var(--text-dim)\">Alerting all Tucson neighbors now</div></div>";
+  sc.innerHTML = "<div style=\"text-align:center;padding:30px\"><div style=\"font-size:3rem;margin-bottom:14px\">🆘</div><div style=\"font-family:'Instrument Serif',serif;font-size:1.2rem;color:var(--accent);margin-bottom:8px\">Posting Emergency Alert...</div><div style=\"font-size:0.82rem;color:var(--text2)\">Alerting all Tucson neighbors now</div></div>";
   try {
     await addPet({status:"lost",name:pet.name,type:pet.type,breed:pet.breed||pet.type,location:pet.area||"Tucson, AZ",description:"SOS EMERGENCY POST — Owner: "+profile.owner_name+". Unique marking: "+(pet.marking||"Not provided")+". Vet: "+(pet.vet||"Not provided")+".",phone:profile.owner_phone,photo_url:""});
-    sc.innerHTML = "<div style=\"text-align:center;padding:30px\"><div style=\"font-size:3.5rem;margin-bottom:14px\">🆘</div><div style=\"font-family:'Orbitron',sans-serif;font-size:1rem;color:#ff4444;margin-bottom:10px\">ALERT POSTED!</div><div style=\"font-size:0.9rem;color:var(--text-dim);line-height:1.6;margin-bottom:20px\">Emergency alert for <strong style=\"color:#fff\">"+pet.name+"</strong> is now live. Every Tucson neighbor who opens this app will see it immediately.</div><button class=\"verify-confirm-btn ready\" onclick=\"closeSOS();switchTab('see')\" style=\"background:var(--red);box-shadow:0 4px 20px rgba(255,34,68,0.4)\">👁 VIEW LIVE ALERT</button></div>";
+    sc.innerHTML = "<div style=\"text-align:center;padding:30px\"><div style=\"font-size:3.5rem;margin-bottom:14px\">🆘</div><div style=\"font-family:'Instrument Serif',serif;font-size:1.2rem;color:var(--accent);margin-bottom:10px\">Alert Posted!</div><div style=\"font-size:0.9rem;color:var(--text2);line-height:1.6;margin-bottom:20px\">Emergency alert for <strong style=\"color:#fff\">"+pet.name+"</strong> is now live. Every Tucson neighbor who opens this app will see it immediately.</div><button class=\"verify-confirm-btn ready\" onclick=\"closeSOS();switchTab('see')\" style=\"background:var(--accent);box-shadow:0 4px 18px var(--accent-glow)\">👁 View Live Alert</button></div>";
     loadAlertBanner();
   } catch(e) {
-    sc.innerHTML = "<div style=\"text-align:center;padding:20px\"><div style=\"color:#ff4444;margin-bottom:10px\">Error posting alert.</div><button class=\"verify-confirm-btn ready\" onclick=\"triggerSOS("+petIndex+")\">TRY AGAIN</button></div>";
+    sc.innerHTML = "<div style=\"text-align:center;padding:20px\"><div style=\"color:var(--accent);margin-bottom:10px\">Error posting alert.</div><button class=\"verify-confirm-btn ready\" onclick=\"triggerSOS("+petIndex+")\">Try Again</button></div>";
   }
 }
 
@@ -1708,7 +2236,6 @@ function getStrayLocation() {
       _strayLatLng = {lat:pos.coords.latitude, lng:pos.coords.longitude};
       el.textContent = "✅ Location captured — looking up address...";
       el.className = "stray-loc-text got";
-      // Reverse geocode to human-readable address (OpenStreetMap, free, no API key)
       fetch("https://nominatim.openstreetmap.org/reverse?format=json&lat="+_strayLatLng.lat+"&lon="+_strayLatLng.lng+"&zoom=16&addressdetails=1")
         .then(function(r){ return r.json(); })
         .then(function(data){
@@ -1717,19 +2244,11 @@ function getStrayLocation() {
           if(a.road) parts.push(a.road);
           if(a.neighbourhood || a.suburb) parts.push(a.neighbourhood || a.suburb);
           if(a.city || a.town || a.village) parts.push(a.city || a.town || a.village);
-          var readable = parts.length ? parts.join(", ") : (data.display_name ? data.display_name.split(",").slice(0,3).join(",") : null);
-          if(readable) {
-            _strayLocReadable = readable;
-            el.textContent = "✅ " + readable;
-          } else {
-            _strayLocReadable = null;
-            el.textContent = "✅ Location captured near Tucson";
-          }
+          var readable = parts.length ? parts.join(", ") : null;
+          if(readable) { _strayLocReadable = readable; el.textContent = "✅ " + readable; }
+          else { _strayLocReadable = null; el.textContent = "✅ Location captured near Tucson"; }
         })
-        .catch(function(){
-          _strayLocReadable = null;
-          el.textContent = "✅ Location captured";
-        });
+        .catch(function(){ _strayLocReadable = null; el.textContent = "✅ Location captured"; });
     },
     function() { el.textContent = "Could not get location — tap to try again"; el.className = "stray-loc-text"; }
   );
@@ -1738,7 +2257,7 @@ function getStrayLocation() {
 async function submitStray() {
   if(!_strayPhotoData) { alert("Please take or upload a photo first!"); return; }
   var btn = document.getElementById("straySubmitBtn");
-  btn.disabled = true; btn.textContent = "POSTING...";
+  btn.disabled = true; btn.textContent = "Posting...";
   var note = document.getElementById("strayNote").value.trim();
   var phone = document.getElementById("strayPhone").value.trim();
   var locStr = _strayLocReadable ? _strayLocReadable : (_strayLatLng ? _strayLatLng.lat.toFixed(4)+", "+_strayLatLng.lng.toFixed(4) : "Location not captured");
@@ -1747,8 +2266,8 @@ async function submitStray() {
     document.getElementById("strayFormView").style.display = "none";
     document.getElementById("straySuccessView").style.display = "block";
     loadAlertBanner();
-  } catch(e) { alert("Error posting. Please try again."); console.error(e); }
-  finally { btn.disabled=false; btn.textContent="📸 POST STRAY SIGHTING"; }
+  } catch(e) { alert("Error posting. Please try again."); }
+  finally { btn.disabled=false; btn.textContent="📸 Post Stray Sighting"; }
 }
 
 // ── SHARE ──────────────────────────────────────────────────────────────────
@@ -1760,15 +2279,14 @@ function shareApp() {
 
 // ── INIT ───────────────────────────────────────────────────────────────────
 (function() {
-  // Initialize Google Auth — checks if user is already signed in
   initAuth();
-  // Poll every 60 seconds for new PAWS-worthy alerts
   setInterval(function(){ checkForPAWSAlert(); }, 60000);
 })();
 loadAlertBanner();
 showPetToast();
 </script>
-<!-- ── PAWS ALERT OVERLAY ───────────────────────────────────────────────── -->
+
+<!-- ── PAWS ALERT OVERLAY ─────────────────────────────────────────────── -->
 <div class="paws-overlay" id="pawsOverlay">
   <div class="paws-strobe"></div>
   <div class="paws-top-bar">
@@ -1783,8 +2301,8 @@ showPetToast();
   <img class="paws-photo" id="pawsPhoto" src="" alt="" style="display:none"/>
   <div class="paws-desc" id="pawsDesc"></div>
   <div class="paws-loc" id="pawsLoc"></div>
-  <button class="paws-btn" id="pawsViewBtn" onclick="dismissPAWS(true)">👁 SEE FULL ALERT & HELP FIND THEM</button>
-  <div class="paws-dismiss" onclick="dismissPAWS(false)">TAP TO DISMISS (auto-closes in <span id="pawsCountdown">10</span>s)</div>
+  <button class="paws-btn" id="pawsViewBtn" onclick="dismissPAWS(true)">👁 See Full Alert & Help Find Them</button>
+  <div class="paws-dismiss" onclick="dismissPAWS(false)">Tap to dismiss (auto-closes in <span id="pawsCountdown">10</span>s)</div>
   <div class="paws-progress" id="pawsProgress"></div>
 </div>
 
