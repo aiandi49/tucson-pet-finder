@@ -2498,6 +2498,29 @@ function shareApp() {
   initAuth();
   // OneSignal handles notification permission
   setInterval(function(){ checkForPAWSAlert(); loadAlertBanner(); }, 20000);
+  // Detect Google OAuth return — open profile modal immediately
+  var hash = window.location.hash || "";
+  var search = window.location.search || "";
+  if(hash.indexOf("access_token") > -1 || search.indexOf("code=") > -1 || hash.indexOf("error") > -1) {
+    // Coming back from Google OAuth - open profile modal after auth loads
+    setTimeout(function() {
+      var overlay = document.getElementById("regOverlay");
+      if(overlay && _supaUser) {
+        overlay.classList.add("open");
+        document.body.style.overflow = "hidden";
+        _supaProfile ? renderProfileDashboard(_supaProfile) : renderProfileCreate();
+      } else if(overlay) {
+        // Auth not ready yet - wait a bit more
+        setTimeout(function() {
+          if(_supaUser) {
+            overlay.classList.add("open");
+            document.body.style.overflow = "hidden";
+            _supaProfile ? renderProfileDashboard(_supaProfile) : renderProfileCreate();
+          }
+        }, 1500);
+      }
+    }, 800);
+  }
 })();
 loadAlertBanner();
 showPetToast();
