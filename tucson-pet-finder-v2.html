@@ -876,7 +876,100 @@ footer {
 .paws-progress { position: absolute; bottom: 0; left: 0; height: 4px; background: var(--accent); width: 100%; transform-origin: left; animation: none; }
 .paws-progress.running { animation: progressBar var(--paws-duration,10s) linear forwards; }
 @keyframes progressBar { from{transform:scaleX(1)}to{transform:scaleX(0)} }
+/* ── ADMIN PANEL ──────────────────────────────────────────────────────── */
+#adminLoginOverlay {
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92);
+  backdrop-filter:blur(12px); z-index:9000; align-items:center; justify-content:center;
+}
+#adminLoginOverlay.open { display:flex; }
+.admin-login-box {
+  background:var(--bg2); border:1px solid rgba(255,92,108,0.3); border-radius:20px;
+  padding:32px 28px; width:min(340px,90vw); text-align:center;
+}
+.admin-login-box h2 {
+  font-family:'Instrument Serif',serif; font-size:1.5rem; color:#fff; margin-bottom:6px;
+}
+.admin-login-box p { font-size:0.8rem; color:var(--text3); margin-bottom:20px; font-family:'DM Mono',monospace; }
+.admin-pw-input {
+  width:100%; padding:14px 16px; border-radius:12px; border:1px solid var(--border);
+  background:var(--bg); color:#fff; font-size:1rem; font-family:'Cabinet Grotesk',sans-serif;
+  margin-bottom:14px; box-sizing:border-box; text-align:center; letter-spacing:0.1em;
+}
+.admin-pw-input:focus { outline:none; border-color:rgba(255,92,108,0.5); }
+.admin-enter-btn {
+  width:100%; padding:14px; border-radius:12px; border:none; cursor:pointer;
+  background:linear-gradient(135deg,var(--accent),#ff5c6c);
+  color:#fff; font-family:'Cabinet Grotesk',sans-serif; font-size:0.95rem; font-weight:800;
+}
+.admin-cancel-btn {
+  width:100%; padding:10px; border-radius:10px; border:1px solid var(--border);
+  background:none; color:var(--text3); font-family:'DM Mono',monospace;
+  font-size:0.7rem; cursor:pointer; margin-top:8px;
+}
+.admin-error { color:var(--accent); font-size:0.78rem; margin-bottom:10px; font-family:'DM Mono',monospace; display:none; }
+
+#adminPanelOverlay {
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95);
+  backdrop-filter:blur(16px); z-index:9000; flex-direction:column; overflow-y:auto;
+}
+#adminPanelOverlay.open { display:flex; }
+.admin-panel-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:20px 20px 14px; border-bottom:1px solid var(--border); flex-shrink:0;
+}
+.admin-panel-title {
+  font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--accent);
+  letter-spacing:0.1em; font-weight:500;
+}
+.admin-panel-close {
+  background:none; border:1px solid var(--border); border-radius:8px;
+  color:var(--text2); font-family:'DM Mono',monospace; font-size:0.7rem;
+  padding:6px 14px; cursor:pointer;
+}
+.admin-panel-body { padding:16px 20px; flex:1; }
+.admin-section-title {
+  font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--text3);
+  letter-spacing:0.1em; margin-bottom:12px; text-transform:uppercase;
+}
+.admin-card {
+  background:var(--bg2); border:1px solid var(--border); border-radius:14px;
+  padding:16px; margin-bottom:12px;
+}
+.admin-card-top { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.admin-card-badge {
+  font-family:'DM Mono',monospace; font-size:0.6rem; padding:3px 8px;
+  border-radius:20px; font-weight:500; flex-shrink:0;
+}
+.badge-pending { background:rgba(255,180,0,0.12); color:#FFB400; border:1px solid rgba(255,180,0,0.25); }
+.badge-lost { background:rgba(255,92,108,0.1); color:var(--accent); border:1px solid rgba(255,92,108,0.2); }
+.badge-found { background:var(--teal-dim); color:var(--teal); border:1px solid rgba(0,212,180,0.2); }
+.admin-card-name { font-family:'Cabinet Grotesk',sans-serif; font-size:0.95rem; font-weight:700; color:#fff; }
+.admin-card-meta { font-size:0.78rem; color:var(--text2); line-height:1.6; margin-bottom:12px; }
+.admin-card-actions { display:flex; gap:8px; }
+.admin-delete-btn {
+  flex:1; padding:10px; border-radius:10px; border:1px solid rgba(255,92,108,0.3);
+  background:rgba(255,92,108,0.08); color:var(--accent);
+  font-family:'Cabinet Grotesk',sans-serif; font-size:0.8rem; font-weight:700; cursor:pointer;
+}
+.admin-restore-btn {
+  flex:1; padding:10px; border-radius:10px; border:1px solid rgba(0,212,180,0.2);
+  background:var(--teal-dim); color:var(--teal);
+  font-family:'Cabinet Grotesk',sans-serif; font-size:0.8rem; font-weight:700; cursor:pointer;
+}
+.admin-empty { text-align:center; padding:40px 20px; color:var(--text3); font-family:'DM Mono',monospace; font-size:0.75rem; }
+
 </style>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "eb3b7f33-0f12-44a4-a561-735b5cf34959",
+      notifyButton: { enable: false }, // we use our own UI
+      allowLocalhostAsSecureOrigin: true,
+    });
+  });
+</script>
 </head>
 <body>
 <div class="page">
@@ -888,7 +981,7 @@ footer {
   </nav>
 
   <div class="hero">
-    <div class="hero-icon">🐾</div>
+    <div class="hero-icon" id="adminTrigger" onclick="adminTap()" style="cursor:default;user-select:none;">🐾</div>
     <h1 class="hero-title">Tucson<br><span>Pet Finder</span></h1>
     <p class="hero-sub">Lost or found a pet in Tucson? Post in 60 seconds and neighbors get alerted instantly. Free forever.</p>
     <div class="hero-pills">
@@ -1148,8 +1241,8 @@ var SURL = "https://msuqflssqixsplcearxr.supabase.co";
 var SKEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zdXFmbHNzcWl4c3BsY2VhcnhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMzU3NDgsImV4cCI6MjA4OTcxMTc0OH0.BlrDiIu2YdDB7oHJ0fFiSEiBDQGvHCFAUaysR6O24zk";
 var SH = {"Content-Type":"application/json","apikey":SKEY,"Authorization":"Bearer "+SKEY};
 
-async function getPets() {
-  try { var r = await fetch(SURL+"/rest/v1/pets?select=*&order=created_at.desc",{headers:SH}); return await r.json(); }
+async function getPets(includeAll) {
+  try { var r = await fetch(SURL+"/rest/v1/pets?select=*&order=created_at.desc"+(includeAll?"":"&status=neq.pending_removal")+(includeAll?"":"&status=neq.pending_removal"),{headers:SH}); return await r.json(); }
   catch(e) { return []; }
 }
 async function addPet(pet) {
@@ -1173,7 +1266,7 @@ async function deletePet(id) {
 async function removeAlert() {
   if(!_currentPet) return;
   var pet = _currentPet;
-  var phone = prompt("To remove this listing, enter the phone number you used when posting it:");
+  var phone = prompt("To request removal, enter the phone number you used when posting:");
   if(!phone || !phone.trim()) return;
   var clean = phone.replace(/\D/g,"");
   var petClean = (pet.phone||"").replace(/\D/g,"");
@@ -1183,10 +1276,10 @@ async function removeAlert() {
   }
   var confirmed = window.confirm("Remove \"" + (pet.name||"this listing") + "\" permanently? This cannot be undone.");
   if(!confirmed) return;
-  await deletePet(pet.id);
+  await patchPet(pet.id,{status:"pending_removal"});
   document.getElementById("modalOverlay").classList.remove("open");
   document.body.style.overflow = "";
-  alert("✅ Listing removed. Thank you for keeping the board up to date!");
+  alert("✅ Removal request sent! An admin will review and confirm within 24 hours.");
   loadListings();
   loadAlertBanner();
 }
@@ -1231,7 +1324,7 @@ function switchTab(tab) {
   document.getElementById("formFound").classList.toggle("active",tab==="found");
   document.getElementById("successPanel").style.display="none";
   var ls=document.getElementById("listingsSection");
-  if(tab==="see"){ls.style.display="block";var c=document.getElementById("listingsContainer");if(!c.children.length||c.innerHTML.indexOf("Loading")>=0)renderListings();}
+  if(tab==="see"){ls.style.display="block";var c=document.getElementById("listingsContainer");if(!c.children.length||c.innerHTML.indexOf("Loading")>=0)loadListings();}
   else ls.style.display="none";
 }
 
@@ -1250,14 +1343,14 @@ function doVoiceStart(fieldId){var el=document.getElementById(fieldId);if(!el)re
 function smartParseName(raw){if(!raw)return raw;var patterns=[/(?:name\s+on\s+(?:the\s+)?(?:collar|tag|tags)\s+(?:says?|reads?|is))\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,/(?:(?:her|his|the|its)\s+name\s+(?:is|was|'s))\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,/(?:name\s+(?:is|was|'s))\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,/(?:they?\s+call\s+(?:him|her|it|them))\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,/(?:goes\s+by)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,/(?:called)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,/(?:named)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i,/(?:says?)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\s*$/i,];for(var i=0;i<patterns.length;i++){var m=raw.match(patterns[i]);if(m&&m[1]){var n=m[1].trim();return n.replace(/\b\w/g,function(c){return c.toUpperCase();});}}if(raw.split(/\s+/).length<=2&&raw.length<=25)return raw;return raw;}
 
 // ── SUBMIT FORMS ───────────────────────────────────────────────────────────
-async function doSubmit(type){var ok=true;if(type==="lost"){var name=smartParseName(document.getElementById("lostName").value.trim());var pt=document.getElementById("lostType").value;var loc=document.getElementById("lostLoc").value.trim();var phone=document.getElementById("lostPhone").value.trim();showErr("errLostName",!name);if(!name)ok=false;showErr("errLostType",!pt);if(!pt)ok=false;showErr("errLostLoc",!loc);if(!loc)ok=false;showErr("errLostPhone",!validPhone(phone));if(!validPhone(phone))ok=false;if(!ok)return;var btn=document.getElementById("lostBtn");btn.disabled=true;btn.textContent="Posting...";try{var pf=document.getElementById("lostPhoto").files[0];var pu=null;if(pf)pu=await uploadPhoto(document.getElementById("lostPrev").src,pf.name);await addPet({status:"lost",name:name,type:pt,breed:document.getElementById("lostBreed").value.trim()||pt,location:loc,description:document.getElementById("lostDesc").value.trim(),phone:fmtPhone(phone),photo_url:pu||""});showSuccess("lost",name);loadAlertBanner();}catch(e){alert("Error posting. Please try again.");}finally{btn.disabled=false;btn.textContent="🚨 Post My Lost Pet Alert";}}else{var pt2=document.getElementById("foundType").value;var loc2=document.getElementById("foundLoc").value.trim();var phone2=document.getElementById("foundPhone").value.trim();showErr("errFoundType",!pt2);if(!pt2)ok=false;showErr("errFoundLoc",!loc2);if(!loc2)ok=false;showErr("errFoundPhone",!validPhone(phone2));if(!validPhone(phone2))ok=false;if(!ok)return;var btn2=document.getElementById("foundBtn");btn2.disabled=true;btn2.textContent="Posting...";try{var pf2=document.getElementById("foundPhoto").files[0];var pu2=null;if(pf2)pu2=await uploadPhoto(document.getElementById("foundPrev").src,pf2.name);var fn2=smartParseName(document.getElementById("foundName").value.trim());await addPet({status:"found",name:fn2||"Found "+pt2,type:pt2,breed:document.getElementById("foundBreed").value.trim()||pt2,location:loc2,description:document.getElementById("foundDesc").value.trim(),phone:fmtPhone(phone2),photo_url:pu2||""});showSuccess("found");loadAlertBanner();}catch(e){alert("Error posting. Please try again.");}finally{btn2.disabled=false;btn2.textContent="🟢 Post My Found Pet Alert";}}}
+async function doSubmit(type){var ok=true;if(type==="lost"){var name=smartParseName(document.getElementById("lostName").value.trim());var pt=document.getElementById("lostType").value;var loc=document.getElementById("lostLoc").value.trim();var phone=document.getElementById("lostPhone").value.trim();showErr("errLostName",!name);if(!name)ok=false;showErr("errLostType",!pt);if(!pt)ok=false;showErr("errLostLoc",!loc);if(!loc)ok=false;showErr("errLostPhone",!validPhone(phone));if(!validPhone(phone))ok=false;if(!ok)return;var btn=document.getElementById("lostBtn");btn.disabled=true;btn.textContent="Posting...";try{var pf=document.getElementById("lostPhoto").files[0];var pu=null;if(pf)pu=await uploadPhoto(document.getElementById("lostPrev").src,pf.name);await addPet({status:"lost",name:name,type:pt,breed:document.getElementById("lostBreed").value.trim()||pt,location:loc,description:document.getElementById("lostDesc").value.trim(),phone:fmtPhone(phone),photo_url:pu||""});showSuccess("lost",name);loadAlertBanner();checkForPAWSAlert();}catch(e){alert("Error posting. Please try again.");}finally{btn.disabled=false;btn.textContent="🚨 Post My Lost Pet Alert";}}else{var pt2=document.getElementById("foundType").value;var loc2=document.getElementById("foundLoc").value.trim();var phone2=document.getElementById("foundPhone").value.trim();showErr("errFoundType",!pt2);if(!pt2)ok=false;showErr("errFoundLoc",!loc2);if(!loc2)ok=false;showErr("errFoundPhone",!validPhone(phone2));if(!validPhone(phone2))ok=false;if(!ok)return;var btn2=document.getElementById("foundBtn");btn2.disabled=true;btn2.textContent="Posting...";try{var pf2=document.getElementById("foundPhoto").files[0];var pu2=null;if(pf2)pu2=await uploadPhoto(document.getElementById("foundPrev").src,pf2.name);var fn2=smartParseName(document.getElementById("foundName").value.trim());await addPet({status:"found",name:fn2||"Found "+pt2,type:pt2,breed:document.getElementById("foundBreed").value.trim()||pt2,location:loc2,description:document.getElementById("foundDesc").value.trim(),phone:fmtPhone(phone2),photo_url:pu2||""});showSuccess("found");loadAlertBanner();checkForPAWSAlert();}catch(e){alert("Error posting. Please try again.");}finally{btn2.disabled=false;btn2.textContent="🟢 Post My Found Pet Alert";}}}
 
 function showSuccess(type,name){document.getElementById("formLost").classList.remove("active");document.getElementById("formFound").classList.remove("active");var sp=document.getElementById("successPanel");sp.style.display="block";if(type==="lost"){document.getElementById("successIcon").textContent="🚨";document.getElementById("successTitle").textContent=name?name+"'s Alert Is Live!":"Alert Posted!";document.getElementById("successTitle").style.color="var(--accent)";document.getElementById("successMsg").textContent="Saved in our database — every Tucson neighbor who opens this app will see it. Share to get more eyes looking!";sp.style.borderColor="var(--accent)";}else{document.getElementById("successIcon").textContent="🟢";document.getElementById("successTitle").textContent="Found Pet Posted!";document.getElementById("successTitle").style.color="var(--green)";document.getElementById("successMsg").textContent="Your report is live. The owner can now find and contact you directly. Thank you!";sp.style.borderColor="var(--teal2)";}sp.scrollIntoView({behavior:"smooth",block:"center"});}
 
 // ── RENDER LISTINGS ────────────────────────────────────────────────────────
 function buildCard(pet){var tier=petAgeTier(pet.created_at);var cls="listing-card";if(pet.status==="found")cls+=" found-card";if(tier==="watching"&&pet.status!=="reunited")cls+=" watching";var dotCls=tier==="hot"?"dot-hot":tier==="watching"?"dot-watching":"dot-archived";var photoHtml=(pet.photo_url&&pet.photo_url.indexOf("data:")<0)?"<img src=\""+pet.photo_url+"\" onerror=\"this.style.display='none'\"/>":petEmoji(pet.type);var typeCls="type-"+(pet.status==="stray"?"stray":pet.status==="reunited"?"reunited":pet.status==="found"?"found":"lost");var typeLabel=pet.status==="stray"?"STRAY":pet.status.toUpperCase();var d=document.createElement("div");d.className=cls;d.onclick=function(){openModal(pet);};d.innerHTML="<div class=\"listing-photo\">"+photoHtml+"</div><div class=\"listing-info\"><div class=\"listing-top\"><span class=\"age-dot "+dotCls+"\"></span><span class=\"listing-type "+typeCls+"\">"+typeLabel+"</span><span class=\"listing-name\">"+(pet.name||"Unknown")+"</span></div><div class=\"listing-breed\">"+(pet.breed||pet.type)+"</div><div class=\"listing-loc\">📍 "+pet.location+"</div></div><div class=\"listing-time\">"+petAgeLabel(pet.created_at)+"</div>";return d;}
 function tierDivider(type){var labels={hot:"🔴 Active — Last 24 Hours",watching:"👀 Still Out There — 1-3 Days",archived:"📁 Older Alerts"};var d=document.createElement("div");d.className="tier-div tier-"+type;d.innerHTML="<div class=\"tier-div-line\"></div><div class=\"tier-lbl\">"+labels[type]+"</div><div class=\"tier-div-line\"></div>";return d;}
-async function renderListings(){var c=document.getElementById("listingsContainer");c.innerHTML="<div class=\"state-box\">Loading alerts from Tucson database...</div>";var pets=await getPets();var skip=["reunited","registered"];var hot=pets.filter(function(p){return skip.indexOf(p.status)<0&&petAgeTier(p.created_at)==="hot";});var watching=pets.filter(function(p){return skip.indexOf(p.status)<0&&petAgeTier(p.created_at)==="watching";});var archived=pets.filter(function(p){return skip.indexOf(p.status)<0&&petAgeTier(p.created_at)==="archived";});document.getElementById("listingCount").textContent=hot.length+" hot · "+watching.length+" watching";c.innerHTML="";if(!pets.filter(function(p){return skip.indexOf(p.status)<0;}).length){c.innerHTML="<div class=\"state-box\">🐾<br><br>No alerts yet in Tucson.<br>Be the first to post!</div>";return;}if(hot.length){c.appendChild(tierDivider("hot"));hot.forEach(function(p){c.appendChild(buildCard(p));});}if(watching.length){c.appendChild(tierDivider("watching"));watching.forEach(function(p){c.appendChild(buildCard(p));});}if(archived.length){var wrap=document.createElement("div");var toggle=document.createElement("div");toggle.style.cssText="text-align:center;padding:12px 0;cursor:pointer";toggle.innerHTML="<span style=\"font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--text3);border:1px solid var(--border);padding:6px 16px;border-radius:20px\">📁 Show "+archived.length+" older alert"+(archived.length!==1?"s":"")+"</span>";toggle.onclick=function(){wrap.innerHTML="";c.appendChild(tierDivider("archived"));archived.forEach(function(p){c.appendChild(buildCard(p));});};wrap.appendChild(toggle);c.appendChild(wrap);}}
+async function renderListings(){var c=document.getElementById("listingsContainer");c.innerHTML="<div class=\"state-box\">Loading alerts from Tucson database...</div>";var pets=await getPets();var skip=["reunited","registered","pending_removal"];var hot=pets.filter(function(p){return skip.indexOf(p.status)<0&&petAgeTier(p.created_at)==="hot";});var watching=pets.filter(function(p){return skip.indexOf(p.status)<0&&petAgeTier(p.created_at)==="watching";});var archived=pets.filter(function(p){return skip.indexOf(p.status)<0&&petAgeTier(p.created_at)==="archived";});document.getElementById("listingCount").textContent=hot.length+" hot · "+watching.length+" watching";c.innerHTML="";if(!pets.filter(function(p){return skip.indexOf(p.status)<0;}).length){c.innerHTML="<div class=\"state-box\">🐾<br><br>No alerts yet in Tucson.<br>Be the first to post!</div>";return;}if(hot.length){c.appendChild(tierDivider("hot"));hot.forEach(function(p){c.appendChild(buildCard(p));});}if(watching.length){c.appendChild(tierDivider("watching"));watching.forEach(function(p){c.appendChild(buildCard(p));});}if(archived.length){var wrap=document.createElement("div");var toggle=document.createElement("div");toggle.style.cssText="text-align:center;padding:12px 0;cursor:pointer";toggle.innerHTML="<span style=\"font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--text3);border:1px solid var(--border);padding:6px 16px;border-radius:20px\">📁 Show "+archived.length+" older alert"+(archived.length!==1?"s":"")+"</span>";toggle.onclick=function(){wrap.innerHTML="";c.appendChild(tierDivider("archived"));archived.forEach(function(p){c.appendChild(buildCard(p));});};wrap.appendChild(toggle);c.appendChild(wrap);}}
 
 // ── ALERT BANNER ───────────────────────────────────────────────────────────
 async function loadAlertBanner(){var pets=await getPets();var sevenDaysAgo=new Date(Date.now()-7*24*60*60*1000);var recentPets=pets.filter(function(p){return new Date(p.created_at)>sevenDaysAgo;});var lost=recentPets.filter(function(p){return p.status==="lost";}).length;var found=recentPets.filter(function(p){return p.status==="found";}).length;var el=document.getElementById("alertText");var strip=document.getElementById("alertStrip");if(lost===0&&found===0){el.textContent="No active alerts in Tucson right now. Post below if you lost or found a pet.";strip.style.borderLeftColor="var(--teal2)";document.querySelector(".alert-icon").textContent="✅";}else{var parts=[];if(lost>0)parts.push("<strong>"+lost+" pet"+(lost!==1?"s":"")+" missing</strong>");if(found>0)parts.push("<strong>"+found+" found</strong> waiting for owner");el.innerHTML=parts.join(" · ")+" in Tucson. <span style='text-decoration:underline;opacity:0.7'>Tap to view →</span>";}checkForPAWSAlert();}
@@ -1271,7 +1364,7 @@ async function reportListing(){if(!_currentPet)return;var pet=_currentPet;var re
 // ── CLAIM FLOW ─────────────────────────────────────────────────────────────
 function openClaimFlow(petStatus){if(!_currentPet)return;var pet=_currentPet;var isReunite=petStatus==="reunite";var vc=document.getElementById("verifyContent");var titleText=isReunite?"✅ Confirm Reunification":(petStatus==="lost"?"🐕 Claim Your Pet":"🏠 Claim Your Pet");var subText=isReunite?"Confirm that "+pet.name+" has been safely returned to their owner.":"Before we connect you, confirm you are the owner of "+pet.name+".";var chk1=isReunite?"The owner has been positively identified":"I can describe a unique marking on this pet";var chk2=isReunite?"The pet and owner have already reunited in person":"I have photos of me with this pet available";var chk3=isReunite?"I personally witnessed the reunion":"I know my pet's vet name or clinic";var chk4=isReunite?"I understand this will permanently remove the alert":"I will meet the finder in a public place";var extraFields=isReunite?"":"<div style=\"margin-bottom:12px\"><label style=\"font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text3);display:block;margin-bottom:6px\">DESCRIBE A UNIQUE FEATURE *</label><input class=\"verify-input\" id=\"claimMark\" placeholder=\"e.g. white patch on left ear, missing tooth...\"/></div><div style=\"margin-bottom:12px\"><label style=\"font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text3);display:block;margin-bottom:6px\">YOUR PHONE NUMBER *</label><input class=\"verify-input\" type=\"tel\" id=\"claimPhone\" placeholder=\"520-XXX-XXXX\" inputmode=\"numeric\" oninput=\"autoPhone(this)\"/></div>";var btnText=isReunite?"🎉 Yes — Mark as Reunited":"🔓 Verified — Connect Me Now";vc.innerHTML="<div class=\"verify-title\">"+titleText+"</div><div class=\"verify-sub\">"+subText+"</div><div class=\"verify-checklist\"><div class=\"verify-checklist-title\">✅ Verification Checklist</div><div class=\"verify-check\"><input type=\"checkbox\" id=\"chk1\" onchange=\"checkClaimBtn()\"><label for=\"chk1\">"+chk1+"</label></div><div class=\"verify-check\"><input type=\"checkbox\" id=\"chk2\" onchange=\"checkClaimBtn()\"><label for=\"chk2\">"+chk2+"</label></div><div class=\"verify-check\"><input type=\"checkbox\" id=\"chk3\" onchange=\"checkClaimBtn()\"><label for=\"chk3\">"+chk3+"</label></div><div class=\"verify-check\"><input type=\"checkbox\" id=\"chk4\" onchange=\"checkClaimBtn()\"><label for=\"chk4\">"+chk4+"</label></div></div>"+extraFields+"<button class=\"verify-confirm-btn\" id=\"claimConfirmBtn\" onclick=\"doConfirmClaim('"+isReunite+"')\">"+btnText+"</button><p style=\"font-size:0.72rem;color:var(--text3);text-align:center;margin-top:10px;line-height:1.5\">"+(isReunite?"This removes the alert permanently.":"By proceeding you confirm this is your pet.")+"</p>";document.getElementById("verifyOverlay").classList.add("open");document.body.style.overflow="hidden";}
 function checkClaimBtn(){var allChecked=["chk1","chk2","chk3","chk4"].every(function(id){var el=document.getElementById(id);return el&&el.checked;});var markEl=document.getElementById("claimMark");var phoneEl=document.getElementById("claimPhone");var markOk=markEl?markEl.value.trim().length>3:true;var phoneOk=phoneEl?phoneEl.value.replace(/\D/g,"").length===10:true;var btn=document.getElementById("claimConfirmBtn");if(btn){if(allChecked&&markOk&&phoneOk)btn.classList.add("ready");else btn.classList.remove("ready");}}
-async function doConfirmClaim(isReuniteStr){if(!_currentPet)return;var pet=_currentPet;var vc=document.getElementById("verifyContent");if(isReuniteStr==="true"){try{await patchPet(pet.id,{status:"reunited"});vc.innerHTML="<div style=\"text-align:center;padding:30px 0\"><div style=\"font-size:3.5rem;margin-bottom:14px\">🎉</div><div style=\"font-family:'Instrument Serif',serif;font-size:1.3rem;color:var(--green);margin-bottom:10px\">Reunited!</div><div style=\"font-size:0.9rem;color:var(--text2);line-height:1.6\">"+(pet.name||"This pet")+" is home safe and removed from the active list.<br><br>Tucson is smiling right now. 💙</div></div>";setTimeout(function(){closeVerify();document.getElementById("modalOverlay").classList.remove("open");document.body.style.overflow="";renderListings();loadAlertBanner();},2500);}catch(e){alert("Error updating. Please try again.");}}else{var phone=document.getElementById("claimPhone")?document.getElementById("claimPhone").value.trim():"";var mark=document.getElementById("claimMark")?document.getElementById("claimMark").value.trim():"";if(!phone||!mark)return;var contactPhone=pet.phone||"";var callLink=contactPhone?"<a href=\"tel:"+contactPhone.replace(/\D/g,"")+"\" style=\"display:block;background:var(--navy);color:#fff;font-family:'Cabinet Grotesk',sans-serif;font-size:0.92rem;font-weight:800;padding:16px;border-radius:12px;text-decoration:none;text-align:center;margin-bottom:12px;box-shadow:var(--shadow-md)\">📞 Call "+(pet.status==="found"?"Finder":"Reporter")+": "+contactPhone+"</a>":"";vc.innerHTML="<div style=\"text-align:center;padding:20px 0 10px\"><div style=\"font-size:3rem;margin-bottom:10px\">✅</div><div style=\"font-family:'Instrument Serif',serif;font-size:1.3rem;color:var(--teal);margin-bottom:8px\">Ownership Verified!</div><div style=\"font-size:0.88rem;color:var(--text2);line-height:1.6;margin-bottom:18px\">You are confirmed as the owner of <strong style=\"color:var(--navy)\">"+(pet.name||"your pet")+"</strong>. Contact the "+(pet.status==="found"?"finder":"reporter")+" now:</div>"+callLink+"<div class=\"safety-banner\" style=\"text-align:left;margin-bottom:16px\"><strong>🤝 Safe Meetup Reminder</strong> Meet in public — Walgreens, Starbucks, Fire Station, or Police Station.</div><button onclick=\"doConfirmClaim('true')\" style=\"width:100%;background:var(--green);color:#fff;font-family:'Cabinet Grotesk',sans-serif;font-size:0.9rem;font-weight:800;padding:16px;border-radius:12px;border:none;cursor:pointer;box-shadow:0 4px 16px var(--green-dim)\">🎉 Pet Is Home — Mark as Reunited</button><p style=\"font-size:0.7rem;color:var(--text3);text-align:center;margin-top:10px\">Only tap this once your pet is safely back with you.</p></div>";}}
+async function doConfirmClaim(isReuniteStr){if(!_currentPet)return;var pet=_currentPet;var vc=document.getElementById("verifyContent");if(isReuniteStr==="true"){try{await patchPet(pet.id,{status:"pending_removal"});vc.innerHTML="<div style=\"text-align:center;padding:30px 0\"><div style=\"font-size:3.5rem;margin-bottom:14px\">🎉</div><div style=\"font-family:'Instrument Serif',serif;font-size:1.3rem;color:var(--green);margin-bottom:10px\">Reunited!</div><div style=\"font-size:0.9rem;color:var(--text2);line-height:1.6\">"+(pet.name||"This pet")+" is home safe and removed from the active list.<br><br>Tucson is smiling right now. 💙</div></div>";setTimeout(function(){closeVerify();document.getElementById("modalOverlay").classList.remove("open");document.body.style.overflow="";loadListings();loadAlertBanner();},2500);}catch(e){alert("Error updating. Please try again.");}}else{var phone=document.getElementById("claimPhone")?document.getElementById("claimPhone").value.trim():"";var mark=document.getElementById("claimMark")?document.getElementById("claimMark").value.trim():"";if(!phone||!mark)return;var contactPhone=pet.phone||"";var callLink=contactPhone?"<a href=\"tel:"+contactPhone.replace(/\D/g,"")+"\" style=\"display:block;background:var(--navy);color:#fff;font-family:'Cabinet Grotesk',sans-serif;font-size:0.92rem;font-weight:800;padding:16px;border-radius:12px;text-decoration:none;text-align:center;margin-bottom:12px;box-shadow:var(--shadow-md)\">📞 Call "+(pet.status==="found"?"Finder":"Reporter")+": "+contactPhone+"</a>":"";vc.innerHTML="<div style=\"text-align:center;padding:20px 0 10px\"><div style=\"font-size:3rem;margin-bottom:10px\">✅</div><div style=\"font-family:'Instrument Serif',serif;font-size:1.3rem;color:var(--teal);margin-bottom:8px\">Ownership Verified!</div><div style=\"font-size:0.88rem;color:var(--text2);line-height:1.6;margin-bottom:18px\">You are confirmed as the owner of <strong style=\"color:var(--navy)\">"+(pet.name||"your pet")+"</strong>. Contact the "+(pet.status==="found"?"finder":"reporter")+" now:</div>"+callLink+"<div class=\"safety-banner\" style=\"text-align:left;margin-bottom:16px\"><strong>🤝 Safe Meetup Reminder</strong> Meet in public — Walgreens, Starbucks, Fire Station, or Police Station.</div><button onclick=\"doConfirmClaim('true')\" style=\"width:100%;background:var(--green);color:#fff;font-family:'Cabinet Grotesk',sans-serif;font-size:0.9rem;font-weight:800;padding:16px;border-radius:12px;border:none;cursor:pointer;box-shadow:0 4px 16px var(--green-dim)\">🎉 Pet Is Home — Mark as Reunited</button><p style=\"font-size:0.7rem;color:var(--text3);text-align:center;margin-top:10px\">Only tap this once your pet is safely back with you.</p></div>";}}
 function closeVerify(){document.getElementById("verifyOverlay").classList.remove("open");document.body.style.overflow="";}
 
 // ── TOAST ──────────────────────────────────────────────────────────────────
@@ -1280,9 +1373,467 @@ async function showPetToast(){await new Promise(function(r){setTimeout(r,2000);}
 function dismissToast(goToAlert){document.getElementById("petToast").classList.remove("show");if(goToAlert&&_toastPet){switchTab("see");setTimeout(function(){openModal(_toastPet);},400);}}
 
 // ── P.A.W.S. ALERT ────────────────────────────────────────────────────────
+
+// ── BROWSER NOTIFICATIONS (fires even when tab is backgrounded) ────────────
+function requestNotifPermission() {
+  if(!("Notification" in window)) return;
+  if(Notification.permission === "default") {
+    Notification.requestPermission();
+  }
+}
+
+function sendBrowserNotif(pet) {
+  if(!("Notification" in window) || Notification.permission !== "granted") return;
+  var title = pet.status === "lost"
+    ? "🚨 PAWS ALERT — " + (pet.name || "Pet") + " IS MISSING"
+    : "🐾 FOUND PET — " + (pet.name || "Pet") + " needs an owner";
+  var body = (pet.breed || pet.type || "") + (pet.location ? " · 📍 " + pet.location : "");
+  var opts = { body: body, icon: "https://tucson-pet-finder.vercel.app/favicon.ico", badge: "https://tucson-pet-finder.vercel.app/favicon.ico", tag: "paws-" + pet.id, renotify: true };
+  try {
+    var n = new Notification(title, opts);
+    n.onclick = function() { window.focus(); dismissPAWS(false); switchTab("see"); setTimeout(function(){ openModal(pet); }, 400); };
+  } catch(e) {}
+}
+
+async function checkForPAWSAlert() {
+  var pets = await getPets();
+  var fresh = pets.filter(function(p) {
+    var ageMin = (Date.now() - new Date(p.created_at)) / 60000;
+    return (p.status==="lost" || p.status==="found") && ageMin < 30 && !_pawsTriggeredIds[p.id];
+  });
+  if(!fresh.length) return;
+  var pet = fresh.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);})[0];
+  _pawsTriggeredIds[pet.id] = true;
+  triggerPAWSAlert(pet);
+}
+
+function triggerPAWSAlert(pet) {
+  var overlay = document.getElementById("pawsOverlay");
+  var duration = 15;
+  document.getElementById("pawsName").textContent = (pet.name || "UNKNOWN PET").toUpperCase();
+  document.getElementById("pawsStatus").textContent = pet.status==="lost" ? "IS MISSING" : "HAS BEEN FOUND";
+  document.getElementById("pawsStop").textContent = pet.status==="lost" ? "STOP!" : "ATTENTION!";
+  var descParts = [];
+  if(pet.breed) descParts.push(pet.breed);
+  if(pet.description) descParts.push(pet.description.slice(0,80)+(pet.description.length>80?"...":""));
+  document.getElementById("pawsDesc").textContent = descParts.join(" — ") || "No description provided.";
+  document.getElementById("pawsLoc").innerHTML = pet.location ? "📍 Last seen: "+pet.location : "";
+  var photoEl = document.getElementById("pawsPhoto");
+  if(pet.photo_url && pet.photo_url.indexOf("data:")<0) {
+    photoEl.src = pet.photo_url; photoEl.style.display = "block";
+  } else {
+    photoEl.style.display = "none";
+    document.getElementById("pawsPaw").textContent = petEmoji(pet.type);
+  }
+  window._pawsCurrentPet = pet;
+  var remaining = duration;
+  document.getElementById("pawsCountdown").textContent = remaining;
+  clearInterval(_pawsCountdownInterval);
+  _pawsCountdownInterval = setInterval(function() {
+    remaining--;
+    var el = document.getElementById("pawsCountdown");
+    if(el) el.textContent = remaining;
+    if(remaining <= 0) { clearInterval(_pawsCountdownInterval); dismissPAWS(false); }
+  }, 1000);
+  var prog = document.getElementById("pawsProgress");
+  prog.classList.remove("running");
+  prog.style.setProperty("--paws-duration", duration+"s");
+  void prog.offsetWidth;
+  prog.classList.add("running");
+  overlay.classList.add("show");
+  document.body.style.overflow = "hidden";
+  speakPAWS(pet, duration);
+  sendBrowserNotif(pet);
+  clearTimeout(_pawsTimer);
+  _pawsTimer = setTimeout(function(){ dismissPAWS(false); }, duration * 1000 + 500);
+}
+
+function speakPAWS(pet, duration) {
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  var name = pet.name || "an unknown pet";
+  var status = pet.status === "lost" ? "is missing" : "has been found";
+  var loc = pet.location ? " Last seen near " + pet.location + "." : "";
+  var msg = "Stop. Stop. " + name + " " + status + ". " + name + " " + status + "." + loc + " Have you seen " + name + "? Please look around you right now. Every second counts.";
+  var utter = new SpeechSynthesisUtterance(msg);
+  utter.rate = 0.88; utter.pitch = 1.1; utter.volume = 1;
+  var voices = window.speechSynthesis.getVoices();
+  var preferred = voices.find(function(v){ return v.lang==="en-US" && v.name.indexOf("Samantha")>=0; })
+    || voices.find(function(v){ return v.lang.indexOf("en")===0; });
+  if(preferred) utter.voice = preferred;
+  window.speechSynthesis.speak(utter);
+}
+
+function dismissPAWS(goToAlert) {
+  clearTimeout(_pawsTimer);
+  clearInterval(_pawsCountdownInterval);
+  window.speechSynthesis && window.speechSynthesis.cancel();
+  document.getElementById("pawsOverlay").classList.remove("show");
+  document.body.style.overflow = "";
+  if(goToAlert && window._pawsCurrentPet) {
+    switchTab("see");
+    setTimeout(function(){ openModal(window._pawsCurrentPet); }, 400);
+  }
+}
+
+function dismissToast(goToAlert) {
+  document.getElementById("petToast").classList.remove("show");
+  if(goToAlert && _toastPet) {
+    switchTab("see");
+    setTimeout(function(){openModal(_toastPet);}, 400);
+  }
+}
+
+// ── SUPABASE AUTH CLIENT ───────────────────────────────────────────────────
+var _supaClient = null;
+var _supaUser = null;
+var _supaProfile = null;
+
+function getSupaClient() {
+  if(!_supaClient && window.supabase) {
+    _supaClient = window.supabase.createClient(SURL, SKEY);
+  }
+  return _supaClient;
+}
+
+async function initAuth() {
+  var client = getSupaClient();
+  if(!client) return;
+  var session = await client.auth.getSession();
+  if(session && session.data && session.data.session) {
+    _supaUser = session.data.session.user;
+    await loadUserProfile();
+    updateSOSButton(_supaProfile && (_supaProfile.pets||[]).filter(Boolean).length > 0);
+  }
+  client.auth.onAuthStateChange(async function(event, session) {
+    if(event === "SIGNED_IN" && session) {
+      _supaUser = session.user;
+      await loadUserProfile();
+      updateSOSButton(_supaProfile && (_supaProfile.pets||[]).filter(Boolean).length > 0);
+      var overlay = document.getElementById("regOverlay");
+      if(overlay && overlay.classList.contains("open")) {
+        _supaProfile ? renderProfileDashboard(_supaProfile) : renderProfileCreate();
+      }
+    } else if(event === "SIGNED_OUT") {
+      _supaUser = null; _supaProfile = null; updateSOSButton(false);
+    }
+  });
+}
+
+async function signInWithGoogle() {
+  var client = getSupaClient();
+  if(!client) { alert("Auth not available. Please reload the page."); return; }
+  var pc = document.getElementById("profileContent");
+  pc.innerHTML = "<div style=\"text-align:center;padding:30px;color:var(--text2)\">Redirecting to Google...</div>";
+  await client.auth.signInWithOAuth({provider:"google",options:{redirectTo:window.location.href}});
+}
+
+async function signOut() {
+  var client = getSupaClient();
+  if(client) await client.auth.signOut();
+  _supaUser = null; _supaProfile = null; updateSOSButton(false);
+  closeProfileModal();
+}
+
+async function loadUserProfile() {
+  if(!_supaUser) return;
+  try {
+    var r = await fetch(SURL+"/rest/v1/profiles?owner_email=eq."+encodeURIComponent(_supaUser.email)+"&select=*", {headers:SH});
+    var data = await r.json();
+    _supaProfile = (data && data.length > 0) ? data[0] : null;
+  } catch(e) { _supaProfile = null; }
+}
+
+// ── PROFILE MODAL ─────────────────────────────────────────────────────────
+async function openProfileModal() {
+  document.getElementById("regOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+  var pc = document.getElementById("profileContent");
+  pc.innerHTML = "<div style=\"text-align:center;padding:30px;color:var(--text2);font-size:0.8rem\">Loading...</div>";
+  if(_supaUser) {
+    if(_supaProfile) { renderProfileDashboard(_supaProfile); }
+    else { renderProfileCreate(); }
+  } else {
+    renderSignIn();
+  }
+}
+
+function closeProfileModal() {
+  document.getElementById("regOverlay").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+function renderSignIn() {
+  var pc = document.getElementById("profileContent");
+  pc.innerHTML =
+    "<div class=\"verify-title\">🐾 Tucson Pet Finder</div>"
+    +"<div class=\"verify-sub\" style=\"margin-bottom:24px\">Sign in to register your pets, get verified owner status, and activate your one-tap SOS emergency button.</div>"
+    +"<div style=\"background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:24px;font-size:0.85rem;color:var(--text2);line-height:2\">"
+    +"🆘 One-tap SOS emergency post<br>"
+    +"✅ Verified Owner badge when claiming<br>"
+    +"🐾 Up to 4 pets registered across all your devices<br>"
+    +"📞 Your info pre-filled automatically"
+    +"</div>"
+    +"<button onclick=\"signInWithGoogle()\" style=\"width:100%;background:#fff;color:#333;font-family:'Cabinet Grotesk',sans-serif;font-size:0.85rem;font-weight:700;padding:16px;border-radius:12px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;box-shadow:0 4px 16px rgba(0,0,0,0.3);margin-bottom:12px\">"
+    +"<svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path fill=\"#4285F4\" d=\"M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z\"/><path fill=\"#34A853\" d=\"M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z\"/><path fill=\"#FBBC05\" d=\"M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z\"/><path fill=\"#EA4335\" d=\"M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z\"/></svg>"
+    +"Continue with Google</button>"
+    +"<p style=\"font-size:0.7rem;color:var(--text3);text-align:center;line-height:1.5\">Your Google account keeps your profile safe across all devices.<br>No separate password needed.</p>";
+}
+
+function renderProfileCreate() {
+  var pc = document.getElementById("profileContent");
+  var email = _supaUser ? _supaUser.email : "";
+  var displayName = _supaUser ? (_supaUser.user_metadata&&_supaUser.user_metadata.full_name ? _supaUser.user_metadata.full_name : email) : "";
+  pc.innerHTML =
+    "<div style=\"display:flex;align-items:center;gap:10px;margin-bottom:16px\">"
+    +(_supaUser&&_supaUser.user_metadata&&_supaUser.user_metadata.avatar_url ? "<img src=\""+_supaUser.user_metadata.avatar_url+"\" style=\"width:40px;height:40px;border-radius:50%;border:2px solid var(--teal)\"/>" : "<div style=\"font-size:2rem\">🐾</div>")
+    +"<div><div style=\"font-family:'Cabinet Grotesk',sans-serif;font-size:0.9rem;font-weight:700;color:#fff\">"+displayName+"</div><div style=\"font-size:0.7rem;color:var(--teal)\">✅ Signed in with Google</div></div>"
+    +"</div>"
+    +"<div class=\"verify-title\">🐾 Complete Your Profile</div>"
+    +"<div class=\"verify-sub\">Add your phone number so you can be contacted and your info is pre-filled when posting alerts.</div>"
+    +"<div style=\"margin-bottom:12px\"><label style=\"font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text3);display:block;margin-bottom:6px\">YOUR NAME *</label><input class=\"verify-input\" id=\"profName\" placeholder=\"e.g. Lamar Myers\" value=\""+displayName+"\"/></div>"
+    +"<div style=\"margin-bottom:18px\"><label style=\"font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text3);display:block;margin-bottom:6px\">YOUR PHONE *</label><input class=\"verify-input\" type=\"tel\" id=\"profPhone\" placeholder=\"520-XXX-XXXX\" inputmode=\"numeric\" oninput=\"autoPhone(this)\"/></div>"
+    +"<button class=\"verify-confirm-btn ready\" onclick=\"createProfile()\" style=\"background:linear-gradient(135deg,#4444ff,#8844ff);box-shadow:0 4px 18px rgba(100,100,255,0.35)\">🐾 Save My Profile →</button>"
+    +"<p style=\"font-size:0.7rem;color:var(--text3);text-align:center;margin-top:10px\">Your data is stored securely. 🌵</p>";
+}
+
+async function createProfile() {
+  var name = document.getElementById("profName").value.trim();
+  var phone = document.getElementById("profPhone").value.trim();
+  if(!name || !validPhone(phone)) { alert("Please enter your name and a valid phone number."); return; }
+  if(!_supaUser) { alert("Please sign in first."); return; }
+  var btn = document.querySelector("#profileContent .verify-confirm-btn");
+  if(btn) { btn.disabled=true; btn.textContent="Saving..."; }
+  try {
+    var r = await fetch(SURL+"/rest/v1/profiles", {
+      method:"POST",
+      headers:{...SH,"Prefer":"return=representation"},
+      body:JSON.stringify({owner_name:name,owner_phone:fmtPhone(phone),owner_email:_supaUser.email,google_id:_supaUser.id,pets:[]})
+    });
+    if(!r.ok) throw new Error(await r.text());
+    var data = await r.json();
+    _supaProfile = data[0];
+    updateSOSButton(false);
+    renderProfileDashboard(_supaProfile);
+  } catch(e) {
+    _supaProfile = {id:"local_"+Date.now(),owner_name:name,owner_phone:fmtPhone(phone),owner_email:_supaUser.email,pets:[]};
+    updateSOSButton(false);
+    renderProfileDashboard(_supaProfile);
+  }
+}
+
+function renderProfileDashboard(profile) {
+  var pc = document.getElementById("profileContent");
+  var pets = profile.pets||[];
+  var slots = [0,1,2,3].map(function(i) {
+    var p = pets[i];
+    if(p) return "<div class=\"pet-slot filled\" onclick=\"editPetSlot("+i+")\"><div class=\"pet-slot-top\"><span class=\"pet-slot-emoji\">"+petEmoji(p.type)+"</span><div><div class=\"pet-slot-name\">"+p.name+"</div><div class=\"pet-slot-detail\">"+(p.breed||p.type)+(p.marking?" · "+p.marking:"")+"</div></div><span style=\"margin-left:auto;font-size:0.7rem;color:var(--green)\">✅</span></div></div>";
+    return "<div class=\"pet-slot\" onclick=\"addPetToProfile("+i+")\"><div class=\"pet-slot-add\">+ Add Pet "+(i+1)+"</div></div>";
+  }).join("");
+  var sosTip = pets.filter(Boolean).length>0
+    ? "<div style=\"background:rgba(200,0,0,0.07);border:1px solid rgba(200,0,0,0.25);border-radius:12px;padding:14px 16px;margin-top:16px\"><div style=\"font-family:'DM Mono',monospace;font-size:0.65rem;color:#ff5c6c;letter-spacing:0.08em;margin-bottom:6px\">🆘 SOS Emergency Button Active</div><div style=\"font-size:0.82rem;color:var(--text2);line-height:1.5\">Your red SOS button is live. One tap posts an emergency alert instantly with all your pet's info.</div></div>"
+    : "<div style=\"background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-top:16px;text-align:center;font-size:0.85rem;color:var(--text2)\">Add at least one pet above to activate your SOS button.</div>";
+  var googleAvatar = _supaUser&&_supaUser.user_metadata&&_supaUser.user_metadata.avatar_url
+    ? "<img src=\""+_supaUser.user_metadata.avatar_url+"\" style=\"width:36px;height:36px;border-radius:50%;border:2px solid var(--teal);flex-shrink:0\"/>"
+    : "<div style=\"font-size:2rem\">🐾</div>";
+  pc.innerHTML =
+    "<div style=\"display:flex;align-items:center;gap:10px;margin-bottom:18px\">"+googleAvatar+"<div><div style=\"font-family:'Cabinet Grotesk',sans-serif;font-size:0.95rem;font-weight:700;color:#fff\">"+profile.owner_name+"</div><div style=\"font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--teal)\">"+profile.owner_phone+" · ✅ Verified Owner</div></div></div>"
+    +"<div style=\"font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--text3);letter-spacing:0.08em;margin-bottom:10px\">MY PETS ("+pets.filter(Boolean).length+"/4 registered)</div>"
+    +slots+sosTip
+    +"<button class=\"verify-confirm-btn ready\" onclick=\"closeProfileModal()\" style=\"margin-top:16px;background:var(--card2);border:1px solid var(--border2);color:var(--teal);box-shadow:none\">✓ Done</button>"
+    +"<button onclick=\"signOut()\" style=\"width:100%;background:none;border:none;color:var(--text3);font-family:'DM Mono',monospace;font-size:0.62rem;cursor:pointer;margin-top:10px;padding:6px\">Sign out</button>";
+}
+
+var _editingSlot = -1;
+function addPetToProfile(slot) { _editingSlot = slot; renderAddPetForm(); }
+function editPetSlot(slot) { _editingSlot = slot; renderAddPetForm(); }
+
+function renderAddPetForm() {
+  var pc = document.getElementById("profileContent");
+  pc.innerHTML =
+    "<button onclick=\"reopenDashboard()\" style=\"background:none;border:none;color:var(--teal);font-family:'DM Mono',monospace;font-size:0.7rem;cursor:pointer;margin-bottom:14px\">← Back to Profile</button>"
+    +"<div class=\"verify-title\">🐾 Add Pet "+(_editingSlot+1)+"</div>"
+    +"<div class=\"verify-sub\">Used for instant SOS posts and verified ownership.</div>"
+    +"<div style=\"margin-bottom:12px\"><label style=\"font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text3);display:block;margin-bottom:6px\">PET NAME *</label><input class=\"verify-input\" id=\"addPetName\" placeholder=\"e.g. Mojo\"/></div>"
+    +"<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px\"><div><label style=\"font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text3);display:block;margin-bottom:6px\">TYPE *</label><select class=\"verify-input\" id=\"addPetType\" style=\"color:var(--text)\"><option value=\"\">Select...</option><option>Dog</option><option>Cat</option><option>Bird</option><option>Rabbit</option><option>Other</option></select></div><div><label style=\"font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text3);display:block;margin-bottom:6px\">BREED / COLOR</label><input class=\"verify-input\" id=\"addPetBreed\" placeholder=\"e.g. Black lab mix\"/></div></div>"
+    +"<div style=\"margin-bottom:12px\"><label style=\"font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text3);display:block;margin-bottom:6px\">UNIQUE MARKING</label><input class=\"verify-input\" id=\"addPetMark\" placeholder=\"e.g. white spot on left ear\"/></div>"
+    +"<div style=\"margin-bottom:12px\"><label style=\"font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text3);display:block;margin-bottom:6px\">NEIGHBORHOOD / AREA</label><input class=\"verify-input\" id=\"addPetArea\" placeholder=\"e.g. Midtown Tucson near Speedway\"/></div>"
+    +"<div style=\"margin-bottom:18px\"><label style=\"font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text3);display:block;margin-bottom:6px\">VET NAME AND PHONE (optional)</label><input class=\"verify-input\" id=\"addPetVet\" placeholder=\"e.g. Dr. Smith 520-555-1234\"/></div>"
+    +"<button class=\"verify-confirm-btn ready\" onclick=\"savePetToProfile()\" style=\"background:linear-gradient(135deg,#00aa44,#2DCA7D);color:#fff\">✅ Save This Pet</button>";
+}
+
+async function reopenDashboard() {
+  if(_supaProfile) { renderProfileDashboard(_supaProfile); return; }
+  if(_supaUser) { renderProfileCreate(); return; }
+  renderSignIn();
+}
+
+async function savePetToProfile() {
+  var name = document.getElementById("addPetName").value.trim();
+  var type = document.getElementById("addPetType").value;
+  if(!name||!type) { alert("Pet name and type are required."); return; }
+  var pet = {
+    name:name,type:type,
+    breed:document.getElementById("addPetBreed").value.trim()||type,
+    marking:document.getElementById("addPetMark").value.trim(),
+    area:document.getElementById("addPetArea").value.trim(),
+    vet:document.getElementById("addPetVet").value.trim()
+  };
+  if(!_supaProfile) return;
+  var pets = (_supaProfile.pets||[]).slice();
+  pets[_editingSlot] = pet;
+  _supaProfile.pets = pets;
+  if(_supaProfile.id && !String(_supaProfile.id).startsWith("local_")) {
+    await fetch(SURL+"/rest/v1/profiles?id=eq."+_supaProfile.id, {
+      method:"PATCH",headers:{...SH,"Prefer":"return=minimal"},body:JSON.stringify({pets:pets})
+    });
+  }
+  updateSOSButton(pets.filter(Boolean).length>0);
+  renderProfileDashboard(_supaProfile);
+}
+
+function updateSOSButton(hasPets) {
+  var fab = document.getElementById("sosFab");
+  if(!fab) return;
+  if(hasPets) fab.classList.add("visible");
+  else fab.classList.remove("visible");
+}
+
+// ── SOS SYSTEM ─────────────────────────────────────────────────────────────
+function openSOS() {
+  if(!_supaUser) { openProfileModal(); return; }
+  if(!_supaProfile) { openProfileModal(); return; }
+  document.getElementById("sosOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+  renderSOSPick(_supaProfile);
+}
+
+function renderSOSPick(profile) {
+  window._sosProfile = profile;
+  var sc = document.getElementById("sosContent");
+  var pets = (profile.pets||[]).filter(Boolean);
+  if(!pets.length) {
+    sc.innerHTML = "<div class=\"verify-title\" style=\"color:var(--accent)\">🆘 SOS Emergency</div><div class=\"verify-sub\">Add pets to your profile first.</div><button class=\"verify-confirm-btn ready\" onclick=\"closeSOS();openProfileModal()\" style=\"background:linear-gradient(135deg,#4444ff,#8844ff)\">🐾 Go to My Profile</button>";
+    return;
+  }
+  var buttons = pets.map(function(p,i) {
+    return "<button class=\"sos-pick-btn\" onclick=\"triggerSOS("+i+")\"><span class=\"sos-pick-emoji\">"+petEmoji(p.type)+"</span><div><div class=\"sos-pick-name\">"+p.name+"</div><div class=\"sos-pick-detail\">"+(p.breed||p.type)+(p.marking?" · "+p.marking:"")+"</div></div><span style=\"margin-left:auto;color:var(--accent);font-size:1.2rem\">🆘</span></button>";
+  }).join("");
+  sc.innerHTML = "<div class=\"verify-title\" style=\"color:var(--accent)\">🆘 Emergency SOS</div><div class=\"verify-sub\">Which pet is missing? We will post an emergency alert instantly.</div>"+buttons+"<button onclick=\"closeSOS()\" style=\"width:100%;background:none;border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--text2);font-family:'DM Mono',monospace;font-size:0.7rem;cursor:pointer;margin-top:4px\">Cancel</button>";
+}
+
+async function triggerSOS(petIndex) {
+  var profile = window._sosProfile;
+  if(!profile) return;
+  var pet = profile.pets[petIndex];
+  var sc = document.getElementById("sosContent");
+  sc.innerHTML = "<div style=\"text-align:center;padding:30px\"><div style=\"font-size:3rem;margin-bottom:14px\">🆘</div><div style=\"font-family:'Instrument Serif',serif;font-size:1.2rem;color:var(--accent);margin-bottom:8px\">Posting Emergency Alert...</div><div style=\"font-size:0.82rem;color:var(--text2)\">Alerting all Tucson neighbors now</div></div>";
+  try {
+    await addPet({status:"lost",name:pet.name,type:pet.type,breed:pet.breed||pet.type,location:pet.area||"Tucson, AZ",description:"SOS EMERGENCY POST — Owner: "+profile.owner_name+". Unique marking: "+(pet.marking||"Not provided")+". Vet: "+(pet.vet||"Not provided")+".",phone:profile.owner_phone,photo_url:""});
+    sc.innerHTML = "<div style=\"text-align:center;padding:30px\"><div style=\"font-size:3.5rem;margin-bottom:14px\">🆘</div><div style=\"font-family:'Instrument Serif',serif;font-size:1.2rem;color:var(--accent);margin-bottom:10px\">Alert Posted!</div><div style=\"font-size:0.9rem;color:var(--text2);line-height:1.6;margin-bottom:20px\">Emergency alert for <strong style=\"color:#fff\">"+pet.name+"</strong> is now live. Every Tucson neighbor who opens this app will see it immediately.</div><button class=\"verify-confirm-btn ready\" onclick=\"closeSOS();switchTab('see')\" style=\"background:var(--accent);box-shadow:0 4px 18px var(--accent-glow)\">👁 View Live Alert</button></div>";
+    loadAlertBanner();
+  } catch(e) {
+    sc.innerHTML = "<div style=\"text-align:center;padding:20px\"><div style=\"color:var(--accent);margin-bottom:10px\">Error posting alert.</div><button class=\"verify-confirm-btn ready\" onclick=\"triggerSOS("+petIndex+")\">Try Again</button></div>";
+  }
+}
+
+function closeSOS() {
+  document.getElementById("sosOverlay").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+// ── SPOT A STRAY ───────────────────────────────────────────────────────────
+var _strayLatLng = null;
+var _strayLocReadable = null;
+var _strayPhotoData = null;
+
+function openStrayModal() {
+  document.getElementById("strayModal").classList.add("open");
+  document.getElementById("strayFormView").style.display = "block";
+  document.getElementById("straySuccessView").style.display = "none";
+  document.body.style.overflow = "hidden";
+}
+
+function closeStrayModal(e) {
+  if(e && e.target !== document.getElementById("strayModal") && !e.target.classList.contains("stray-close")) return;
+  document.getElementById("strayModal").classList.remove("open");
+  document.body.style.overflow = "";
+  _strayLatLng = null; _strayLocReadable = null; _strayPhotoData = null;
+  document.getElementById("strayPhotoPreview").style.display = "none";
+  document.getElementById("strayPhotoHint").style.display = "flex";
+  document.getElementById("strayLocText").textContent = "Tap to capture your GPS location";
+  document.getElementById("strayLocText").className = "stray-loc-text";
+  document.getElementById("strayNote").value = "";
+  document.getElementById("strayPhone").value = "";
+  document.getElementById("strayPhotoInput").value = "";
+}
+
+function loadStrayPhoto(input) {
+  var f = input.files[0];
+  if(!f) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    _strayPhotoData = e.target.result;
+    var img = document.getElementById("strayPhotoPreview");
+    img.src = _strayPhotoData; img.style.display = "block";
+    document.getElementById("strayPhotoHint").style.display = "none";
+  };
+  reader.readAsDataURL(f);
+}
+
+function getStrayLocation() {
+  var el = document.getElementById("strayLocText");
+  el.textContent = "📡 Getting your location...";
+  if(!navigator.geolocation) { el.textContent = "GPS not available on this device"; return; }
+  navigator.geolocation.getCurrentPosition(
+    function(pos) {
+      _strayLatLng = {lat:pos.coords.latitude, lng:pos.coords.longitude};
+      el.textContent = "✅ Location captured — looking up address...";
+      el.className = "stray-loc-text got";
+      fetch("https://nominatim.openstreetmap.org/reverse?format=json&lat="+_strayLatLng.lat+"&lon="+_strayLatLng.lng+"&zoom=16&addressdetails=1")
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          var a = data.address || {};
+          var parts = [];
+          if(a.road) parts.push(a.road);
+          if(a.neighbourhood || a.suburb) parts.push(a.neighbourhood || a.suburb);
+          if(a.city || a.town || a.village) parts.push(a.city || a.town || a.village);
+          var readable = parts.length ? parts.join(", ") : null;
+          if(readable) { _strayLocReadable = readable; el.textContent = "✅ " + readable; }
+          else { _strayLocReadable = null; el.textContent = "✅ Location captured near Tucson"; }
+        })
+        .catch(function(){ _strayLocReadable = null; el.textContent = "✅ Location captured"; });
+    },
+    function() { el.textContent = "Could not get location — tap to try again"; el.className = "stray-loc-text"; }
+  );
+}
+
+async function submitStray() {
+  if(!_strayPhotoData) { alert("Please take or upload a photo first!"); return; }
+  var btn = document.getElementById("straySubmitBtn");
+  btn.disabled = true; btn.textContent = "Posting...";
+  var note = document.getElementById("strayNote").value.trim();
+  var phone = document.getElementById("strayPhone").value.trim();
+  var locStr = _strayLocReadable ? _strayLocReadable : (_strayLatLng ? _strayLatLng.lat.toFixed(4)+", "+_strayLatLng.lng.toFixed(4) : "Location not captured");
+  try {
+    await addPet({status:"stray",name:"Stray Sighting",type:"Unknown",breed:"Unknown",location:locStr,description:note||"No additional notes.",phone:phone?fmtPhone(phone):"",photo_url:_strayPhotoData});
+    document.getElementById("strayFormView").style.display = "none";
+    document.getElementById("straySuccessView").style.display = "block";
+    loadAlertBanner();
+  } catch(e) { alert("Error posting. Please try again."); }
+  finally { btn.disabled=false; btn.textContent="📸 Post Stray Sighting"; }
+}
+
+// ── SHARE ──────────────────────────────────────────────────────────────────
+function shareApp() {
+  var text = "🐾 FREE app for Tucson pet owners — Tucson Pet Finder! Post lost or found pets and neighbors get alerted instantly. No sign-up. No cost. Try it: tucson-pet-finder.vercel.app/tucson-pet-finder.html";
+  if(navigator.share) navigator.share({title:"Tucson Pet Finder",text:text,url:window.location.href});
+  else navigator.clipboard.writeText(text).then(function(){ alert("Copied! Paste in Nextdoor or text a friend!"); });
+}
+
 var _pawsTimer=null,_pawsCountdownInterval=null,_pawsTriggeredIds={};
 async function checkForPAWSAlert(){var pets=await getPets();var fresh=pets.filter(function(p){var ageMin=(Date.now()-new Date(p.created_at))/60000;return(p.status==="lost"||p.status==="found")&&ageMin<30&&!_pawsTriggeredIds[p.id];});if(!fresh.length)return;var pet=fresh.sort(function(a,b){return new Date(b.created_at)-new Date(a.created_at);})[0];_pawsTriggeredIds[pet.id]=true;triggerPAWSAlert(pet);}
-function triggerPAWSAlert(pet){var overlay=document.getElementById("pawsOverlay");var duration=10;document.getElementById("pawsName").textContent=(pet.name||"UNKNOWN PET").toUpperCase();document.getElementById("pawsStatus").textContent=pet.status==="lost"?"IS MISSING":"HAS BEEN FOUND";document.getElementById("pawsStop").textContent=pet.status==="lost"?"STOP!":"ATTENTION!";var descParts=[];if(pet.breed)descParts.push(pet.breed);if(pet.description)descParts.push(pet.description.slice(0,80)+(pet.description.length>80?"...":""));document.getElementById("pawsDesc").textContent=descParts.join(" — ")||"No description provided.";document.getElementById("pawsLoc").innerHTML=pet.location?"📍 Last seen: "+pet.location:"";var photoEl=document.getElementById("pawsPhoto");if(pet.photo_url&&pet.photo_url.indexOf("data:")<0){photoEl.src=pet.photo_url;photoEl.style.display="block";}else{photoEl.style.display="none";document.getElementById("pawsPaw").textContent=petEmoji(pet.type);}window._pawsCurrentPet=pet;var remaining=duration;document.getElementById("pawsCountdown").textContent=remaining;clearInterval(_pawsCountdownInterval);_pawsCountdownInterval=setInterval(function(){remaining--;var el=document.getElementById("pawsCountdown");if(el)el.textContent=remaining;if(remaining<=0){clearInterval(_pawsCountdownInterval);dismissPAWS(false);}},1000);var prog=document.getElementById("pawsProgress");prog.classList.remove("running");prog.style.setProperty("--paws-duration",duration+"s");void prog.offsetWidth;prog.classList.add("running");overlay.classList.add("show");document.body.style.overflow="hidden";speakPAWS(pet,duration);clearTimeout(_pawsTimer);_pawsTimer=setTimeout(function(){dismissPAWS(false);},duration*1000+500);}
+function triggerPAWSAlert(pet){var overlay=document.getElementById("pawsOverlay");var duration=15;document.getElementById("pawsName").textContent=(pet.name||"UNKNOWN PET").toUpperCase();document.getElementById("pawsStatus").textContent=pet.status==="lost"?"IS MISSING":"HAS BEEN FOUND";document.getElementById("pawsStop").textContent=pet.status==="lost"?"STOP!":"ATTENTION!";var descParts=[];if(pet.breed)descParts.push(pet.breed);if(pet.description)descParts.push(pet.description.slice(0,80)+(pet.description.length>80?"...":""));document.getElementById("pawsDesc").textContent=descParts.join(" — ")||"No description provided.";document.getElementById("pawsLoc").innerHTML=pet.location?"📍 Last seen: "+pet.location:"";var photoEl=document.getElementById("pawsPhoto");if(pet.photo_url&&pet.photo_url.indexOf("data:")<0){photoEl.src=pet.photo_url;photoEl.style.display="block";}else{photoEl.style.display="none";document.getElementById("pawsPaw").textContent=petEmoji(pet.type);}window._pawsCurrentPet=pet;var remaining=duration;document.getElementById("pawsCountdown").textContent=remaining;clearInterval(_pawsCountdownInterval);_pawsCountdownInterval=setInterval(function(){remaining--;var el=document.getElementById("pawsCountdown");if(el)el.textContent=remaining;if(remaining<=0){clearInterval(_pawsCountdownInterval);dismissPAWS(false);}},1000);var prog=document.getElementById("pawsProgress");prog.classList.remove("running");prog.style.setProperty("--paws-duration",duration+"s");void prog.offsetWidth;prog.classList.add("running");overlay.classList.add("show");document.body.style.overflow="hidden";speakPAWS(pet,duration);sendBrowserNotif(pet);clearTimeout(_pawsTimer);_pawsTimer=setTimeout(function(){dismissPAWS(false);},duration*1000+500);}
 function speakPAWS(pet,duration){if(!window.speechSynthesis)return;window.speechSynthesis.cancel();var name=pet.name||"an unknown pet";var status=pet.status==="lost"?"is missing":"has been found";var loc=pet.location?" Last seen near "+pet.location+".":"";var msg="Stop. Stop. "+name+" "+status+". "+name+" "+status+"."+loc+" Have you seen "+name+"? Please look around you right now. Every second counts.";var utter=new SpeechSynthesisUtterance(msg);utter.rate=0.88;utter.pitch=1.1;utter.volume=1;var voices=window.speechSynthesis.getVoices();var preferred=voices.find(function(v){return v.lang==="en-US"&&v.name.indexOf("Samantha")>=0;})||voices.find(function(v){return v.lang.indexOf("en")===0;});if(preferred)utter.voice=preferred;window.speechSynthesis.speak(utter);}
 function dismissPAWS(goToAlert){clearTimeout(_pawsTimer);clearInterval(_pawsCountdownInterval);window.speechSynthesis&&window.speechSynthesis.cancel();document.getElementById("pawsOverlay").classList.remove("show");document.body.style.overflow="";if(goToAlert&&window._pawsCurrentPet){switchTab("see");setTimeout(function(){openModal(window._pawsCurrentPet);},400);}}
 
@@ -1327,9 +1878,143 @@ async function submitStray(){if(!_strayPhotoData){alert("Please take or upload a
 function shareApp(){var text="🐾 FREE app for Tucson pet owners — Tucson Pet Finder! Post lost or found pets and neighbors get alerted instantly. No sign-up. No cost. Try it: tucson-pet-finder.vercel.app/tucson-pet-finder.html";if(navigator.share)navigator.share({title:"Tucson Pet Finder",text:text,url:window.location.href});else navigator.clipboard.writeText(text).then(function(){alert("Copied! Paste in Nextdoor or text a friend!");});}
 
 // ── INIT ───────────────────────────────────────────────────────────────────
-(function(){initAuth();setInterval(function(){checkForPAWSAlert();},60000);})();
+(function(){initAuth();setInterval(function(){checkForPAWSAlert();loadAlertBanner();},20000);})();
 loadAlertBanner();
 showPetToast();
+
+// ── ADMIN SYSTEM ───────────────────────────────────────────────────────────
+var ADMIN_HASH = "5048b9576e81a4b38a116f3718bbca6a716a5d333deee46b4a67f8e2f153560e"; // SHA-256 of PetHub2026! — change this hash if you change the password
+// To generate a new hash: https://emn178.github.io/online-tools/sha256.html
+var _adminTaps = 0, _adminTapTimer = null;
+var _adminAuthed = false;
+
+function adminTap() {
+  _adminTaps++;
+  clearTimeout(_adminTapTimer);
+  _adminTapTimer = setTimeout(function(){ _adminTaps = 0; }, 2000);
+  if(_adminTaps >= 5) {
+    _adminTaps = 0;
+    openAdminLogin();
+  }
+}
+
+function openAdminLogin() {
+  document.getElementById("adminLoginOverlay").classList.add("open");
+  document.getElementById("adminError").style.display = "none";
+  document.getElementById("adminPwInput").value = "";
+  setTimeout(function(){ document.getElementById("adminPwInput").focus(); }, 100);
+}
+
+function closeAdminLogin() {
+  document.getElementById("adminLoginOverlay").classList.remove("open");
+}
+
+async function sha256(str) {
+  var buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,"0"); }).join("");
+}
+
+async function doAdminLogin() {
+  var pw = document.getElementById("adminPwInput").value.trim();
+  if(!pw) return;
+  var hash = await sha256(pw);
+  // Hardcoded hash for PetHub2026!
+  if(hash === "5048b9576e81a4b38a116f3718bbca6a716a5d333deee46b4a67f8e2f153560e") {
+    _adminAuthed = true;
+    closeAdminLogin();
+    openAdminPanel();
+  } else {
+    var errEl = document.getElementById("adminError");
+    errEl.style.display = "block";
+    document.getElementById("adminPwInput").value = "";
+    document.getElementById("adminPwInput").focus();
+    setTimeout(function(){ errEl.style.display = "none"; }, 3000);
+  }
+}
+
+function closeAdminPanel() {
+  document.getElementById("adminPanelOverlay").classList.remove("open");
+  _adminAuthed = false;
+}
+
+async function openAdminPanel() {
+  document.getElementById("adminPanelOverlay").classList.add("open");
+  await renderAdminPanel();
+}
+
+async function renderAdminPanel() {
+  var body = document.getElementById("adminPanelBody");
+  body.innerHTML = "<div class='admin-empty'>Loading alerts...</div>";
+  var pets = await getPets(true); // pass true = fetch ALL including pending
+  var pending = pets.filter(function(p){ return p.status === "pending_removal"; });
+  var active  = pets.filter(function(p){ return p.status !== "pending_removal"; });
+
+  var html = "";
+
+  // Pending removal section
+  html += "<div class='admin-section-title'>🕐 Awaiting Your Approval (" + pending.length + ")</div>";
+  if(!pending.length) {
+    html += "<div class='admin-empty' style='padding:20px'>✅ Nothing pending — all clear!</div>";
+  } else {
+    pending.forEach(function(pet) {
+      html += buildAdminCard(pet, true);
+    });
+  }
+
+  // Active listings section  
+  html += "<div class='admin-section-title' style='margin-top:24px'>📋 All Active Listings (" + active.length + ")</div>";
+  if(!active.length) {
+    html += "<div class='admin-empty' style='padding:20px'>No active listings right now.</div>";
+  } else {
+    active.forEach(function(pet) {
+      html += buildAdminCard(pet, false);
+    });
+  }
+
+  body.innerHTML = html;
+}
+
+function buildAdminCard(pet, isPending) {
+  var badgeClass = isPending ? "badge-pending" : (pet.status === "found" ? "badge-found" : "badge-lost");
+  var badgeLabel = isPending ? "PENDING REMOVAL" : pet.status.toUpperCase();
+  var posted = timeAgo(pet.created_at);
+  return "<div class='admin-card'>"
+    + "<div class='admin-card-top'>"
+    + "<span class='admin-card-badge " + badgeClass + "'>" + badgeLabel + "</span>"
+    + "<span class='admin-card-name'>" + (pet.name || "Unknown") + "</span>"
+    + "</div>"
+    + "<div class='admin-card-meta'>"
+    + "📍 " + (pet.location || "—") + "<br>"
+    + "📞 " + (pet.phone || "—") + "<br>"
+    + "🕐 " + posted
+    + (pet.description ? "<br>📝 " + pet.description.substring(0,80) + (pet.description.length>80?"…":"") : "")
+    + "</div>"
+    + "<div class='admin-card-actions'>"
+    + "<button class='admin-delete-btn' onclick=\"adminDeletePet('" + pet.id + "')\">🗑️ Delete Forever</button>"
+    + (isPending ? "<button class='admin-restore-btn' onclick=\"adminRestorePet('" + pet.id + "','" + pet.status + "')\">↩️ Restore</button>" : "")
+    + "</div>"
+    + "</div>";
+}
+
+async function adminDeletePet(id) {
+  if(!_adminAuthed) return;
+  if(!confirm("Permanently delete this listing? This cannot be undone.")) return;
+  await deletePet(id);
+  await renderAdminPanel();
+  loadListings();
+  loadAlertBanner();
+}
+
+async function adminRestorePet(id, originalStatus) {
+  if(!_adminAuthed) return;
+  // Restore to its previous status (lost/found/stray)
+  var restoreStatus = (originalStatus === "pending_removal") ? "lost" : originalStatus;
+  await patchPet(id, {status: restoreStatus});
+  await renderAdminPanel();
+  loadListings();
+  loadAlertBanner();
+}
+
 </script>
 
 <!-- PAWS OVERLAY -->

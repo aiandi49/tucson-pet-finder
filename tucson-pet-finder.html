@@ -939,7 +939,101 @@ footer {
   .form-panel { margin: 0 24px 22px; }
   .alert-strip { margin: 16px 24px; }
 }
+
+/* ── ADMIN PANEL ──────────────────────────────────────────────────────── */
+#adminLoginOverlay {
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92);
+  backdrop-filter:blur(12px); z-index:9000; align-items:center; justify-content:center;
+}
+#adminLoginOverlay.open { display:flex; }
+.admin-login-box {
+  background:var(--bg2); border:1px solid rgba(255,92,108,0.3); border-radius:20px;
+  padding:32px 28px; width:min(340px,90vw); text-align:center;
+}
+.admin-login-box h2 {
+  font-family:'Instrument Serif',serif; font-size:1.5rem; color:#fff; margin-bottom:6px;
+}
+.admin-login-box p { font-size:0.8rem; color:var(--text3); margin-bottom:20px; font-family:'DM Mono',monospace; }
+.admin-pw-input {
+  width:100%; padding:14px 16px; border-radius:12px; border:1px solid var(--border);
+  background:var(--bg); color:#fff; font-size:1rem; font-family:'Cabinet Grotesk',sans-serif;
+  margin-bottom:14px; box-sizing:border-box; text-align:center; letter-spacing:0.1em;
+}
+.admin-pw-input:focus { outline:none; border-color:rgba(255,92,108,0.5); }
+.admin-enter-btn {
+  width:100%; padding:14px; border-radius:12px; border:none; cursor:pointer;
+  background:linear-gradient(135deg,var(--accent),#ff5c6c);
+  color:#fff; font-family:'Cabinet Grotesk',sans-serif; font-size:0.95rem; font-weight:800;
+}
+.admin-cancel-btn {
+  width:100%; padding:10px; border-radius:10px; border:1px solid var(--border);
+  background:none; color:var(--text3); font-family:'DM Mono',monospace;
+  font-size:0.7rem; cursor:pointer; margin-top:8px;
+}
+.admin-error { color:var(--accent); font-size:0.78rem; margin-bottom:10px; font-family:'DM Mono',monospace; display:none; }
+
+#adminPanelOverlay {
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95);
+  backdrop-filter:blur(16px); z-index:9000; flex-direction:column; overflow-y:auto;
+}
+#adminPanelOverlay.open { display:flex; }
+.admin-panel-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:20px 20px 14px; border-bottom:1px solid var(--border); flex-shrink:0;
+}
+.admin-panel-title {
+  font-family:'DM Mono',monospace; font-size:0.75rem; color:var(--accent);
+  letter-spacing:0.1em; font-weight:500;
+}
+.admin-panel-close {
+  background:none; border:1px solid var(--border); border-radius:8px;
+  color:var(--text2); font-family:'DM Mono',monospace; font-size:0.7rem;
+  padding:6px 14px; cursor:pointer;
+}
+.admin-panel-body { padding:16px 20px; flex:1; }
+.admin-section-title {
+  font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--text3);
+  letter-spacing:0.1em; margin-bottom:12px; text-transform:uppercase;
+}
+.admin-card {
+  background:var(--bg2); border:1px solid var(--border); border-radius:14px;
+  padding:16px; margin-bottom:12px;
+}
+.admin-card-top { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.admin-card-badge {
+  font-family:'DM Mono',monospace; font-size:0.6rem; padding:3px 8px;
+  border-radius:20px; font-weight:500; flex-shrink:0;
+}
+.badge-pending { background:rgba(255,180,0,0.12); color:#FFB400; border:1px solid rgba(255,180,0,0.25); }
+.badge-lost { background:rgba(255,92,108,0.1); color:var(--accent); border:1px solid rgba(255,92,108,0.2); }
+.badge-found { background:var(--teal-dim); color:var(--teal); border:1px solid rgba(0,212,180,0.2); }
+.admin-card-name { font-family:'Cabinet Grotesk',sans-serif; font-size:0.95rem; font-weight:700; color:#fff; }
+.admin-card-meta { font-size:0.78rem; color:var(--text2); line-height:1.6; margin-bottom:12px; }
+.admin-card-actions { display:flex; gap:8px; }
+.admin-delete-btn {
+  flex:1; padding:10px; border-radius:10px; border:1px solid rgba(255,92,108,0.3);
+  background:rgba(255,92,108,0.08); color:var(--accent);
+  font-family:'Cabinet Grotesk',sans-serif; font-size:0.8rem; font-weight:700; cursor:pointer;
+}
+.admin-restore-btn {
+  flex:1; padding:10px; border-radius:10px; border:1px solid rgba(0,212,180,0.2);
+  background:var(--teal-dim); color:var(--teal);
+  font-family:'Cabinet Grotesk',sans-serif; font-size:0.8rem; font-weight:700; cursor:pointer;
+}
+.admin-empty { text-align:center; padding:40px 20px; color:var(--text3); font-family:'DM Mono',monospace; font-size:0.75rem; }
+
 </style>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "eb3b7f33-0f12-44a4-a561-735b5cf34959",
+      notifyButton: { enable: false }, // we use our own UI
+      allowLocalhostAsSecureOrigin: true,
+    });
+  });
+</script>
 </head>
 <body>
 <div class="page">
@@ -951,7 +1045,7 @@ footer {
   </nav>
 
   <div class="hero">
-    <div class="hero-icon">🐾</div>
+    <div class="hero-icon" id="adminTrigger" onclick="adminTap()" style="cursor:default;user-select:none;">🐾</div>
     <h1 class="hero-title">Tucson<br><span>Pet Finder</span></h1>
     <p class="hero-sub">Lost or found a pet in Tucson? Post in 60 seconds. Neighbors get alerted instantly. Free forever.</p>
     <div class="hero-stats">
@@ -1548,6 +1642,7 @@ async function doSubmit(type) {
       await addPet({status:"lost",name:name,type:pt,breed:document.getElementById("lostBreed").value.trim()||pt,location:loc,description:document.getElementById("lostDesc").value.trim(),phone:fmtPhone(phone),photo_url:photoUrl||""});
       showSuccess("lost", name);
       loadAlertBanner();
+      checkForPAWSAlert();
     } catch(e) { alert("Error posting. Please try again."); }
     finally { btn.disabled=false; btn.textContent="🚨 Post Lost Pet Alert"; }
   } else {
@@ -1568,6 +1663,7 @@ async function doSubmit(type) {
       await addPet({status:"found",name:foundName2||"Found "+pt2,type:pt2,breed:document.getElementById("foundBreed").value.trim()||pt2,location:loc2,description:document.getElementById("foundDesc").value.trim(),phone:fmtPhone(phone2),photo_url:photoUrl2||""});
       showSuccess("found");
       loadAlertBanner();
+      checkForPAWSAlert();
     } catch(e) { alert("Error posting. Please try again."); }
     finally { btn2.disabled=false; btn2.textContent="🟢 Post Found Pet Alert"; }
   }
@@ -1633,7 +1729,7 @@ async function renderListings() {
   var c = document.getElementById("listingsContainer");
   c.innerHTML = "<div class=\"state-box\">Loading alerts from Tucson database...</div>";
   var pets = await getPets();
-  var skip = ["reunited","registered"];
+  var skip = ["reunited","registered","pending_removal"];
   var hot = pets.filter(function(p) { return skip.indexOf(p.status)<0 && petAgeTier(p.created_at)==="hot"; });
   var watching = pets.filter(function(p) { return skip.indexOf(p.status)<0 && petAgeTier(p.created_at)==="watching"; });
   var archived = pets.filter(function(p) { return skip.indexOf(p.status)<0 && petAgeTier(p.created_at)==="archived"; });
@@ -1745,20 +1841,18 @@ function closeModalOverlay(e) {
 async function removeAlert() {
   if(!_currentPet) return;
   var pet = _currentPet;
-  var phone = prompt("To remove this listing, enter the phone number you used when posting it:");
+  var phone = prompt("To request removal, enter the phone number you used when posting:");
   if(!phone || !phone.trim()) return;
   var clean = phone.replace(/\D/g,"");
   var petClean = (pet.phone||"").replace(/\D/g,"");
   if(clean !== petClean) {
-    alert("❌ Phone number doesn't match. Only the person who posted this listing can remove it.");
+    alert("❌ Phone number doesn't match. Only the person who posted this listing can request removal.");
     return;
   }
-  var confirm = window.confirm("Remove \"" + (pet.name||"this listing") + "\" permanently? This cannot be undone.");
-  if(!confirm) return;
-  await deletePet(pet.id);
+  await patchPet(pet.id, {status:"pending_removal"});
   document.getElementById("modalOverlay").classList.remove("open");
   document.body.style.overflow = "";
-  alert("✅ Listing removed. Thank you for keeping the board up to date!");
+  alert("✅ Removal request sent! An admin will review and confirm within 24 hours.");
   loadListings();
   loadAlertBanner();
 }
@@ -1837,13 +1931,13 @@ async function doConfirmClaim(isReuniteStr) {
   var vc = document.getElementById("verifyContent");
   if(isReuniteStr==="true") {
     try {
-      await patchPet(pet.id, {status:"reunited"});
+      await patchPet(pet.id, {status:"pending_removal"});
       vc.innerHTML = "<div style=\"text-align:center;padding:30px 0\"><div style=\"font-size:3.5rem;margin-bottom:14px\">🎉</div><div style=\"font-family:'Instrument Serif',serif;font-size:1.3rem;color:var(--green);margin-bottom:10px\">Reunited!</div><div style=\"font-size:0.9rem;color:var(--text2);line-height:1.6\">"+(pet.name||"This pet")+" is home safe and removed from the active list.<br><br>Tucson is smiling right now. 💙</div></div>";
       setTimeout(function() {
         closeVerify();
         document.getElementById("modalOverlay").classList.remove("open");
         document.body.style.overflow = "";
-        renderListings();
+        loadListings();
         loadAlertBanner();
       }, 2500);
     } catch(e) { alert("Error updating. Please try again."); }
@@ -1902,6 +1996,27 @@ var _pawsTimer = null;
 var _pawsCountdownInterval = null;
 var _pawsTriggeredIds = {};
 
+// ── BROWSER NOTIFICATIONS (fires even when tab is backgrounded) ────────────
+function requestNotifPermission() {
+  if(!("Notification" in window)) return;
+  if(Notification.permission === "default") {
+    Notification.requestPermission();
+  }
+}
+
+function sendBrowserNotif(pet) {
+  if(!("Notification" in window) || Notification.permission !== "granted") return;
+  var title = pet.status === "lost"
+    ? "🚨 PAWS ALERT — " + (pet.name || "Pet") + " IS MISSING"
+    : "🐾 FOUND PET — " + (pet.name || "Pet") + " needs an owner";
+  var body = (pet.breed || pet.type || "") + (pet.location ? " · 📍 " + pet.location : "");
+  var opts = { body: body, icon: "https://tucson-pet-finder.vercel.app/favicon.ico", badge: "https://tucson-pet-finder.vercel.app/favicon.ico", tag: "paws-" + pet.id, renotify: true };
+  try {
+    var n = new Notification(title, opts);
+    n.onclick = function() { window.focus(); dismissPAWS(false); switchTab("see"); setTimeout(function(){ openModal(pet); }, 400); };
+  } catch(e) {}
+}
+
 async function checkForPAWSAlert() {
   var pets = await getPets();
   var fresh = pets.filter(function(p) {
@@ -1916,7 +2031,7 @@ async function checkForPAWSAlert() {
 
 function triggerPAWSAlert(pet) {
   var overlay = document.getElementById("pawsOverlay");
-  var duration = 10;
+  var duration = 15;
   document.getElementById("pawsName").textContent = (pet.name || "UNKNOWN PET").toUpperCase();
   document.getElementById("pawsStatus").textContent = pet.status==="lost" ? "IS MISSING" : "HAS BEEN FOUND";
   document.getElementById("pawsStop").textContent = pet.status==="lost" ? "STOP!" : "ATTENTION!";
@@ -1950,6 +2065,7 @@ function triggerPAWSAlert(pet) {
   overlay.classList.add("show");
   document.body.style.overflow = "hidden";
   speakPAWS(pet, duration);
+  sendBrowserNotif(pet);
   clearTimeout(_pawsTimer);
   _pawsTimer = setTimeout(function(){ dismissPAWS(false); }, duration * 1000 + 500);
 }
@@ -2340,10 +2456,145 @@ function shareApp() {
 // ── INIT ───────────────────────────────────────────────────────────────────
 (function() {
   initAuth();
-  setInterval(function(){ checkForPAWSAlert(); }, 60000);
+  // OneSignal handles notification permission
+  setInterval(function(){ checkForPAWSAlert(); loadAlertBanner(); }, 20000);
 })();
 loadAlertBanner();
 showPetToast();
+
+// ── ADMIN SYSTEM ───────────────────────────────────────────────────────────
+var ADMIN_HASH = "5048b9576e81a4b38a116f3718bbca6a716a5d333deee46b4a67f8e2f153560e"; // SHA-256 of PetHub2026! — change this hash if you change the password
+// To generate a new hash: https://emn178.github.io/online-tools/sha256.html
+var _adminTaps = 0, _adminTapTimer = null;
+var _adminAuthed = false;
+
+function adminTap() {
+  _adminTaps++;
+  clearTimeout(_adminTapTimer);
+  _adminTapTimer = setTimeout(function(){ _adminTaps = 0; }, 2000);
+  if(_adminTaps >= 5) {
+    _adminTaps = 0;
+    openAdminLogin();
+  }
+}
+
+function openAdminLogin() {
+  document.getElementById("adminLoginOverlay").classList.add("open");
+  document.getElementById("adminError").style.display = "none";
+  document.getElementById("adminPwInput").value = "";
+  setTimeout(function(){ document.getElementById("adminPwInput").focus(); }, 100);
+}
+
+function closeAdminLogin() {
+  document.getElementById("adminLoginOverlay").classList.remove("open");
+}
+
+async function sha256(str) {
+  var buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,"0"); }).join("");
+}
+
+async function doAdminLogin() {
+  var pw = document.getElementById("adminPwInput").value.trim();
+  if(!pw) return;
+  var hash = await sha256(pw);
+  // Hardcoded hash for PetHub2026!
+  if(hash === "5048b9576e81a4b38a116f3718bbca6a716a5d333deee46b4a67f8e2f153560e") {
+    _adminAuthed = true;
+    closeAdminLogin();
+    openAdminPanel();
+  } else {
+    var errEl = document.getElementById("adminError");
+    errEl.style.display = "block";
+    document.getElementById("adminPwInput").value = "";
+    document.getElementById("adminPwInput").focus();
+    setTimeout(function(){ errEl.style.display = "none"; }, 3000);
+  }
+}
+
+function closeAdminPanel() {
+  document.getElementById("adminPanelOverlay").classList.remove("open");
+  _adminAuthed = false;
+}
+
+async function openAdminPanel() {
+  document.getElementById("adminPanelOverlay").classList.add("open");
+  await renderAdminPanel();
+}
+
+async function renderAdminPanel() {
+  var body = document.getElementById("adminPanelBody");
+  body.innerHTML = "<div class='admin-empty'>Loading alerts...</div>";
+  var pets = await getPets(true); // pass true = fetch ALL including pending
+  var pending = pets.filter(function(p){ return p.status === "pending_removal"; });
+  var active  = pets.filter(function(p){ return p.status !== "pending_removal"; });
+
+  var html = "";
+
+  // Pending removal section
+  html += "<div class='admin-section-title'>🕐 Awaiting Your Approval (" + pending.length + ")</div>";
+  if(!pending.length) {
+    html += "<div class='admin-empty' style='padding:20px'>✅ Nothing pending — all clear!</div>";
+  } else {
+    pending.forEach(function(pet) {
+      html += buildAdminCard(pet, true);
+    });
+  }
+
+  // Active listings section  
+  html += "<div class='admin-section-title' style='margin-top:24px'>📋 All Active Listings (" + active.length + ")</div>";
+  if(!active.length) {
+    html += "<div class='admin-empty' style='padding:20px'>No active listings right now.</div>";
+  } else {
+    active.forEach(function(pet) {
+      html += buildAdminCard(pet, false);
+    });
+  }
+
+  body.innerHTML = html;
+}
+
+function buildAdminCard(pet, isPending) {
+  var badgeClass = isPending ? "badge-pending" : (pet.status === "found" ? "badge-found" : "badge-lost");
+  var badgeLabel = isPending ? "PENDING REMOVAL" : pet.status.toUpperCase();
+  var posted = timeAgo(pet.created_at);
+  return "<div class='admin-card'>"
+    + "<div class='admin-card-top'>"
+    + "<span class='admin-card-badge " + badgeClass + "'>" + badgeLabel + "</span>"
+    + "<span class='admin-card-name'>" + (pet.name || "Unknown") + "</span>"
+    + "</div>"
+    + "<div class='admin-card-meta'>"
+    + "📍 " + (pet.location || "—") + "<br>"
+    + "📞 " + (pet.phone || "—") + "<br>"
+    + "🕐 " + posted
+    + (pet.description ? "<br>📝 " + pet.description.substring(0,80) + (pet.description.length>80?"…":"") : "")
+    + "</div>"
+    + "<div class='admin-card-actions'>"
+    + "<button class='admin-delete-btn' onclick=\"adminDeletePet('" + pet.id + "')\">🗑️ Delete Forever</button>"
+    + (isPending ? "<button class='admin-restore-btn' onclick=\"adminRestorePet('" + pet.id + "','" + pet.status + "')\">↩️ Restore</button>" : "")
+    + "</div>"
+    + "</div>";
+}
+
+async function adminDeletePet(id) {
+  if(!_adminAuthed) return;
+  if(!confirm("Permanently delete this listing? This cannot be undone.")) return;
+  await deletePet(id);
+  await renderAdminPanel();
+  loadListings();
+  loadAlertBanner();
+}
+
+async function adminRestorePet(id, originalStatus) {
+  if(!_adminAuthed) return;
+  // Restore to its previous status (lost/found/stray)
+  var restoreStatus = (originalStatus === "pending_removal") ? "lost" : originalStatus;
+  await patchPet(id, {status: restoreStatus});
+  await renderAdminPanel();
+  loadListings();
+  loadAlertBanner();
+}
+
 </script>
 
 <!-- ── PAWS ALERT OVERLAY ─────────────────────────────────────────────── -->
@@ -2364,6 +2615,31 @@ showPetToast();
   <button class="paws-btn" id="pawsViewBtn" onclick="dismissPAWS(true)">👁 See Full Alert & Help Find Them</button>
   <div class="paws-dismiss" onclick="dismissPAWS(false)">Tap to dismiss (auto-closes in <span id="pawsCountdown">10</span>s)</div>
   <div class="paws-progress" id="pawsProgress"></div>
+</div>
+
+
+<!-- ADMIN LOGIN -->
+<div id="adminLoginOverlay">
+  <div class="admin-login-box">
+    <h2>🔐 Admin Access</h2>
+    <p>TUCSON PET FINDER · OWNER ONLY</p>
+    <div class="admin-error" id="adminError">❌ Incorrect password</div>
+    <input class="admin-pw-input" type="password" id="adminPwInput" placeholder="Enter admin password"
+      onkeydown="if(event.key==='Enter')doAdminLogin()"/>
+    <button class="admin-enter-btn" onclick="doAdminLogin()">Enter Admin Panel</button>
+    <button class="admin-cancel-btn" onclick="closeAdminLogin()">Cancel</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanelOverlay">
+  <div class="admin-panel-header">
+    <div class="admin-panel-title">🛡️ ADMIN PANEL · TUCSON PET FINDER</div>
+    <button class="admin-panel-close" onclick="closeAdminPanel()">✕ Exit</button>
+  </div>
+  <div class="admin-panel-body" id="adminPanelBody">
+    <div class="admin-empty">Loading...</div>
+  </div>
 </div>
 
 </body>
