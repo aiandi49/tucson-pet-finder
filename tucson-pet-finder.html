@@ -1234,6 +1234,13 @@ async function patchPet(id, data) {
   });
 }
 
+async function deletePet(id) {
+  await fetch(SURL+"/rest/v1/pets?id=eq."+id, {
+    method:"DELETE",
+    headers:Object.assign({},SH,{"Prefer":"return=minimal"})
+  });
+}
+
 async function uploadPhoto(b64, fileName) {
   try {
     var mime = b64.split(",")[0].split(":")[1].split(";")[0];
@@ -1656,8 +1663,10 @@ async function renderListings() {
 // ── ALERT BANNER ───────────────────────────────────────────────────────────
 async function loadAlertBanner() {
   var pets = await getPets();
-  var lost = pets.filter(function(p){return p.status==="lost";}).length;
-  var found = pets.filter(function(p){return p.status==="found";}).length;
+  var sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+  var recentPets = pets.filter(function(p){ return new Date(p.created_at) > sevenDaysAgo; });
+  var lost = recentPets.filter(function(p){return p.status==="lost";}).length;
+  var found = recentPets.filter(function(p){return p.status==="found";}).length;
   var el = document.getElementById("alertText");
   var strip = document.getElementById("alertStrip");
   if(lost===0 && found===0) {
@@ -1707,7 +1716,8 @@ function openModal(pet) {
       "<div class=\"safety-banner\"><strong>🤝 Safe Meetup Spots</strong> Always meet in a public place with cameras around.<div class=\"safety-places\"><span class=\"safety-place\">🏪 Walgreens</span><span class=\"safety-place\">🚔 Police Station</span><span class=\"safety-place\">☕ Starbucks</span><span class=\"safety-place\">🏥 Fire Station</span><span class=\"safety-place\">🏬 Walmart</span></div></div>"
       +"<button class=\"claim-lost-btn\" onclick=\"openClaimFlow('lost')\">🐕 This Is My Pet — I Am the Owner</button>"
       +"<div class=\"safety-note\"><span>🔒</span><span>Clicking above starts a <strong>verification checklist</strong>. Once verified, you'll get the contact info and a green <strong>Mark as Reunited</strong> button.</span></div>"
-      +"<button class=\"report-btn\" onclick=\"reportListing()\">🚨 Report Suspicious Activity</button>";
+      +"<button class=\"report-btn\" onclick=\"reportListing()\">🚨 Report Suspicious Activity</button>"
+      +"<button onclick=\"removeAlert()\" style=\"width:100%;margin-top:8px;padding:12px;border-radius:10px;border:1px solid rgba(255,92,108,0.3);background:rgba(255,92,108,0.06);color:var(--accent);font-family:'Cabinet Grotesk',sans-serif;font-size:0.8rem;font-weight:700;cursor:pointer;\">🗑️ I Posted This — Remove Listing</button>";
   } else if(pet.status==="found") {
     cb.textContent = "📞 Contact Finder: "+pet.phone;
     cb.onclick = function(){window.location.href="tel:"+pet.phone.replace(/\D/g,"");};
@@ -1716,9 +1726,11 @@ function openModal(pet) {
       "<div class=\"safety-banner\"><strong>🤝 Safe Meetup Spots</strong> Always meet in a public place with cameras around.<div class=\"safety-places\"><span class=\"safety-place\">🏪 Walgreens</span><span class=\"safety-place\">🚔 Police Station</span><span class=\"safety-place\">☕ Starbucks</span><span class=\"safety-place\">🏥 Fire Station</span><span class=\"safety-place\">🏬 Walmart</span></div></div>"
       +"<button class=\"claim-found-btn\" onclick=\"openClaimFlow('found')\">🏠 This Is My Pet — Reunite Now</button>"
       +"<div class=\"safety-note\"><span>🔒</span><span>Clicking above opens a <strong>quick verification</strong>. Once confirmed, you'll get the finder's contact and a green <strong>Mark as Reunited</strong> button.</span></div>"
-      +"<button class=\"report-btn\" onclick=\"reportListing()\">🚨 Report Suspicious Activity</button>";
+      +"<button class=\"report-btn\" onclick=\"reportListing()\">🚨 Report Suspicious Activity</button>"
+      +"<button onclick=\"removeAlert()\" style=\"width:100%;margin-top:8px;padding:12px;border-radius:10px;border:1px solid rgba(255,92,108,0.3);background:rgba(255,92,108,0.06);color:var(--accent);font-family:'Cabinet Grotesk',sans-serif;font-size:0.8rem;font-weight:700;cursor:pointer;\">🗑️ I Posted This — Remove Listing</button>";
   } else if(pet.status==="reunited") {
-    extra.innerHTML = "<div style=\"text-align:center;padding:16px 0;font-size:0.88rem;color:var(--text2)\">🎉 This pet has been reunited with their family!</div>";
+    extra.innerHTML = "<div style=\"text-align:center;padding:16px 0;font-size:0.88rem;color:var(--text2)\">🎉 This pet has been reunited with their family!</div>"
+      +"<button onclick=\"removeAlert()\" style=\"width:100%;margin-top:8px;padding:12px;border-radius:10px;border:1px solid rgba(255,92,108,0.3);background:rgba(255,92,108,0.06);color:var(--accent);font-family:'Cabinet Grotesk',sans-serif;font-size:0.8rem;font-weight:700;cursor:pointer;\">🗑️ I Posted This — Remove Listing</button>";
   }
   document.getElementById("modalOverlay").classList.add("open");
   document.body.style.overflow = "hidden";
@@ -1728,6 +1740,27 @@ function closeModalOverlay(e) {
   if(e && e.target !== document.getElementById("modalOverlay") && !e.target.classList.contains("modal-close")) return;
   document.getElementById("modalOverlay").classList.remove("open");
   document.body.style.overflow = "";
+}
+
+async function removeAlert() {
+  if(!_currentPet) return;
+  var pet = _currentPet;
+  var phone = prompt("To remove this listing, enter the phone number you used when posting it:");
+  if(!phone || !phone.trim()) return;
+  var clean = phone.replace(/\D/g,"");
+  var petClean = (pet.phone||"").replace(/\D/g,"");
+  if(clean !== petClean) {
+    alert("❌ Phone number doesn't match. Only the person who posted this listing can remove it.");
+    return;
+  }
+  var confirm = window.confirm("Remove \"" + (pet.name||"this listing") + "\" permanently? This cannot be undone.");
+  if(!confirm) return;
+  await deletePet(pet.id);
+  document.getElementById("modalOverlay").classList.remove("open");
+  document.body.style.overflow = "";
+  alert("✅ Listing removed. Thank you for keeping the board up to date!");
+  loadListings();
+  loadAlertBanner();
 }
 
 async function reportListing() {
