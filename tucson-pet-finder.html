@@ -912,12 +912,39 @@ footer {
 .paws-progress { position:absolute;bottom:0;left:0;height:4px;background:var(--accent);width:100%;transform-origin:left;animation:none; }
 .paws-progress.running { animation:progressBar var(--paws-duration,10s) linear forwards; }
 @keyframes progressBar { from{transform:scaleX(1)}to{transform:scaleX(0)} }
+
+/* ══════════════════════════════════════
+   MOBILE — 375px and below (iPhone SE etc)
+══════════════════════════════════════ */
+@media (max-width: 375px) {
+  .hero-title { font-size: 1.8rem; }
+  .hero-sub { font-size: 0.85rem; }
+  .hero-stats { gap: 16px; }
+  .tab-btn { font-size: 0.7rem; padding: 10px 4px; }
+  .form-row-2 { grid-template-columns: 1fr; }
+  .res-grid { grid-template-columns: 1fr; }
+  .alert-text { font-size: 0.82rem; }
+  .nav-title { font-size: 0.82rem; }
+  .submit-btn { font-size: 0.8rem; padding: 13px; }
+  .modal-sheet { border-radius: 18px 18px 0 0; }
+}
+
+/* ══════════════════════════════════════
+   TABLET — wider than 480px
+══════════════════════════════════════ */
+@media (min-width: 481px) {
+  .page { padding: 80px 0 180px; }
+  .hero { padding: 40px 24px 28px; }
+  .tabs { margin: 0 24px 18px; }
+  .form-panel { margin: 0 24px 22px; }
+  .alert-strip { margin: 16px 24px; }
+}
 </style>
 </head>
 <body>
 <div class="page">
   <nav>
-    <a class="nav-back" href="/">← Home</a>
+    <a class="nav-back" href="https://pet-hub-three.vercel.app">← PetHub</a>
     <div class="nav-title">🐾 Pet Finder</div>
     <a href="tucson-pet-finder-v2.html" class="nav-light-link">☀️ Light</a>
     <div class="nav-live">LIVE</div>
