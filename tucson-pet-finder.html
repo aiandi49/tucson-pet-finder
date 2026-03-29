@@ -2150,10 +2150,11 @@ async function initAuth() {
       _supaUser = session.user;
       await loadUserProfile();
       updateSOSButton(_supaProfile && (_supaProfile.pets||[]).filter(Boolean).length > 0);
+      // Always open the profile modal after Google sign-in redirect
       var overlay = document.getElementById("regOverlay");
-      if(overlay && overlay.classList.contains("open")) {
-        _supaProfile ? renderProfileDashboard(_supaProfile) : renderProfileCreate();
-      }
+      if(overlay) overlay.classList.add("open");
+      document.body.style.overflow = "hidden";
+      _supaProfile ? renderProfileDashboard(_supaProfile) : renderProfileCreate();
     } else if(event === "SIGNED_OUT") {
       _supaUser = null; _supaProfile = null; updateSOSButton(false);
     }
